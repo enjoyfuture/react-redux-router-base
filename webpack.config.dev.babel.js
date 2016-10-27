@@ -5,9 +5,6 @@ import HtmlwebpackPlugin from 'html-webpack-plugin';
 import precss from 'precss';
 import autoprefixer from 'autoprefixer';
 
-const hotDevServer = 'webpack/hot/dev-server';
-// https://github.com/webpack/webpack-dev-server
-const webpackDevServer = 'webpack-dev-server/client?http://0.0.0.0:8888';
 const appPath = path.resolve(__dirname, 'public');
 
 //判断 dll 文件是否已生成

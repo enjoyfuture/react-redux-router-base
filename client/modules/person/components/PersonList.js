@@ -95,6 +95,20 @@ class PersonList extends Component {
           }
           </tbody>
         </table>
+      </div>
+    );
+  }
+
+  render() {
+    const {person} = this.props;
+    const entities = person.get('entities');
+    const lastPage = entities && entities.get('lastPage');
+    return (
+      <div>
+        <div className={bootstrap('mb-1')}>
+          <Link className={bootstrap('btn', 'btn-primary')} to="/person/create">Add Person</Link>
+        </div>
+        {this.renderList()}
         <div className={cx('wern-btn-group')}>
           <button type="button" className={bootstrap('btn', 'btn-primary')} disabled={lastPage}
                   onClick={this.loadMore}>Load More
@@ -103,17 +117,6 @@ class PersonList extends Component {
                   onClick={this.refresh}>Refresh
           </button>
         </div>
-      </div>
-    );
-  }
-
-  render() {
-    return (
-      <div>
-        <div className={bootstrap('mb-1')}>
-          <Link className={bootstrap('btn', 'btn-primary')} to="/person/create">Add Person</Link>
-        </div>
-        {this.renderList()}
       </div>
     );
   }

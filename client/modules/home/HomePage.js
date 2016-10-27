@@ -38,7 +38,7 @@ export class Home extends Component {
           <h3 className={bootstrap('mb-1')}>{this.props.home.get('content')}</h3>
           <div className={cx('wern-btn-group')}>
             <button className={bootstrap('btn', 'btn-info')}
-                    onClick={this.helloHandle}>欢迎您来到这里dddd
+                    onClick={this.helloHandle}>欢迎您来到这里
             </button>
             <button className={bootstrap('', 'btn', 'btn-primary')}
                     onClick={this.toastHandle}>Toast
