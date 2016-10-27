@@ -4,6 +4,7 @@
  * @type {request}
  */
 import request from 'request';
+import Promise from 'bluebird';
 
 export const remotePostJSON = (options) => {
   console.info('请求地址:', options.url, '请求参数:', JSON.stringify(options.data));
@@ -11,7 +12,7 @@ export const remotePostJSON = (options) => {
     request.post(
       {
         url: options.url,
-        json: JSON.parse(JSON.stringify(options.data)) || {},
+        json: options.data || {},
         headers: {
           cookie: options.cookie,
           'X-Requested-With': 'XMLHttpRequest'
@@ -19,14 +20,14 @@ export const remotePostJSON = (options) => {
       },
       (err, response, body) => {
         if (err) {
-          console.log(err);
+          console.error('=======错误==========', err);
           reject(err);
         } else {
           if (body.success) {
             console.info('=======返回数据==========', JSON.stringify(body));
-            resolve(body);
+            resolve(body.data);
           } else {
-            console.log(body.message);
+            console.error('=======错误==========', JSON.stringify(body));
             reject(body.message);
           }
         }
@@ -37,24 +38,34 @@ export const remotePostJSON = (options) => {
 
 /**
  * get获取json数据
- * @param url
+ * @param options
  */
-export const remoteGetJSON = (url) => {
+export const remoteGetJSON = (options) => {
+  let url;
+  let json = {};
+  if (typeof options === 'string') {
+    url = options;
+  } else if (typeof options === 'object') {
+    json = options.data || {};
+    url = options.url;
+  }
+  console.info('请求地址:', url, '请求参数:', JSON.stringify(json));
   return new Promise((resolve, reject) => {
     request.get(
       {
         url,
-        json: {}
+        json
       },
       (err, response, body) => {
         if (err) {
+          console.error('=======错误==========', err);
           reject(err);
         } else {
           if (body.success) {
             console.info('=======返回数据==========', JSON.stringify(body));
-            resolve(body);
+            resolve(body.data);
           } else {
-            console.log(body.message);
+            console.error('=======错误==========', JSON.stringify(body));
             reject(body);
           }
         }

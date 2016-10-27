@@ -2,7 +2,7 @@ const SERVER_URL = process.env.SERVER_URL;
 const global = {};
 
 global.apis = {
-  personList: `${SERVER_URL}/personList`,
+  personList: `${SERVER_URL}person/list`,
 };
 
-export default global;
+module.exports = global;

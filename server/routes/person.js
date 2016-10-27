@@ -11,10 +11,9 @@ router.get('/list', (req, res, next) => {
   const pagination = new Pagination({pageSize, currentPage});
   pagination.setOptions({totalCount: 55});
 
-  personService.list().then((data) => {
-    const person = data.person(currentPage);
-    pagination.setItems(person.items);
-    res.json(data);
+  personService.list(currentPage).then((data) => {
+    pagination.setItems(data.items);
+    res.json(pagination);
   }).catch((err) => {
     next(err);
   });
@@ -41,7 +40,6 @@ router.post('/', (req, res) => {
 
 router.delete('/', (req, res) => {
   const person = req.body;
-  console.log(req.body);
   const {id} = person;
   if (!id) {
     return res.json({

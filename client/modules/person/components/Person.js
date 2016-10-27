@@ -4,7 +4,7 @@ import bootstrap from '../../../util/bootstrapCss';
 const Person = ({children, personAction, person}) => {
 
   return (
-    <div className={bootstrap('container', 'm-t-2')}>
+    <div className={bootstrap('container', 'mt-2')}>
       {children && React.cloneElement(children, {
         personAction,
         person

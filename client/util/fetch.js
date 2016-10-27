@@ -41,7 +41,7 @@ function callApi({url, body = {}, method = 'get', options = {}}) {
   if (url.indexOf('http') === 0) {
     fullUrl = url;
   } else {
-    fullUrl = url;
+    fullUrl = `/api/${url}`;
   }
 
   const _options = {method, ...defaultOptions, ...options};

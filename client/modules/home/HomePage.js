@@ -29,16 +29,16 @@ export class Home extends Component {
   render() {
     return (
       <div className={cx('home')}>
-        <h1 className={bootstrap('m-t-2')}>The react app using wern cil to generate.</h1>
-        <h2 className={bootstrap('m-t-3')}>
+        <h1 className={bootstrap('mt-2')}>The react app using wern cil to generate.</h1>
+        <h2 className={bootstrap('mt-3')}>
           React Redux Router Immutable Webpack Gulp Sass Css Module etc.
         </h2>
-        <hr className={bootstrap('m-t-2', 'm-b-2')}/>
+        <hr className={bootstrap('mt-2', 'mb-2')}/>
         <div>
-          <h3 className={bootstrap('m-b-1')}>{this.props.home.get('content')}</h3>
+          <h3 className={bootstrap('mb-1')}>{this.props.home.get('content')}</h3>
           <div className={cx('wern-btn-group')}>
             <button className={bootstrap('btn', 'btn-info')}
-                    onClick={this.helloHandle}>欢迎您来到这里
+                    onClick={this.helloHandle}>欢迎您来到这里dddd
             </button>
             <button className={bootstrap('', 'btn', 'btn-primary')}
                     onClick={this.toastHandle}>Toast

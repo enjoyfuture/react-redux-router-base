@@ -53,7 +53,8 @@ class Pagination {
 
   /**
    * 设置错误信息和错误 code
-   * @param {message, errorCode}
+   * @param message
+   * @param errorCode
    */
   setError({message, errorCode}) {
     this.success = false;

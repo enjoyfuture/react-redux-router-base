@@ -2,6 +2,7 @@
  * 自动加载路由配置
  */
 import fs from 'fs';
+import mock from './mock';
 
 export default (app) => {
   //页面路由
@@ -29,6 +30,7 @@ export default (app) => {
     res.render('person', content)
   });
 
+  app.use('/mock', mock);
   //后台数据路由
   fs.readdirSync(__dirname).forEach((name) => {
     const _name = name.replace(/.js/, '');

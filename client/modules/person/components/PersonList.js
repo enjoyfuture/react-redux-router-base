@@ -66,9 +66,9 @@ class PersonList extends Component {
 
     if (items.size === 0) {
       return (
-        <div className={bootstrap('m-t-3')}>
+        <div className={bootstrap('mt-3')}>
           <img className={cx('no-items')} src={noItems}/>
-          <p className={bootstrap('m-t-2', 'text-xs-center', 'text-muted')}>暂无记录</p>
+          <p className={bootstrap('mt-2', 'text-xs-center', 'text-muted')}>暂无记录</p>
         </div>
       );
     }
@@ -110,7 +110,7 @@ class PersonList extends Component {
   render() {
     return (
       <div>
-        <div className={bootstrap('m-b-1')}>
+        <div className={bootstrap('mb-1')}>
           <Link className={bootstrap('btn', 'btn-primary')} to="/person/create">Add Person</Link>
         </div>
         {this.renderList()}

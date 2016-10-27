@@ -33,9 +33,9 @@ const webpackConfig = {
 
   // 入口文件 让webpack用哪个文件作为项目的入口
   entry: {
-    index: ['./client/pages/home/index.js', webpackDevServer],
-    about: ['./client/pages/about/index.js', webpackDevServer],
-    person: ['./client/pages/person/index.js', webpackDevServer]
+    index: ['./client/pages/home/index.js'],
+    about: ['./client/pages/about/index.js'],
+    person: ['./client/pages/person/index.js']
   },
 
   // 出口 让webpack把处理完成的文件放在哪里

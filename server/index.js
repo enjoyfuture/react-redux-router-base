@@ -42,20 +42,6 @@ if (process.env.NODE_ENV === 'development') {
 // load routers
 routes(app);
 
-//将未知的页面请求重定向到首页
-app.get('*', (req, res, next) => {
-  if (/\.(ico)|(png)|(jpg)|(gif)|(js)|(css)/.test(req.url)) {
-    return next();
-  }
-
-  const content = {
-    data: JSON.stringify(req.content || {})
-  };
-
-  res.render('index', content)
-});
-
-
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
   const err = new Error('Not Found');

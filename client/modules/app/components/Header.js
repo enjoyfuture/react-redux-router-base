@@ -1,26 +1,17 @@
 import React, {PropTypes} from 'react';
-import {Link} from 'react-router';
 import classNames from 'classnames/bind';
 import styles from '../less/header.less';
 const cx = classNames.bind(styles);
 
 const Header = () => {
+  const pathname = location.pathname;
   return (
     <nav className={cx('nav')}>
-      <Link to="/"
-            className={cx('nav-item')}
-            activeClassName={cx('nav-item-active')}>Wern Home</Link>
-      <Link to="/film"
-            className={cx('nav-item')}
-            activeClassName={cx('nav-item-active')}>Film(List)</Link>
-      <Link to="/person"
-            className={cx('nav-item')}
-            activeClassName={cx('nav-item-active')}>Person(Paging)</Link>
-      <Link to="/vote"
-            className={cx('nav-item')}
-            activeClassName={cx('nav-item-active')}>Vote</Link>
-      <Link to="/about" className={cx('nav-item')}
-            activeClassName={cx('nav-item-active')}>About</Link>
+      <a href="/"
+            className={cx('nav-item', pathname === '/' ? 'nav-item-active' : '')}>Wern Home</a>
+      <a href="/demo/person#/person"
+            className={cx('nav-item', pathname === '/demo/person' ? 'nav-item-active' : '')}>Person(Paging)</a>
+      <a href="/about" className={cx('nav-item', pathname === '/about' ? 'nav-item-active' : '')}>About</a>
     </nav>
   );
 };
