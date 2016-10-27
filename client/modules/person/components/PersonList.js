@@ -87,9 +87,9 @@ class PersonList extends Component {
           </thead>
           <tbody>
           {
-            items ? items.map((person) => {
+            items ? items.map((item) => {
               return (
-                <PersonItem key={person.get('id')} person={person} personAction={personAction}/>
+                <PersonItem key={item.get('id')} person={item} personAction={personAction}/>
               );
             }) : null
           }
