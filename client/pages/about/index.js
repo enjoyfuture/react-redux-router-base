@@ -29,6 +29,6 @@ if (process.env.NODE_ENV === 'development') {
 promise.polyfill();
 
 render(
-  <Root routes={routes} reducers={reducers}/>,
+  <Root routes={routes} reducers={reducers} basename="/about"/>,
   document.getElementById('layout')
 );

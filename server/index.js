@@ -22,6 +22,7 @@ app.use(bodyParser.urlencoded({limit: '20mb', extended: false}));
 app.use(bodyParser.text());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, './views')));
 
 if (process.env.NODE_ENV === 'development') {
   const webpackConfig = require('../webpack.config.dev.babel');
@@ -39,6 +40,7 @@ if (process.env.NODE_ENV === 'development') {
     heartbeat: 10 * 1000
   }));
 }
+
 // load routers
 routes(app);
 

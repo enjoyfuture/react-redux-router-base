@@ -2,35 +2,41 @@
  * 自动加载路由配置
  */
 import fs from 'fs';
+import path from 'path';
 import mock from './mock';
+
+//页面路由
+const pageRoutes = ['index', 'about', 'person'];
 
 export default (app) => {
   //页面路由
-  //首页
-  app.get('/', (req, res, next) => {
-    const content = {
-      data: JSON.stringify(req.content || {})
-    };
-    res.render('index', content)
+  pageRoutes.forEach((item) => {
+    app.get(item === 'index' ? '/' : `/${item}`, (req, res) => {
+      res.render(item)
+    });
   });
 
-  // 关于页
-  app.get('/about', (req, res, next) => {
-    const content = {
-      data: JSON.stringify(req.content || {})
-    };
-    res.render('about', content)
+  // handle every other route with index.html, which will contain
+  // a script tag to your application's JavaScript file(s).
+  app.get('*', (req, res, next) => {
+    const url = req.url.substring(1);
+    if (url.startsWith('api') || url.startsWith('mock')) {
+      return next();
+    }
+    let page;
+    pageRoutes.forEach((item) => {
+      if (item !== 'index' && url.startsWith(item)) {
+        page = item;
+      }
+    });
+    if (page) {
+      res.render(page);
+    }
   });
 
-  // demo 页
-  app.get('/demo/person', (req, res, next) => {
-    const content = {
-      data: JSON.stringify(req.content || {})
-    };
-    res.render('person', content)
-  });
-
+  //
   app.use('/mock', mock);
+
   //后台数据路由
   fs.readdirSync(__dirname).forEach((name) => {
     const _name = name.replace(/.js/, '');

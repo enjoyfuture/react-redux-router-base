@@ -7,7 +7,7 @@ import App from '../../modules/app/AppPage';
 const routes = (store) => {
   return (
     <Route path="/" component={App}>
-      <Route path="person" getComponent={(nextState, cb) => {
+      <Route path="index" getComponent={(nextState, cb) => {
         require.ensure([], require => {
           cb(null, require('../../modules/person/PersonPage').default);
         });

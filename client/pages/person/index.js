@@ -30,6 +30,6 @@ promise.polyfill();
 
 
 render(
-  <Root routes={routes} reducers={reducers}/>,
+  <Root routes={routes} reducers={reducers} basename="/person"/>,
   document.getElementById('layout')
 );

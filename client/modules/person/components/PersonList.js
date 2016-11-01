@@ -106,7 +106,7 @@ class PersonList extends Component {
     return (
       <div>
         <div className={bootstrap('mb-1')}>
-          <Link className={bootstrap('btn', 'btn-primary')} to="/person/create">Add Person</Link>
+          <Link className={bootstrap('btn', 'btn-primary')} to="/index/create">Add Person</Link>
         </div>
         {this.renderList()}
         <div className={cx('wern-btn-group')}>
