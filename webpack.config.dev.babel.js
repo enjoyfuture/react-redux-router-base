@@ -1,9 +1,9 @@
-import path from 'path';
-import fs from 'fs';
-import webpack from 'webpack';
-import HtmlwebpackPlugin from 'html-webpack-plugin';
-import precss from 'precss';
-import autoprefixer from 'autoprefixer';
+const path = require('path');
+const fs = require('fs');
+const webpack = require('webpack');
+const HtmlwebpackPlugin = require('html-webpack-plugin');
+const precss = require('precss');
+const autoprefixer = require('autoprefixer');
 
 const appPath = path.resolve(__dirname, 'public');
 
@@ -127,7 +127,7 @@ if (dllExist) {
        * 在这里引入 manifest 文件
        */
       manifest: require('./public/dll/vendor-manifest.json')
-    }),
+    })
   );
 }
 // 为 HtmlwebpackPlugin 设置配置项，与 entry 键对应，根据需要设置其参数值

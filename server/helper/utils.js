@@ -1,12 +1,11 @@
-'use strict';
 /**
  * 基础的工具方法
  * @type {request}
  */
-import request from 'request';
-import Promise from 'bluebird';
+const request = require('request');
+const Promise = require('bluebird');
 
-export const remotePostJSON = (options) => {
+module.exports.remotePostJSON = (options) => {
   console.info('请求地址:', options.url, '请求参数:', JSON.stringify(options.data));
   return new Promise((resolve, reject) => {
     request.post(
@@ -40,7 +39,7 @@ export const remotePostJSON = (options) => {
  * get获取json数据
  * @param options
  */
-export const remoteGetJSON = (options) => {
+module.exports.remoteGetJSON = (options) => {
   let url;
   let json = {};
   if (typeof options === 'string') {

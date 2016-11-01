@@ -1,13 +1,12 @@
 /**
  * 入口文件
  */
-import path from 'path';
-import express from 'express';
-import favicon from 'serve-favicon';
-import cookieParser from 'cookie-parser';
-import bodyParser from 'body-parser';
-
-import routes from './routes';
+const path = require('path');
+const express = require('express');
+const favicon = require('serve-favicon');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const routes = require('./routes');
 
 const app = express();
 
@@ -22,7 +21,6 @@ app.use(bodyParser.urlencoded({limit: '20mb', extended: false}));
 app.use(bodyParser.text());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
-app.use(express.static(path.join(__dirname, './views')));
 
 if (process.env.NODE_ENV === 'development') {
   const webpackConfig = require('../webpack.config.dev.babel');

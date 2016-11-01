@@ -1,10 +1,5 @@
 #!/usr/bin/env node
 
-if (process.env.NODE_ENV === 'development') {
-  require('babel-register')();
-  require('babel-polyfill');
-}
-
 const http = require('http');
 const config = require('../server/config');
 const app = require('../server');

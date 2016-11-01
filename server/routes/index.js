@@ -1,13 +1,13 @@
 /**
  * 自动加载路由配置
  */
-import fs from 'fs';
-import mock from './mock';
+const fs = require('fs');
+const mock = require('./mock');
 
 //页面路由
 const pageRoutes = ['index', 'about', 'person'];
 
-export default (app) => {
+module.exports = (app) => {
   //页面路由
   pageRoutes.forEach((item) => {
     app.get(item === 'index' ? '/' : `/${item}`, (req, res) => {
