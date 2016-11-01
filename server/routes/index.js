@@ -2,7 +2,6 @@
  * 自动加载路由配置
  */
 import fs from 'fs';
-import path from 'path';
 import mock from './mock';
 
 //页面路由
@@ -34,7 +33,7 @@ export default (app) => {
     }
   });
 
-  //
+  // mock 数据
   app.use('/mock', mock);
 
   //后台数据路由
