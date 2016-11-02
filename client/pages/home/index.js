@@ -3,6 +3,7 @@
  * because `import` will be transformed to `Object.defineProperty` by babel,
  * `Object.defineProperty` doesn't exists in IE8,
  * (but will be polyfilled after `require('es5-shim')` executed).
+ * 关于 ie8 支持可以查看 https://github.com/xcatliu/react-ie8
  */
 const ie8 = require('../../util/perfect').ie8();
 if (ie8) {

@@ -2,7 +2,6 @@
  * 自动加载路由配置
  */
 const fs = require('fs');
-const mock = require('./mock');
 
 //页面路由
 const pageRoutes = ['index', 'about', 'person'];
@@ -32,9 +31,6 @@ module.exports = (app) => {
       res.render(page);
     }
   });
-
-  // mock 数据
-  app.use('/mock', mock);
 
   //后台数据路由
   fs.readdirSync(__dirname).forEach((name) => {

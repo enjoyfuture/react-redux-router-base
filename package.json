@@ -18,7 +18,7 @@
     "buildCode": "webpack -p --progress --colors --config webpack.build.babel.js",
     "build": "cross-env NODE_ENV=production npm run buildCode",
     "buildTemplate": "cross-env NODE_ENV=development npm run buildCode && npm run clean",
-    "prestart": "cross-env npm run clean && NODE_ENV=development npm run generateEnv",
+    "prestart": "cross-env npm run clean && NODE_ENV=development npm run generateEnv && npm run buildTemplate",
     "start": "nodemon ./bin/www",
     "startProd": "cross-env NODE_ENV=production node ./bin/www"
   },
@@ -55,6 +55,8 @@
     "babel-loader": "^6.2.7",
     "babel-plugin-transform-class-properties": "^6.16.0",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-es3-member-expression-literals": "^6.8.0",
+    "babel-plugin-transform-es3-property-literals": "^6.8.0",
     "babel-plugin-transform-flow-comments": "^6.17.0",
     "babel-plugin-transform-flow-strip-types": "^6.14.0",
     "babel-plugin-transform-object-rest-spread": "^6.16.0",

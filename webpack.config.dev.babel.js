@@ -55,7 +55,7 @@ const webpackConfig = {
         loader: 'eslint'
       },
       {
-        test: /\.jsx?$/,
+        test: /\.js?$/,
         loader: 'babel', // 'babel-loader' is also a legal name to reference
         exclude: /node_modules/,
       },

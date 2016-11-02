@@ -5,7 +5,9 @@ import assign from 'lodash/assign';
 import callApi from './fetch';
 import errorHandler from './errorHandler';
 
-export const CALL_API = Symbol('Call API');
+// 用 Symbol 来标示独一无二的属性值，FIXME 有兼容行问题，目前先用常量代替
+//export const CALL_API = Symbol('Call API');
+export const CALL_API = 'CALL_API';
 
 // A Redux middleware that interprets actions with CALL_API info specified.
 // Performs the call and promises when such actions are dispatched.
