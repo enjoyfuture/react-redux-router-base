@@ -28,10 +28,16 @@ if (process.env.NODE_ENV === 'development') {
   const compiler = webpack(webpackConfig);
 
   app.use(require('webpack-dev-middleware')(compiler, {
-    noInfo: true,
+    //noInfo: true, //如果设置该参数为 true，则不打印输出信息
+    cache: true, //开启缓存，增量编译
+    stats: {
+      colors: true, //打印日志显示颜色
+      reasons: true //打印相关被引入的模块
+    },
     publicPath: webpackConfig.output.publicPath
   }));
 
+  //热部署，自动刷新，需要结合 webpack.config.dev.babel 中的定义
   app.use(require('webpack-hot-middleware')(compiler, {
     log: console.log,
     path: '/__webpack_hmr',

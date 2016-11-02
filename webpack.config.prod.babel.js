@@ -6,6 +6,8 @@ import MappingPlugin from 'webpack-mapping-plugin';
 import precss from 'precss';
 import autoprefixer from 'autoprefixer';
 
+const appPath = path.resolve(__dirname, 'public');
+
 // multiple extract instances
 const extractLess = new ExtractTextPlugin({
   filename: 'css/[name].[chunkhash].css',
@@ -30,9 +32,9 @@ const webpackConfig = {
   },
 
   output: {
-    path: path.join(__dirname, 'public/dist'),
+    path: path.join(appPath, 'dist'),
     filename: '[name].[chunkhash].js',
-    publicPath: './dist',
+    publicPath: '/dist/',
   },
 
   resolve: {
@@ -73,9 +75,6 @@ const webpackConfig = {
           fallbackLoader: 'style-loader',
           loader: 'css-loader?modules&localIdentName=[name]_[local]_[hash:base64:5]!postcss-loader?pack=cleaner!less-loader'
         })
-      }, {
-        test: /\.json$/,
-        loader: 'json-loader',
       },
       {
         test: /\.hbs$/,
@@ -98,11 +97,6 @@ const webpackConfig = {
     extractCSS,
     new MappingPlugin({
       basePath: '/',
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      compressor: {
-        warnings: false,
-      }
     }),
     new webpack.LoaderOptionsPlugin({
       options: {

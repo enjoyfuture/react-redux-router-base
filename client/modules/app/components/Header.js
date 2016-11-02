@@ -10,7 +10,7 @@ const Header = () => {
       <a href="/"
             className={cx('nav-item', pathname === '/' ? 'nav-item-active' : '')}>Wern Home</a>
       <a href="/person/index"
-            className={cx('nav-item', pathname === '/demo/person' ? 'nav-item-active' : '')}>Person(Paging)</a>
+            className={cx('nav-item', pathname.indexOf('/person') !== -1 ? 'nav-item-active' : '')}>Person(Paging)</a>
       <a href="/about" className={cx('nav-item', pathname === '/about' ? 'nav-item-active' : '')}>About</a>
     </nav>
   );

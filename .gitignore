@@ -2,3 +2,8 @@
 node_modules
 dist
 npm-debug.log
+
+# 一些不需要提交的文件
+server/config/index.js
+server/views
+!server/views/error.hbs

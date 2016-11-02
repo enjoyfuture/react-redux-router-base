@@ -7,6 +7,8 @@ const autoprefixer = require('autoprefixer');
 
 const appPath = path.resolve(__dirname, 'public');
 
+const hotMiddlewareScript = 'webpack-hot-middleware/client?reload=true';
+
 //判断 dll 文件是否已生成
 let dllExist = false;
 try {
@@ -30,9 +32,9 @@ const webpackConfig = {
 
   // 入口文件 让webpack用哪个文件作为项目的入口
   entry: {
-    index: ['./client/pages/home/index.js'],
-    about: ['./client/pages/about/index.js'],
-    person: ['./client/pages/person/index.js']
+    index: ['./client/pages/home/index.js', hotMiddlewareScript],
+    about: ['./client/pages/about/index.js', hotMiddlewareScript],
+    person: ['./client/pages/person/index.js', hotMiddlewareScript]
   },
 
   // 出口 让webpack把处理完成的文件放在哪里
