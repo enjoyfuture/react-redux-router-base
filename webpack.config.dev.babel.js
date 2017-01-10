@@ -20,7 +20,7 @@ try {
 
 const webpackConfig = {
   cache: true, //开启缓存,增量编译
-  devtool: 'source-map', //生成 source map文件
+  devtool: 'cheap-eval-source-map', //生成 source map文件
   stats: {
     colors: true, //打印日志显示颜色
     reasons: true //打印相关模块被引入

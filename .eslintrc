@@ -163,7 +163,7 @@
     "jsx-quotes": 2,//jsx属性值应该用双引号
     "key-spacing": 2,//键值之间的空格
     "keyword-spacing": 2,//关键字 if, else, for, while, do, switch, try, catch, finally, and with 要求有空格
-    "linebreak-style": 2,//验证 unix (LF) or windows (CRLF)
+    "linebreak-style": 0,//验证 unix (LF) or windows (CRLF)
     //"lines-around-comment": 2,//注释的规范写法
     "max-depth": [2, 12],//限制语句块最大嵌套深度
     //"max-len": [122, 2, {"ignoreUrls": true, "ignoreComments": true, "ignorePattern": true}], //限定每行最大长度

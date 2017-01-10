@@ -98,6 +98,11 @@ const webpackConfig = {
     new MappingPlugin({
       basePath: '/',
     }),
+    new webpack.optimize.UglifyJsPlugin({
+      compressor: {
+        warnings: false,
+      }
+    }),
     new webpack.LoaderOptionsPlugin({
       options: {
         postcss () {

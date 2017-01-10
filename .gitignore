@@ -1,6 +1,7 @@
 .idea
 node_modules
 dist
+dll
 npm-debug.log
 
 # 一些不需要提交的文件
