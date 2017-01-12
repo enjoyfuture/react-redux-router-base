@@ -1,21 +1,31 @@
 import promise from 'es6-promise';
 import React from 'react';
-import render from 'react-dom';
+import {render} from 'react-dom';
+import {combineReducers} from 'redux-immutable';
+import {Route, IndexRoute} from 'react-router';
 
-import routes from './routes';
-import reducers from './reducers';
-
-let Root;
-if (process.env.NODE_ENV === 'development') {
-  Root = require('../../containers/Root.dev').default;
-} else {
-  Root = require('../../containers/Root.prod').default;
-}
+import Root from '../../Root';
+import routing from '../../common/reducers/routing';
+import toast from '../../common/reducers/toast';
+import App from '../../common/App';
+import AboutPage from './AboutPage';
+import '../../common/less/main.less';
 
 // Promise 兼容性处理
 promise.polyfill();
 
+const routes = (
+  <Route path="/" component={App}>
+    <IndexRoute component={AboutPage}/>
+  </Route>
+);
+
+const reducers = combineReducers({
+  routing,
+  toast
+});
+
 render(
-  <Root routes={routes} reducers={reducers} basename="/about"/>,
+  <Root routes={routes} reducers={reducers} basename="/context/about"/>,
   document.getElementById('layout')
 );

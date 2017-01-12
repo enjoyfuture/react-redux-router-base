@@ -1,0 +1,13 @@
+.ellipsis() {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.ellipsis-line(@line: 2) {
+  display: -webkit-box;
+  line-clamp: @line;
+  box-orient: vertical;
+  word-break: break-all;
+  overflow: hidden;
+}

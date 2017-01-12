@@ -4,8 +4,8 @@ import webpack from 'webpack';
 export default {
   entry: {
     vendor: ['react', 'react-dom', 'redux', 'redux-thunk', 'react-redux', 'react-router',
-      'react-router-redux', 'isomorphic-fetch', 'classnames', 'immutable', 'redux-immutable',
-      'redux-devtools', 'es6-promise', 'react-addons-css-transition-group', 'history', 'lodash',
+      'react-router-redux-fixed', 'isomorphic-fetch', 'classnames', 'immutable', 'redux-immutable',
+      'redux-devtools', 'es6-promise', 'react-addons-css-transition-group', 'react-addons-perf',
       'redux-devtools-log-monitor', 'redux-devtools-dock-monitor', 'redux-logger']
   },
 

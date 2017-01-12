@@ -50,7 +50,7 @@
     "array-callback-return": 2, //在数组方法中,回调函数应该加上 return,比如在 array.reduce中
     "block-scoped-var": 2,//在快作用于中不允许使用var来定义变量
     //"class-methods-use-this": 2, //在 class 定义的方法中，没有使用 this，会认为是不应该的
-    "complexity": 2,//判断语句复杂度，关闭该规则
+    "complexity": 0,//判断语句复杂度，关闭该规则
     //"consistent-return": 2,//不同的分支返回的类型应该一样
     "curly": [2, "multi-line"],//在循环或判断语句中是否需要加花括号
     "default-case": 2,//在 switch语句中，检测是否有默认分支
@@ -61,7 +61,7 @@
     //"no-alert": 2,//不允许用alert语句
     "no-caller": 2,//不允许用 arguments.caller 和 arguments.callee
     "no-case-declarations": 2,//在 case 语句中使用声明式语句时，需要用 {} 括起来
-    "no-div-regex": 2,//消除除法运算符迷惑用户使用 例如 return /=foo/; 应该写成 return /\=foo/;
+    "no-div-regex": 0,//消除除法运算符迷惑用户使用 例如 return /=foo/; 应该写成 return /\=foo/;
     //"no-else-return": 2,//如果在if语句中有return，则在else中可以不用return，可以放到最外面返回
     //"no-empty-function": 2, //不要定义空函数
     "no-empty-pattern": 2,//不允许空的解构赋值，例如 var {a: {}} = foo;
@@ -104,7 +104,7 @@
     "no-useless-concat": 2, //不必要的字符串连接最好去掉，写在一起
     "no-useless-escape": 2, //不必要的转义就不要转义了
     "no-void": 2,//不建议使用void操作符
-    "no-warning-comments": 1,//对于注释中的 TODO FIXME XXX 等，是否给出提示，建议开发中设置为1，部署的时候设置为 2
+    "no-warning-comments": 0,//对于注释中的 TODO FIXME XXX 等，是否给出提示，建议开发中设置为1，部署的时候设置为 2
     "no-with": 2,//不允许使用with表达式语句
     "radix": 2,//在调用 parseInt 应该指定基数
     "vars-on-top": 2,//所有变量声明是否都放在函数最上面或过程快最上面
@@ -163,11 +163,11 @@
     "jsx-quotes": 2,//jsx属性值应该用双引号
     "key-spacing": 2,//键值之间的空格
     "keyword-spacing": 2,//关键字 if, else, for, while, do, switch, try, catch, finally, and with 要求有空格
-    "linebreak-style": 0,//验证 unix (LF) or windows (CRLF)
+    "linebreak-style": 2,//验证 unix (LF) or windows (CRLF)
     //"lines-around-comment": 2,//注释的规范写法
     "max-depth": [2, 12],//限制语句块最大嵌套深度
     //"max-len": [122, 2, {"ignoreUrls": true, "ignoreComments": true, "ignorePattern": true}], //限定每行最大长度
-    "max-lines": ["error", {"max": 500, "skipBlankLines": true, "skipComments": true}], // 指定每个文件最大行
+    "max-lines": ["error", {"max": 800, "skipBlankLines": true, "skipComments": true}], // 指定每个文件最大行
     "max-nested-callbacks": [2, 3], // 限定回调函数最大深度
     "max-params": [2, 4], //限定函数参数最大个数
     "max-statements-per-line": ["error", {"max": 2}], // 每行最大表达式
@@ -179,7 +179,7 @@
     "newline-per-chained-call": 0,
     "no-array-constructor": 2,//不允许使用 new Array(2, 1, 2) 来创建数组，而改用 []
     "no-bitwise": 2, //禁止使用位运算符,包括以下情况 var x = y | z; var x = y & z; var x = y ^ z; var x = ~ z; var x = y << z; var x = y >> z; var x = y >>> z; x |= y; x &= y; x ^= y; x <<= y; x >>= y; x >>>= y;
-    "no-continue": 2,//是否允许使用 continue语句
+    "no-continue": 0,//是否允许使用 continue语句
     //"no-inline-comments": 2,//注释是否允许在代码的后面，开启则不允许
     //"no-lonely-if": 2,//应该使用 else if ，而不要使用 else { if(){} }
     "no-mixed-spaces-and-tabs": 2,//不允许空格和制表位混合使用
@@ -276,7 +276,7 @@
     "react/prop-types": 2, //对于没有设置 propType 的 prop 给出警告
     "react/react-in-jsx-scope": 2, //对于使用了 JSX,要使用 React 组件
     "react/require-render-return": 2, // render 方法中需要 return
-    "react/self-closing-comp": 2, //对于没有子元素的组件应该是这样的 <Hello name="John" /> 而不应该 <Hello name="John"></Hello>
+    "react/self-closing-comp": 0, //对于没有子元素的组件应该是这样的 <Hello name="John" /> 而不应该 <Hello name="John"></Hello>
     "react/sort-comp": 2, //组件方法是否按一定的顺序书写,默认为: 1  static methods and properties 2 lifecycle methods: displayName, propTypes, contextTypes, childContextTypes, mixins, statics,defaultProps, constructor, getDefaultProps, getInitialState, state, getChildContext, componentWillMount, componentDidMount, componentWillReceiveProps, shouldComponentUpdate, componentWillUpdate, componentDidUpdate, componentWillUnmount (in this order).  3 custom methods 4 render method
     //"react/sort-prop-types": 2, //propType 是否按字母顺序来排列
     "react/style-prop-object": 2, // style 必须是对象
@@ -304,7 +304,7 @@
     //"react/jsx-space-before-closing": 2, // 在关闭标签前是否加一空格
     "react/jsx-uses-react": 2,//React声明了而没有被调用
     "react/jsx-uses-vars": 2, //jsx组件被定义而没有被调用
-    "react/jsx-wrap-multilines": 2, //多行 jsx 表达式应该用 () 包裹起来
+    "react/jsx-wrap-multilines": 2 //多行 jsx 表达式应该用 () 包裹起来
 
     // eslint-plugin-flow-vars rule
     //"flowtype/boolean-style": 2,
@@ -338,7 +338,7 @@
     "react": {
       "createClass": "createClass", // Regex for Component Factory to use, default to "createClass"
       "pragma": "React",  // Pragma to use, default to "React"
-      "version": "15.3.2" // React version, default to the latest React stable release
+      "version": "15.4.2" // React version, default to the latest React stable release
     },
     "sharedData": "sharedName"
   },

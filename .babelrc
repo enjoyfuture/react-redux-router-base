@@ -4,13 +4,12 @@
     "react"
   ],
   "plugins": [
-    "transform-flow-comments", // 可以指定函数参数注解
-    "transform-object-rest-spread", // 支持对象 rest 预发
-    "transform-flow-strip-types", // 可以指定函数参数 类型
     "transform-class-properties", //解析类属性，静态和实例的属性
     "transform-decorators-legacy", // 编译 es7 decorator
-    "transform-runtime",
+    "transform-es3-member-expression-literals", // 调用属性时，对关键字的处理 比如 foo.catch 会转换成 foo["catch"];
     "transform-es3-property-literals", // 编译关键字作为定义对象时属性，比如 class
-    "transform-es3-member-expression-literals" // 调用属性时，对关键字的处理 比如 foo.catch 会转换成 foo["catch"];
-  ]
+    "transform-flow-comments", // 可以指定函数参数注解
+    "transform-flow-strip-types", // 可以指定函数参数类型
+    "transform-object-rest-spread" // 支持对象 rest
+    ]
 }
