@@ -201,7 +201,7 @@
     //"one-var": 2,//多个变量声明是否用一个var语句
     //"one-var-declaration-per-line": [2, "always"], //定义多个变量时,是否需要每个变量在一行显示
     "operator-assignment": 2,//对于赋值表达式，应该使用其简略式写法，比如  x = x + y 应该用 x += y
-    "operator-linebreak": 2,//有操作符时，是否检测打断的行
+    "operator-linebreak": 0,//有操作符时，是否检测打断的行
     //"padded-blocks": 2,//是否验证空白块
     //"quote-props": 2,//属性加单引号或双引号，个人建议不用加的最好不加
     "quotes": [2, "single"],//字符串引号，建议使用单引号
@@ -274,7 +274,7 @@
     "react/prefer-es6-class": 2, //应该使用 es6 来创建 class
     "react/prefer-stateless-function": 2, // 对于无状态的组件尽量使用函数来声明组件,比如 const Foo = function(props) {return <div>{props.foo}</div>;};
     "react/prop-types": 2, //对于没有设置 propType 的 prop 给出警告
-    "react/react-in-jsx-scope": 2, //对于使用了 JSX,要使用 React 组件
+    "react/react-in-jsx-scope": 0, //对于使用了 JSX,要使用 React 组件
     "react/require-render-return": 2, // render 方法中需要 return
     "react/self-closing-comp": 0, //对于没有子元素的组件应该是这样的 <Hello name="John" /> 而不应该 <Hello name="John"></Hello>
     "react/sort-comp": 2, //组件方法是否按一定的顺序书写,默认为: 1  static methods and properties 2 lifecycle methods: displayName, propTypes, contextTypes, childContextTypes, mixins, statics,defaultProps, constructor, getDefaultProps, getInitialState, state, getChildContext, componentWillMount, componentDidMount, componentWillReceiveProps, shouldComponentUpdate, componentWillUpdate, componentDidUpdate, componentWillUnmount (in this order).  3 custom methods 4 render method

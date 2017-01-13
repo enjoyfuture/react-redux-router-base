@@ -31,6 +31,11 @@ const routes = (store) => {
             });
           }}/>
         </Route>
+        <Route path="/film" getComponent={(nextState, cb) => {
+          require.ensure([], require => {
+            cb(null, require('./film/components/Film').default);
+          });
+        }}/>
       </Route>
     </Route>
   );

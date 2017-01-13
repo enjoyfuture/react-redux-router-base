@@ -1,11 +1,15 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
+import {Link} from 'react-router';
 
 class Page extends Component {
   static propTypes = {
     children: PropTypes.node,
     dispatch: PropTypes.func,
-    person: PropTypes.object
+    caches: PropTypes.object,
+    person: PropTypes.object,
+    film: PropTypes.object,
+    location: PropTypes.object,
   };
 
   static childContextTypes = {
@@ -24,14 +28,27 @@ class Page extends Component {
 
   render() {
     const {
-      children, person
+      children, caches, person, film, location
     } = this.props;
 
+    const {pathname} = location;
+    const type = pathname.indexOf('/person') !== -1 ? 'person' : 'film';
+    const props = type === 'person'
+      ? {person}
+      : {caches, film};
+
     return (
-      <div className="container mt-2">
-        {children && React.cloneElement(children, {
-          person
-        })}
+      <div className="container mt-1">
+        <ul className="nav nav-tabs mb-2">
+          <li className="nav-item">
+            <Link className="nav-link" activeClassName="active" to="/person">Person</Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" activeClassName="active" to="/film">Film</Link>
+          </li>
+        </ul>
+
+        {children && React.cloneElement(children, props)}
       </div>
     );
   }
@@ -39,8 +56,12 @@ class Page extends Component {
 
 function mapStateToProps(state, ownProps) {
   const person = state.get('person');
+  const film = state.get('film');
+  const caches = state.get('caches');
   return {
-    person
+    person,
+    film,
+    caches
   };
 }
 

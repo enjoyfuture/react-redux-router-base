@@ -41,7 +41,7 @@ if (process.env.NODE_ENV === 'development') {
   const compiler = webpack(webpackConfig);
 
   app.use(require('webpack-dev-middleware')(compiler, {
-    //noInfo: true, //如果设置该参数为 true，则不打印输出信息
+    noInfo: true, //如果设置该参数为 true，则不打印输出信息
     cache: true, //开启缓存，增量编译
     stats: {
       colors: true, //打印日志显示颜色

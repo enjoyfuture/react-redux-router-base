@@ -1,9 +1,22 @@
-import {Map, fromJS} from 'immutable';
+import {fromJS} from 'immutable';
 
 /**
- * customTypes 根据实际业务需求自定义 reducer
+ *
+ * 返回的数据格式为
+ {
+  isFetching: false,
+  paging: {
+    pageNum: 1,
+    lastPage: false,
+    totalPages: 12,
+    totalCount: 59,
+    items: [{}, {}] //分页数据
+  }
+ }
  */
-function person(state = Map(), action) {
+function person(state = fromJS({
+  isFetching: false,
+}), action) {
   const {type} = action;
   switch (type) {
   case 'person-list-request':
@@ -12,21 +25,10 @@ function person(state = Map(), action) {
     return state.set('isFetching', false);
   }
   case 'person-list-success': {
-    /**
-     * 返回的数据格式为
-     {
-      isFetching: false,
-      paging: {
-        currentPage: 1,
-        lastPage: false,
-        items: [{}, {}] //分页数据
-      }
-     }
-     */
-    const {data, clean} = action;
-    const items = state.get('items');
+    const {data, clear} = action;
+    const paging = state.get('paging');
     //初始化时或者先清空数据时
-    if (!items || clean === true) {
+    if (!paging || clear === true) {
       return state.set('isFetching', false).set('paging', fromJS(data));
     } else {
       return state.set('isFetching', false)
@@ -58,8 +60,17 @@ function person(state = Map(), action) {
   }
   case 'person-add': {
     const {person} = action;
-    return state.updateIn(['paging', 'items'], (items) => {
-      return items.unshift(person);
+    const paging = state.get('paging');
+    let _state = state;
+    if (!paging) {
+      _state = state.set('paging', fromJS({
+        pageNum: 1,
+        lastPage: false,
+        items: []
+      }));
+    }
+    return _state.updateIn(['paging', 'items'], (items) => {
+      return items.unshift(fromJS(person));
     });
   }
   case 'person-delete': {

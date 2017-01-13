@@ -26,17 +26,17 @@ function fetchPersonFailure(error) {
   };
 }
 
-function fetchPersonList(currentPage = 1, clear) {
+function fetchPersonList(pageNum = 1, clear) {
   return (dispatch, getState) => {
     callApi({
-      url: `person/list?currentPage=${currentPage}`,
+      url: `page-2/person?pageNum=${pageNum}`,
     }).then((json) => {
-      const {resultData} = json;
+      const {data} = json;
       if (!json) {
         return dispatch(fetchPersonFailure('请求失败'));
       }
 
-      return dispatch(fetchPersonSuccess(resultData, clear));
+      return dispatch(fetchPersonSuccess(data, clear));
     }, (error) => {
       const message = errorHandler(error);
       return dispatch(fetchPersonFailure(message));
@@ -48,17 +48,17 @@ export function getPersonList(clear) {
   return (dispatch, getState) => {
     const person = getState().get('person');
     const isFetching = person.get('isFetching');
-    const entities = person.get('entities');
+    const paging = person.get('paging');
     //请求页码
-    const currentPage = clear === true || !entities ? 1 : entities.get('currentPage') + 1;
+    const pageNum = clear === true || !paging ? 1 : paging.get('pageNum') + 1;
     //最后一页
-    const lastPage = clear === true || !entities ? false : entities.get('lastPage');
+    const lastPage = clear === true || !paging ? false : paging.get('lastPage');
 
     if (isFetching || lastPage) {
       return null;
     }
     dispatch(fetchPersonRequest());
-    return dispatch(fetchPersonList(currentPage, clear));
+    return dispatch(fetchPersonList(pageNum, clear));
   };
 }
 

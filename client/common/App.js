@@ -54,9 +54,7 @@ export class App extends Component {
       <div className="main">
         {this.renderToast()}
         <Header />
-        <div className="container">
-          {children}
-        </div>
+        {children}
         <Footer />
       </div>
     );

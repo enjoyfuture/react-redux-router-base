@@ -15,7 +15,7 @@ const isFile = function (name) {
 const context = process.env.NODE_ENV === 'product' ? '' : '/context';
 
 //为了区分前后端路由，服务端统一加前缀 api
-const buildRoutContext = function (routePath) {
+const buildRoutPath = function (routePath) {
   const rootLength = rootPath.length;
 
   return routePath.length === rootLength
@@ -78,11 +78,11 @@ function addRoute(app, routePath = rootPath) {
     if (!isFile(name)) {
       addRoute(app, path.join(routePath, name)); //递归添加子路由
     } else {
-      const context = buildRoutContext(routePath);
-      const routeName = (context + name.replace(/.js/, '')).replace(/\\/g, '/');
+      const route = buildRoutPath(routePath);
+      const routeName = (route + name.replace(/.js/, '')).replace(/\\/g, '/');
       const obj = require(`./routes/${routeName}`);
-      logger.info(`add route automatic:${routeName}`);
-      app.use(routeName, obj);
+      logger.info(`add route automatic:${context}/api${routeName}`);
+      app.use(`${context}/api${routeName}`, obj);
     }
   });
 }

@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
-import {fromJS} from 'immutable';
 import callApi from '../../../../../utils/fetch';
 import {addPerson} from '../../action';
+import './style.less'
 
 class PersonForm extends Component {
   static contextTypes = {
@@ -23,7 +23,7 @@ class PersonForm extends Component {
 
   savePerson = () => {
     const {firstName, lastName} = this.state;
-    const url = 'person';
+    const url = 'page-2/person';
     const {dispatch, router} = this.context;
     //这里没有走 action, 直接发送 fetch 请求,对于不需要维护状态的请求,我们也可以直接调用 fetch
     return callApi({
@@ -35,7 +35,13 @@ class PersonForm extends Component {
       method: 'post'
     }).then(
       (json) => {
-        dispatch(addPerson(fromJS(json.data)));
+        const {data} = json;
+        const person = {
+          id: data.id,
+          firstName,
+          lastName
+        };
+        dispatch(addPerson(person));
         router.goBack();
       },
       (error) => {
@@ -58,7 +64,7 @@ class PersonForm extends Component {
     return (
       <form>
         <div className="form-group row">
-          <label className="col-2 form-control-label">First Name</label>
+          <label className="col-2 col-form-label">First Name</label>
           <div className="col-4">
             <input type="text" className="form-control" placeholder="First Name"
                    value={firstName} onChange={this.handleChange('firstName')}/>
@@ -66,14 +72,14 @@ class PersonForm extends Component {
         </div>
 
         <div className="form-group row">
-          <label className="col-2 form-control-label">Last Name</label>
+          <label className="col-2 col-form-label">Last Name</label>
           <div className="col-4">
             <input type="text" className="form-control" placeholder="Last Name"
                    value={lastName} onChange={this.handleChange('lastName')}/>
           </div>
         </div>
         <div className="form-group row">
-          <div className="col-offset-2 col-4">
+          <div className="offset-2 col-4">
             <button type="button" className="btn btn-primary"
                     onClick={this.savePerson}>Save
             </button>

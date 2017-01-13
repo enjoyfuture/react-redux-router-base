@@ -43,7 +43,7 @@ class PersonItem extends Component {
   handleSave = (e) => {
     e.preventDefault();
     const {dispatch} = this.context;
-    const url = 'person';
+    const url = 'page-2/person';
     const body = this.state.person.toJSON();
 
     return callApi({
@@ -66,9 +66,10 @@ class PersonItem extends Component {
     return (e) => {
       e.preventDefault();
       const {dispatch} = this.context;
-      const url = 'person';
+      const url = 'page-2/person';
       return callApi({
-        url, body: {
+        url,
+        body: {
           id
         }, method: 'delete'
       }).then(

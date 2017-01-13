@@ -6,7 +6,9 @@ import {combineReducers} from 'redux-immutable';
 import Root from '../../Root';
 import routing from '../../common/reducers/routing';
 import toast from '../../common/reducers/toast';
+import caches from '../../common/reducers/caches';
 import person from './person/reducer';
+import film from './film/reducer';
 
 import routes from './routes';
 
@@ -18,7 +20,9 @@ promise.polyfill();
 const reducers = combineReducers({
   routing,
   toast,
-  person
+  caches,
+  person,
+  film
 });
 
 render(
