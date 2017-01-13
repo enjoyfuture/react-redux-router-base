@@ -1,28 +1,18 @@
-import React, {Component, PropTypes} from 'react';
-import {setToast} from '../../../../../common/action/toast';
+import React, {PropTypes} from 'react';
 
-export class Com1 extends Component {
-  static contextTypes = {
-    dispatch: PropTypes.func,
-  };
+const Com1 = ({children, module1}) => {
+  return (
+    <div>
+      {children && React.cloneElement(children, {
+        module1
+      })}
+    </div>
+  );
+};
 
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-
-  toast = () => {
-    this.context.dispatch(setToast({content: 'Toast'}));
-  };
-
-  render() {
-    return (
-      <div className="content">
-        <button onClick={this.toast}>Toast</button>
-        Com1
-      </div>
-    );
-  }
-}
+Com1.propTypes = {
+  children: PropTypes.node,
+  module1: PropTypes.object
+};
 
 export default Com1;

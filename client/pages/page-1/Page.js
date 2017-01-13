@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {connect} from 'react-redux';
+import {Link} from 'react-router';
 
 class Page extends Component {
   static propTypes = {
@@ -7,6 +8,8 @@ class Page extends Component {
     location: PropTypes.object,
     dispatch: PropTypes.func,
     caches: PropTypes.object,
+    module1: PropTypes.object,
+    module2: PropTypes.object,
   };
   static childContextTypes = {
     dispatch: PropTypes.func
@@ -24,19 +27,27 @@ class Page extends Component {
 
   render() {
     const {
-      children, location, caches
+      children, location, caches, module1, module2
     } = this.props;
 
-    const props = {
-      location, caches
-    };
+    const {pathname} = location;
+    const props = pathname.indexOf('/module1') !== -1
+      ? {location, caches, module1}
+      : {location, caches, module2};
 
     return (
-      <section className="abs-container">
-        {
-          children && React.cloneElement(children, props)
-        }
-      </section>
+      <div className="container mt-1">
+        <ul className="nav nav-tabs mb-2">
+          <li className="nav-item">
+            <Link className="nav-link" activeClassName="active" to="/module1">Module1</Link>
+          </li>
+          <li className="nav-item">
+            <Link className="nav-link" activeClassName="active" to="/module2">Module2</Link>
+          </li>
+        </ul>
+
+        {children && React.cloneElement(children, props)}
+      </div>
     );
   }
 }
@@ -44,6 +55,8 @@ class Page extends Component {
 function mapStateToProps(state, ownProps) {
   return {
     caches: state.get('caches'),
+    module1: state.get('module1'),
+    module2: state.get('module2'),
   };
 }
 

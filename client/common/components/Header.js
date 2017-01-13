@@ -10,7 +10,7 @@ const Header = () => {
          className={classNames('header-nav-item', pathname.indexOf(`${context}/home`) !== -1 ? 'active' : '')}>
         Home
       </a>
-      <a href={`${context}/page1`}
+      <a href={`${context}/page1/module1`}
          className={classNames('header-nav-item', pathname.indexOf(`${context}/page1`) !== -1 ? 'active' : '')}>
         Page1
       </a>

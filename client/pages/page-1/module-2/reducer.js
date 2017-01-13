@@ -1,6 +1,6 @@
 import {Map} from 'immutable';
 
-function module1(state = Map(), action) {
+function module2(state = Map(), action) {
   const {type, context} = action;
   switch (type) {
   case 'module-1-hello':
@@ -10,4 +10,4 @@ function module1(state = Map(), action) {
   }
 }
 
-export default module1;
+export default module2;
