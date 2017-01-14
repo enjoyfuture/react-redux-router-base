@@ -21,7 +21,10 @@ const extractCSS = new ExtractTextPlugin({
 const webpackConfig = {
   devtool: 'cheap-source-map',
   entry: {
+    home: ['./client/pages/home/index.js'],
+    about: ['./client/pages/about/index.js'],
     page1: ['./client/pages/page-1/index.js'],
+    page2: ['./client/pages/page-2/index.js'],
     vendor1: [
       'react',
       'react-dom'

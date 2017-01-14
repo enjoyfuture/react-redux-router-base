@@ -27,7 +27,7 @@ copy(path.join(nodeModules, 'es5-shim', 'es5-sham.min.js'), path.join(dest, 'es5
 copy(path.join(nodeModules, 'respond.js', 'dest', 'respond.min.js'), path.join(dest, 'respond.min.js'));
 copy(path.join(nodeModules, 'html5shiv', 'dist', 'html5shiv.min.js'), path.join(dest, 'html5shiv.min.js'));
 copy(path.join(nodeModules, 'fetch-ie8', 'fetch.js'), path.join(dest, 'fetch-ie8.js'));
-copy(path.join(rootPath, 'client', 'util', 'console.js'), path.join(dest, 'console.js'));
-copy(path.join(rootPath, 'client', 'util', 'es5-sham-ie8.js'), path.join(dest, 'es5-sham-ie8.js'));
-copy(path.join(rootPath, 'client', 'util', 'ie8-eventlistener.js'), path.join(dest, 'ie8-eventlistener.js'));
+copy(path.join(__dirname, 'console.js'), path.join(dest, 'console.js'));
+copy(path.join(__dirname, 'es5-sham-ie8.js'), path.join(dest, 'es5-sham-ie8.js'));
+copy(path.join(__dirname, 'ie8-eventlistener.js'), path.join(dest, 'ie8-eventlistener.js'));
 
