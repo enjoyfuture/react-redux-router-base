@@ -4,7 +4,7 @@ import {createStore, applyMiddleware, compose} from 'redux';
 import thunk from 'redux-thunk';
 import {Router, useRouterHistory} from 'react-router';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
-import {syncHistoryWithStore, routerMiddleware} from 'react-router-redux'
+import {syncHistoryWithStore, routerMiddleware} from 'react-router-redux-fixed'
 import Immutable from 'immutable';
 
 //开发环境
@@ -32,7 +32,7 @@ if (process.env.NODE_ENV === 'development') {
  * @param initialState
  * @returns {*}
  */
-function configureStore(history, reducers, initialState) {
+export function configureStore(history, reducers, initialState) {
 
   // Installs hooks that always keep react-router and redux store in sync
   const middleware = [thunk, routerMiddleware(history)];

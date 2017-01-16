@@ -6,7 +6,7 @@
 import Immutable from 'immutable';
 import {
   LOCATION_CHANGE
-} from 'react-router-redux';
+} from 'react-router-redux-fixed';
 
 const initialState = Immutable.fromJS({
   locationBeforeTransitions: null

@@ -9,12 +9,8 @@ class PersonForm extends Component {
     dispatch: PropTypes.func,
   };
 
-  static propTypes = {
-    personAction: PropTypes.object,
-  };
-
-  constructor(props) {
-    super(props);
+  constructor(props, context) {
+    super(props, context);
     this.state = {
       firstName: '',
       lastName: ''

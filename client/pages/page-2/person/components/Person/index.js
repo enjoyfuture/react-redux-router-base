@@ -2,7 +2,7 @@ import React, {PropTypes} from 'react';
 
 const Person = ({children, person}) => {
   return (
-    <div>
+    <div className="person">
       {children && React.cloneElement(children, {
         person
       })}

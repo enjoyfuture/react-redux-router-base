@@ -42,6 +42,51 @@ NODE_ENV=beta npm run build
 NODE_ENV=product npm run build
 ```
 
+## Unit Test
+
+### Test
+```
+npm run test
+```
+
+If you writ unit test incremental, you should use the following command, it will save compile time.
+
+### Test Watch
+```
+npm run test-watch
+```
+
+### 检查单元测试的覆盖度
+```
+npm run check-coverage
+```
+
+说明，用来查看测试通过率，后面的参数值可以修改，分别是表达式，条件分支，函数，行数 百分比
+```
+"check-coverage": "nyc check-coverage --statements 100 --branches 100 --functions 100 --lines 100"
+```
+
+
+## Unit Test Frame
+
+* ava : 测试框架，类似于 mocha jest jasmine QUnit 等
+  官网：https://github.com/avajs/ava
+  中文指南：https://github.com/avajs/ava-docs/blob/master/zh_CN/readme.md
+* enzyme : React测试工具，依赖 react-addons-test-utils 可以类似 jquery 风格的 api 操作react 节点
+  官网：https://github.com/airbnb/enzyme
+  文档：http://airbnb.io/enzyme/
+* sinon : 提供 fake 数据， 替换函数调用等功能
+  官网：http://sinonjs.org/
+* nyc : JS code coverage tool that computes statement, line, function and branch coverage（用来检测单元测试覆盖率）
+  官网：https://github.com/istanbuljs/nyc
+  Note: With this configuration, the Istanbul instrumentation will only be active when NODE_ENV or BABEL_ENV is test.
+* nock: 用来模拟 http 请求测试用
+  官网：https://github.com/node-nock/nock
+* 参考文章
+  * http://zhaozhiming.github.io/blog/2016/03/28/use-ava-and-enzyme-to-test-react-component-part1/
+  * http://zhaozhiming.github.io/blog/2016/03/29/use-ava-and-enzyme-to-test-react-component-part2/
+  * http://zhaozhiming.github.io/blog/2016/03/29/use-ava-and-enzyme-to-test-react-component-part3/
+
 ## Development explain
 
 * shortcut key: control + h , open DevTool panel
