@@ -10,7 +10,7 @@ const logger = require('./helper/mylogger').Logger;
 const env = process.env.NODE_ENV;
 
 //文件匹配
-const fileMapping = env === 'development' ? null : JSON.stringify(require('../public/dist/mapping.json'));
+const fileMapping = env === 'development' ? null : require('../public/dist/mapping.json');
 
 const rootPath = path.join(__dirname, 'routes');
 
