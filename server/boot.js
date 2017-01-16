@@ -4,15 +4,40 @@
 const fs = require('fs');
 const path = require('path');
 const serialize = require('serialize-javascript');
+const handlebars = require('handlebars');
 const logger = require('./helper/mylogger').Logger;
 
+const fileMapping = process.env.webpackAssets && JSON.parse(process.env.webpackAssets);
+const env = process.env.NODE_ENV;
+
 const rootPath = path.join(__dirname, 'routes');
-const isFile = function (name) {
-  return (/\.js/).test(name);
-};
 
 //页面上下文，根路径，nginx 会卸载掉前缀 context
 const context = process.env.NODE_ENV === 'product' ? '' : '/context';
+const urlPrefix = '/context/dist/';
+
+const readTmpl = (callback) => {
+  fs.readFile(path.join(__dirname, 'views', 'layout.hbs'), 'utf8', (err, data) => {
+    if (err) {
+      logger.error(`读取 handlebars 模板文件出错${err.stack}`);
+      callback(err);
+    }
+    const template = handlebars.compile(data);
+    callback(null, template);
+  });
+};
+
+//预加载模板
+let template;
+readTmpl((err, tmpl) => {
+  if (!err) {
+    template = tmpl;
+  }
+});
+
+const isFile = function (name) {
+  return (/\.js/).test(name);
+};
 
 //为了区分前后端路由，服务端统一加前缀 api
 const buildRoutPath = function (routePath) {
@@ -26,16 +51,16 @@ const buildRoutPath = function (routePath) {
 function addRoute(app, routePath = rootPath) {
   //页面路由
   const pageRoutes = [{
-    route: 'home',
+    page: 'home',
     title: 'Home Page'
   }, {
-    route: 'page1',
+    page: 'page1',
     title: 'Page1'
   }, {
-    route: 'page2',
+    page: 'page2',
     title: 'Page2'
   }, {
-    route: 'about',
+    page: 'about',
     title: 'About Page'
   }];
 
@@ -53,14 +78,14 @@ function addRoute(app, routePath = rootPath) {
 
     logger.info(`页面 url **** ${url}`);
 
-    let page = {
-      route: 'home',
+    let route = {
+      page: 'home',
       title: 'home'
     };
 
     pageRoutes.forEach((item) => {
-      if (url.startsWith(item.route)) {
-        page = item;
+      if (url.startsWith(item.page)) {
+        route = item;
         return false;
       }
     });
@@ -69,8 +94,45 @@ function addRoute(app, routePath = rootPath) {
     // TODO 这里可以根据业务需求初始化数据
     const initialState = {};
     const scriptHtml = `window.__initialState__=${serialize(initialState)};`;
-    const {route, title} = page;
-    res.render(route, {title, scriptHtml});
+    const {page, title} = route;
+    const links = env === 'development' ? ''
+      : `<link rel='stylesheet' href="${fileMapping[`${urlPrefix}vendor.css`]}">
+         <link rel='stylesheet' href="${fileMapping[`${urlPrefix}${page}.css`]}">`;
+
+    const vendor = env === 'development'
+      ? '<script src="/context/dll/vendor.dll.js"></script>'
+      : `<script src="${fileMapping[`${urlPrefix}vendor.js`]}"></script>`;
+    const pageScript = env === 'development'
+      ? `<script src="${urlPrefix}${page}.js"></script>`
+      : `<script src="${fileMapping[`${urlPrefix}${page}.js`]}"></script>`;
+
+    const data = {
+      title, scriptHtml,
+      script: vendor + pageScript,
+      links
+    };
+
+    if (template) {
+      res.send(template(data));
+    } else {
+      //再次尝试读取一次
+      readTmpl((err, tmpl) => {
+        if (err) {
+          return res.status(500).send({
+            message: err.message,
+            error: err
+          });
+        }
+        res.send(tmpl(data));
+      });
+    }
+
+    //如果想自定义页面，也可以按照以下方式处理
+    /*res.render(page, {
+     title, scriptHtml,
+     script: vendor + pageScript,
+     links
+     });*/
   });
 
   //服务端数据路由

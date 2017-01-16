@@ -4,3 +4,5 @@
 module.exports.port = process.env.PORT = 8888;
 module.exports.NODE_ENV = process.env.NODE_ENV = 'production';
 module.exports.SERVER_URL = process.env.SERVER_URL = 'http://172.25.47.49:8090/mock/587840cd5e91ea263c736e39/react/';
+//文件匹配
+process.env.webpackAssets = JSON.stringify(require('../../public/dist/mapping.json'));

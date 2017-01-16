@@ -25,21 +25,9 @@ const webpackConfig = {
     about: ['./client/pages/about/index.js'],
     page1: ['./client/pages/page-1/index.js'],
     page2: ['./client/pages/page-2/index.js'],
-    vendor1: [
+    vendor: [
       'react',
       'react-dom'
-    ],
-    vendor2: [
-      'redux',
-      'redux-thunk',
-      'react-redux',
-      'react-router',
-      'react-router-redux-fixed',
-      'isomorphic-fetch',
-      'classnames',
-      'immutable',
-      'redux-immutable',
-      'es6-promise'
     ]
   },
 
@@ -104,17 +92,14 @@ const webpackConfig = {
         'NODE_ENV': JSON.stringify('production'),
       }
     }),
-    new webpack.optimize.CommonsChunkPlugin([{
-      name: 'vendor1',
+    new webpack.optimize.CommonsChunkPlugin({
+      name: 'vendor',
       filename: '[name].[chunkhash].js',
-    }, {
-      name: 'vendor2',
-      filename: '[name].[chunkhash].js',
-    }]),
+    }),
     extractLess,
     extractCSS,
     new MappingPlugin({
-      basePath: '/',
+      basePath: '/context/dist/',
     }),
     new webpack.optimize.UglifyJsPlugin({
       compressor: {

@@ -39,7 +39,7 @@ const webpackConfig = {
   output: {
     // 编译输出目录, 不能省略
     path: path.resolve(appPath, 'dist'),
-    filename: '[name].bundle.js', //文件名称
+    filename: '[name].js', //文件名称
     publicPath: '/context/dist/' //资源上下文路径
   },
 
