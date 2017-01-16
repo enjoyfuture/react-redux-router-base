@@ -2,18 +2,17 @@
 ##########################################
 # 启动或关闭应用                           #
 # ！！修改内容！！                         #
-#      【第8行】appName的值改为自己的应用名  #
+#      【第9行】appName的值改为自己的应用名  #
 # tanxiangyuan@20170104                  #
 ##########################################
 
-appName="react-node-demo"
+export appName="react-node-demo"
+export PATH=/export/local/node/bin:/export/local/pm2/bin:$PATH
+export PM2_HOME=/export/local/pm2-home
+
 baseDir=`cd $(dirname $0);pwd`
 logPath="/export/log/$appName"
 logFile="$logPath/${appName}_detail.log"
-
-export PATH=/export/local/node/bin:/export/local/pm2/bin:$PATH
-export PM2_HOME=/export/local/pm2-home
-export logFileName=$logFile
 
 if [ ! -d "$logPath" ]; then
     #创建日志目录并授权
