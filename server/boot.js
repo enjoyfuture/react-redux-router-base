@@ -7,8 +7,10 @@ const serialize = require('serialize-javascript');
 const handlebars = require('handlebars');
 const logger = require('./helper/mylogger').Logger;
 
-const fileMapping = process.env.webpackAssets && JSON.parse(process.env.webpackAssets);
 const env = process.env.NODE_ENV;
+
+//文件匹配
+const fileMapping = env === 'development' ? null : JSON.stringify(require('../public/dist/mapping.json'));
 
 const rootPath = path.join(__dirname, 'routes');
 
