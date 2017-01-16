@@ -8,7 +8,8 @@
   ],
   "verbose": true,
   "watch": [
-    "server"
+    "server",
+    "webpack.config.dev.babel.js"
   ],
   "env": {
     "NODE_ENV": "development"

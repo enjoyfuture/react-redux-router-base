@@ -1,0 +1,94 @@
+/*react 动画效果*/
+
+// 透明效果
+.opacity-enter {
+  opacity: 0.01;
+}
+
+.opacity-enter.opacity-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.opacity-leave {
+  opacity: 1;
+}
+
+.opacity-leave.opacity-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}
+
+//fade in 效果
+.fade-in-enter {
+  transform: translate(-100%, -100%);
+}
+
+.fade-in-enter.fade-in-enter-active {
+  transform: translate(0, 0);
+  transition: transform 300ms ease-in;
+}
+
+.fade-in-leave {
+  transform: translate(0, 0);
+}
+
+.fade-in-leave.fade-in-leave-active {
+  transform: translate(100%, 100%);
+  transition: translate 300ms ease-in;
+}
+
+//右侧进入
+.animate-right-appear {
+  transform: translate(100%, 0);
+}
+
+.animate-right-appear.animate-right-appear-active {
+  transform: translate(90%, 0);
+  transition: transform 300ms ease-in;
+}
+
+.animate-right-enter {
+  transform: translate(100%, 0);
+}
+
+.animate-right-enter.animate-right-enter-active {
+  transform: translate(0, 0);
+  transition: transform 300ms ease-in;
+}
+
+.animate-right-leave {
+  transform: translate(0, 0);
+}
+
+.animate-right-leave.animate-right-leave-active {
+  transform: translate(-100%, 0);
+  transition: translate 300ms ease-in;
+}
+
+//渐入效果
+.burst-in-enter {
+  opacity: 0.01;
+  backface-visibility: hidden;
+  animation-duration: .3s;
+  animation-timing-function: ease-in-out;
+  animation-fill-mode: both;
+  animation-duration: .3s;
+  animation-name: burstIn
+}
+
+.burst-in-enter.burst-in-enter-active {
+  opacity: 1;
+}
+
+@keyframes burstIn {
+  0% {
+    transform: scale(0.9);
+    opacity: 0
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1
+  }
+}

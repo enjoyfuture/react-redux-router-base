@@ -1,12 +1,12 @@
 import path from 'path';
 import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
-import HtmlwebpackPlugin from 'html-webpack-plugin';
 import MappingPlugin from 'webpack-mapping-plugin';
 import precss from 'precss';
 import autoprefixer from 'autoprefixer';
 
 const appPath = path.resolve(__dirname, 'public');
+const nodeModules = path.resolve(__dirname, 'node_modules');
 
 // multiple extract instances
 const extractLess = new ExtractTextPlugin({
@@ -14,31 +14,35 @@ const extractLess = new ExtractTextPlugin({
   allChunks: true
 });
 const extractCSS = new ExtractTextPlugin({
-  filename: 'css/[name].bootstrap.[chunkhash].css',
+  filename: 'css/style.[name].[chunkhash].css',
   allChunks: true
 });
 
 const webpackConfig = {
-  devtool: 'hidden-source-map',
-
+  devtool: 'cheap-source-map',
   entry: {
-    index: ['./client/pages/home/index.js'],
+    home: ['./client/pages/home/index.js'],
     about: ['./client/pages/about/index.js'],
-    person: ['./client/pages/person/index.js'],
+    page1: ['./client/pages/page-1/index.js'],
+    page2: ['./client/pages/page-2/index.js'],
     vendor: [
       'react',
-      'react-dom',
+      'react-dom'
     ]
   },
 
   output: {
     path: path.join(appPath, 'dist'),
     filename: '[name].[chunkhash].js',
-    publicPath: '/dist/',
+    publicPath: '/context/dist/',
   },
 
   resolve: {
     extensions: ['.js', '.jsx', '.css', '.less'],
+    //模块别名定义，方便直接引用别名
+    alias: {
+      'react-router-redux': path.resolve(nodeModules, 'react-router-redux-fixed/lib/index.js'),
+    },
     modules: [
       'client',
       'node_modules',
@@ -52,33 +56,32 @@ const webpackConfig = {
         loader: 'babel-loader',
         exclude: /node_modules/,
       },
-
       {
-        test: /\.(png|jpg|jpeg|gif|svg|woff|woff2)$/,
-        loader: 'url',
+        test: /\.(png|jpg|gif)$/,
+        loader: 'url-loader',
         query: {
           name: '[hash].[ext]',
           limit: 10000, // 10kb
         }
       },
       {
+        test: /\.(mp4|ogg|eot|woff|ttf|svg)$/,
+        loader: 'file-loader'
+      },
+      {
         test: /\.css$/,
         loader: extractCSS.extract({
           fallbackLoader: 'style-loader',
-          loader: 'css-loader?modules&localIdentName=[name]_[local]_[hash:base64:5]!postcss-loader?pack=cleaner'
-        }),
+          loader: 'css-loader!postcss-loader?pack=cleaner'
+        })
       },
       {
         test: /\.less/,
         exclude: /node_modules/,
         loader: extractLess.extract({
           fallbackLoader: 'style-loader',
-          loader: 'css-loader?modules&localIdentName=[name]_[local]_[hash:base64:5]!postcss-loader?pack=cleaner!less-loader'
+          loader: 'css-loader!postcss-loader?pack=cleaner!less-loader'
         })
-      },
-      {
-        test: /\.hbs$/,
-        loader: 'handlebars'
       }
     ],
   },
@@ -96,7 +99,12 @@ const webpackConfig = {
     extractLess,
     extractCSS,
     new MappingPlugin({
-      basePath: '/',
+      basePath: '/context/dist/',
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      compressor: {
+        warnings: false,
+      }
     }),
     new webpack.LoaderOptionsPlugin({
       options: {
@@ -113,38 +121,5 @@ const webpackConfig = {
     })
   ],
 };
-
-//创建 HtmlWebpackPlugin 的实例
-// https://www.npmjs.com/package/html-webpack-plugin
-const entry = webpackConfig.entry;
-
-// 为 HtmlwebpackPlugin 设置配置项，与 entry 键对应，根据需要设置其参数值
-const htmlwebpackPluginConfig = {
-  index: {
-    title: 'Node Demo'
-  },
-  about: {
-    title: 'Node Demo - About'
-  },
-  person: {
-    title: 'Node Demo - Person'
-  }
-};
-
-for (const key in entry) {
-  if (entry.hasOwnProperty(key) && key !== 'vendor') {
-    webpackConfig.plugins.push(
-      new HtmlwebpackPlugin({
-        title: htmlwebpackPluginConfig[key].title,
-        template: path.resolve(__dirname, 'server', 'templates', 'layout.html'),
-        filename: path.resolve(__dirname, 'server', 'views', `${key}.hbs`),
-        //chunks这个参数告诉插件要引用entry里面的哪几个入口
-        chunks: [key, 'vendor'],
-        //要把script插入到标签里
-        inject: 'body'
-      })
-    );
-  }
-}
 
 export default webpackConfig;

@@ -1,0 +1,82 @@
+/**
+* toast 样式，居中显示配合 flex 布局
+**/
+.toast-panel {
+  //flex 布局
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  //防止阻挡下面元素的操作
+  pointer-events: none;
+  will-change: transform;
+  transform: translateZ(0);
+
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 2001;
+  overflow: hidden;
+  outline: 0;
+  -webkit-overflow-scrolling: touch;
+  opacity: 0;
+
+  .toast {
+    opacity: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 0.7rem;
+    padding: 0.5rem 1rem;
+    color: #fff;
+    max-width: 80%;
+  }
+
+  &.enter {
+    opacity: 1;
+    transition: opacity 500ms ease-in;
+
+    .toast {
+      opacity: 1;
+      transition: opacity 500ms ease-in;
+    }
+  }
+
+  &.leave {
+    opacity: 0;
+    transition: opacity 1000ms ease-in;
+
+    .toast {
+      opacity: 0;
+      transition: opacity 1000ms ease-in;
+    }
+  }
+}
+
+.toast-panel-ie8 {
+  top: 48%;
+  margin: 0 auto;
+  height: 30px;
+  width: 350px;
+  text-align: center;
+  display: none;
+  .toast {
+    background: rgb(0, 0, 0); //ie8
+    max-width: 100%;
+    padding: 5px;
+  }
+
+  &.enter {
+    display: block;
+    .toast {
+      display: block;
+    }
+  }
+
+  &.leave {
+    display: none;
+    .toast {
+      display: none;
+    }
+  }
+}
