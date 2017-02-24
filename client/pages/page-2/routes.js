@@ -5,17 +5,17 @@ import {Route, IndexRoute} from 'react-router';
 /*eslint-disable react/jsx-no-bind,react/react-in-jsx-scope*/
 const routes = (store) => {
   return (
-    <Route path="/" getComponent={(nextState, cb) => {
+    <Route path="/page2" getComponent={(nextState, cb) => {
       require.ensure([], require => {
         cb(null, require('../../common/App').default);
       });
     }}>
-      <Route path="/" getComponent={(nextState, cb) => {
+      <Route getComponent={(nextState, cb) => {
         require.ensure([], require => {
           cb(null, require('./Page').default);
         });
       }}>
-        <Route path="/person" getComponent={(nextState, cb) => {
+        <Route path="person" getComponent={(nextState, cb) => {
           require.ensure([], require => {
             cb(null, require('./person/components/Person').default);
           });
@@ -31,11 +31,13 @@ const routes = (store) => {
             });
           }}/>
         </Route>
-        <Route path="/film" getComponent={(nextState, cb) => {
+
+        <Route path="film" getComponent={(nextState, cb) => {
           require.ensure([], require => {
             cb(null, require('./film/components/Film').default);
           });
         }}/>
+
       </Route>
     </Route>
   );

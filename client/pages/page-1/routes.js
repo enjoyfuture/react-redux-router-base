@@ -8,7 +8,7 @@ import Module2Com1 from './module-2/components/com-1';
 
 const routes = (
   <Route path="/" component={App}>
-    <Route path="/" component={Page}>
+    <Route path="page1" component={Page}>
       <Route path="module1" component={Module1Com1}>
         <IndexRoute components={Module1Com2}/>
       </Route>

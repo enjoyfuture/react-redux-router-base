@@ -6,36 +6,42 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const compress = require('compression');
-const boot = require('./boot');
+const apiRouter = require('./routes/api-route-loader');
+const pageRouter = require('./routes/page-routes');
 const logger = require('./helper/mylogger').Logger;
 const getClientIP = require('./helper/utils').getClientIP;
 const errorHandler = require('./helper/errorHandler');
 
+logger.info(`process.env.NODE_ENV is [${process.env.NODE_ENV}]`);
+const isDev = process.env.NODE_ENV === 'development';
+const isProduct = process.env.NODE_ENV === 'development';
 const app = express();
 
 //页面上下文，根路径，nginx 会卸载掉前缀 context
-const context = process.env.NODE_ENV === 'product' ? '/' : '/context/';
+const context = isProduct ? '/' : '/context/';
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
-
-app.use(compress());//开启Gzip
+//非生产环境开启Gzip，生产环境nginx会开启gzip
+if(!isProduct){
+    app.use(compress());
+}
 app.use(bodyParser.json({limit: '20mb'}));//设置前端post提交最大内容
 app.use(bodyParser.urlencoded({limit: '20mb', extended: false}));
 app.use(bodyParser.text());
 app.use(cookieParser());
 app.use(require('./helper/requestLogger').create(logger));
 
-logger.info(`process.env.NODE_ENV is [${process.env.NODE_ENV}]`);
 
-if (process.env.NODE_ENV === 'product') {
+
+if (isProduct) {
   app.use(express.static(path.join(__dirname, '../public')));
 } else {
   app.use('/context', express.static(path.join(__dirname, '../public')));
 }
 
-if (process.env.NODE_ENV === 'development') {
+if (isDev) {
   const webpackConfig = require('../webpack.config.dev.babel');
   const webpack = require('webpack');
   const compiler = webpack(webpackConfig);
@@ -65,7 +71,8 @@ app.use((req, res, next) => {
 });
 
 // load routers
-boot(app);
+apiRouter(app);
+pageRouter(app);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

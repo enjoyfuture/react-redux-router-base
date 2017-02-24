@@ -4,7 +4,7 @@ import {createStore, applyMiddleware, compose} from 'redux';
 import thunk from 'redux-thunk';
 import {Router, useRouterHistory} from 'react-router';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
-import {syncHistoryWithStore, routerMiddleware} from 'react-router-redux-fixed'
+import {syncHistoryWithStore, routerMiddleware} from 'react-router-redux'
 import Immutable from 'immutable';
 
 //开发环境

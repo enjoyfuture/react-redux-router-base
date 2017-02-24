@@ -15,7 +15,7 @@ import '../../common/less/main.less';
 promise.polyfill();
 
 const routes = (
-  <Route path="/" component={App}>
+  <Route path="/about" component={App}>
     <IndexRoute component={AboutPage}/>
   </Route>
 );
