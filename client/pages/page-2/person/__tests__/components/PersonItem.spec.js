@@ -1,10 +1,11 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import test from 'ava';
 import {shallow} from 'enzyme';
 import sinon from 'sinon';
 import Immutable, {Map} from 'immutable';
 import PersonItem from '../../components/PersonItem';
-import {updatePerson, deletePerson} from '../../action';
+import {deletePerson} from '../../action';
 
 const props = {
   person: Map({id: 1, firstName: 'zhang', lastName: 'san'})
@@ -30,7 +31,7 @@ test('test edit and the method handleEdit', t => {
         dispatch
       },
       childContextTypes: {
-        dispatch: React.PropTypes.func,
+        dispatch: PropTypes.func,
       },
     });
   wrapper.find('td a').at(0).simulate('click', eventObject);
@@ -46,7 +47,7 @@ test('test cancel and the method handleCancel', t => {
         dispatch
       },
       childContextTypes: {
-        dispatch: React.PropTypes.func,
+        dispatch: PropTypes.func,
       },
     });
 
@@ -71,7 +72,7 @@ test('test save and the method handleSave', t => {
         dispatch
       },
       childContextTypes: {
-        dispatch: React.PropTypes.func,
+        dispatch: PropTypes.func,
       },
     });
   wrapper.find('td a').at(0).simulate('click', eventObject);
@@ -93,7 +94,7 @@ test('test delete and the method handleDelete', t => {
         dispatch
       },
       childContextTypes: {
-        dispatch: React.PropTypes.func,
+        dispatch: PropTypes.func,
       },
     });
 

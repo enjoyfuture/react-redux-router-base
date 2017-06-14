@@ -108,10 +108,10 @@ module.exports.remoteGetJSON = (options) => {
   });
 };
 
-//返回客户端 ip
+// 返回客户端 ip
 module.exports.getClientIP = function (req) {
   let ipAddress;
-  const headers = req.headers;
+  const {headers} = req;
   const forwardedIpsStr = headers['x-real-ip'] || headers['x-forwarded-for'];
   ipAddress = forwardedIpsStr || null;
   if (!ipAddress) {
@@ -120,7 +120,7 @@ module.exports.getClientIP = function (req) {
   return ipAddress;
 };
 
-//首字母大写
+// 首字母大写
 module.exports.upperFirstLetter = (str) => {
   if (!str) {
     return '';

@@ -6,10 +6,34 @@
   "plugins": [
     "transform-class-properties", //解析类属性，静态和实例的属性
     "transform-decorators-legacy", // 编译 es7 decorator
-    "transform-es3-member-expression-literals", // 调用属性时，对关键字的处理 比如 foo.catch 会转换成 foo["catch"];
-    "transform-es3-property-literals", // 编译关键字作为定义对象时属性，比如 class
     "transform-flow-comments", // 可以指定函数参数注解
     "transform-flow-strip-types", // 可以指定函数参数类型
     "transform-object-rest-spread" // 支持对象 rest
-    ]
+  ],
+  "env": {
+    "development": {
+      "presets": [
+        ["es2015", { "modules": false }],
+        "react"
+      ],
+      "plugins": [
+        "transform-class-properties", //解析类属性，静态和实例的属性
+        "transform-decorators-legacy", // 编译 es7 decorator
+        "transform-flow-comments", // 可以指定函数参数注解
+        "transform-flow-strip-types", // 可以指定函数参数类型
+        "transform-object-rest-spread" // 支持对象 rest
+      ]
+    },
+    "production": {
+      // 生产环境利用该插件去掉 PropTypes 检测
+      "plugins": [
+        "transform-react-remove-prop-types",
+        {
+          "mode": "remove", // 默认值为 remove ，即删除 PropTypes
+          "removeImport": true, // the import statements are removed as well. import PropTypes from 'prop-types'
+          "ignoreFilenames": ["node_modules"]
+        }
+      ]
+    }
+  }
 }

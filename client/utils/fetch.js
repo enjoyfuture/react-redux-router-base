@@ -4,14 +4,14 @@ import perfect from './perfect';
 const defaultOptions = {
   credentials: 'include', //设置该属性可以把 cookie 信息传到后台
   headers: {
-    'Accept': 'application/json',
+    Accept: 'application/json',
     'Content-Type': 'application/json; charset=utf-8'
   }
 };
 
 // 检查请求是否成功
 function checkStatus(response) {
-  const status = response.status;
+  const {status} = response;
   if (status >= 200 && status < 300) {
     return response;
   }

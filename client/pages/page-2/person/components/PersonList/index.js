@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import {Link} from 'react-router';
 import PersonItem from '../PersonItem';
 import {getPersonList} from '../../action';
@@ -66,22 +67,22 @@ class PersonList extends Component {
       <div>
         <table className="table">
           <thead className="thead-inverse">
-          <tr>
-            <th>#</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Username</th>
-            <th/>
-          </tr>
+            <tr>
+              <th>#</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Username</th>
+              <th/>
+            </tr>
           </thead>
           <tbody>
-          {
-            items ? items.map((item) => {
-              return (
-                <PersonItem key={item.get('id')} person={item}/>
-              );
-            }) : null
-          }
+            {
+              items ? items.map((item) => {
+                return (
+                  <PersonItem key={item.get('id')} person={item}/>
+                );
+              }) : null
+            }
           </tbody>
         </table>
       </div>

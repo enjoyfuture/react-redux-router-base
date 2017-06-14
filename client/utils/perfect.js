@@ -4,7 +4,7 @@
  * @returns {null}
  */
 export const getLocationParams = () => {
-  let search = location.search;
+  let {search} = location;
   if (search.length > 1) {
     const params = {};
     search = search.substring(1);
@@ -33,9 +33,8 @@ export const getLocationOrigin = () => {
  * @returns {*}
  */
 export const getLocationRoot = () => {
-  const pathname = location.pathname;
-  const origin = location.origin;
-  const root = pathname.match(/\/[\w\d-]+\//)[0];
+  const {pathname, origin} = location;
+  const [root] = pathname.match(/\/[\w\d-]+\//);
   return origin + root;
 };
 
@@ -57,7 +56,7 @@ export const parseJSON = (str) => {
     json = JSON.parse(str);
   } catch (e) {
     json = null;
-    console.info(e);
+    console.warn(`JSON 格式不正确：${e.message}`);
   }
   return json;
 };
@@ -69,7 +68,7 @@ export const stringifyJSON = (json) => {
     str = JSON.stringify(json);
   } catch (e) {
     str = null;
-    console.info(e);
+    console.warn(`JSON 格式不正确：${e.message}`);
   }
   return str;
 };
@@ -178,59 +177,6 @@ export const styleSupport = (styleProp) => {
   return false;
 };
 
-/**
- * 判断是否支持 history.pushState
- * @returns {*|pushState|replaceState}
- */
-export const historyH5Support = () => {
-  return history.pushState && history.replaceState;
-};
-
-/**
- * 判断是否为 ie8
- * @returns {boolean}
- */
-export const ie8 = (function () {
-  const nav = window.navigator;
-  const browser = nav.appName;
-  let version = nav.appVersion;
-  const v = version.split(';');
-  if (v[1]) {
-    version = v[1].replace(/[ ]/g, '');
-    return browser === 'Microsoft Internet Explorer' && version === 'MSIE8.0';
-  }
-  return false;
-}());
-
-/**
- * 判断是否为 ie9
- * @returns {boolean}
- */
-export const ie9 = (function () {
-  const nav = window.navigator;
-  const browser = nav.appName;
-  let version = nav.appVersion;
-  const v = version.split(';');
-  if (v[1]) {
-    version = v[1].replace(/[ ]/g, '');
-    return browser === 'Microsoft Internet Explorer' && version === 'MSIE9.0';
-  }
-  return false;
-}());
-
-export const ltIe10 = (function () {
-  const nav = window.navigator;
-  const browser = nav.appName;
-  let version = nav.appVersion;
-  const v = version.split(';');
-  if (v[1]) {
-    version = v[1].replace(/[ ]/g, '');
-    return browser === 'Microsoft Internet Explorer' &&
-      (version === 'MSIE9.0' || version === 'MSIE8.0');
-  }
-  return false;
-}());
-
 //小数转换为百分比数
 export const toPercent = (num) => {
   num = Number(num);
@@ -268,9 +214,7 @@ export const thousands = (num, fixed = 2, hundredThousand) => {
     const a = n.replace(re, '$1,').split('.');
     return a[0];
   }
-  else {
-    return n.replace(re, '$1,');
-  }
+  return n.replace(re, '$1,');
 };
 
 /**
@@ -315,6 +259,7 @@ export default {
   formatDate,
   createDate,
   styleSupport,
+  thousands,
   toPercent,
   compare
 };

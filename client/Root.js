@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware, compose} from 'redux';
 import thunk from 'redux-thunk';
@@ -8,13 +9,13 @@ import {syncHistoryWithStore, routerMiddleware} from 'react-router-redux-fixed'
 import Immutable from 'immutable';
 
 //开发环境
-let DevTools, createLogger;
+let DevTools;
 if (process.env.NODE_ENV === 'development') {
-  const createDevTools = require('redux-devtools').createDevTools;
+  const {createDevTools} = require('redux-devtools');
   const LogMonitor = require('redux-devtools-log-monitor').default;
   const DockMonitor = require('redux-devtools-dock-monitor').default;
-  createLogger = require('redux-logger');
 
+  /*eslint-disable indent*/
   DevTools = createDevTools(
     <DockMonitor toggleVisibilityKey="ctrl-h"
                  changePositionKey="ctrl-w"
@@ -36,7 +37,8 @@ export function configureStore(history, reducers, initialState) {
 
   // Installs hooks that always keep react-router and redux store in sync
   const middleware = [thunk, routerMiddleware(history)];
-  if (createLogger) { //开发环境
+  if (process.env.NODE_ENV === 'development') { //开发环境
+    const {createLogger} = require('redux-logger');
     middleware.push(createLogger());
   }
 
@@ -89,15 +91,15 @@ const Root = ({routes, reducers, basename}) => {
 
   const _routes = typeof routes === 'function' ? routes(store) : routes;
   return DevTools ? (
-      <Provider store={store}>
-        <div>
-          <Router history={history}>
-            {_routes}
-          </Router>
-          <DevTools/>
-        </div>
-      </Provider>
-    )
+    <Provider store={store}>
+      <div>
+        <Router history={history}>
+          {_routes}
+        </Router>
+        <DevTools/>
+      </div>
+    </Provider>
+  )
     : (
       <Provider store={store}>
         <Router history={history}>

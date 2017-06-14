@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import test from 'ava';
 import {shallow, mount} from 'enzyme';
 import sinon from 'sinon';
@@ -19,7 +20,7 @@ function componentWrapper() {
         dispatch
       },
       childContextTypes: {
-        dispatch: React.PropTypes.func,
+        dispatch: PropTypes.func,
       },
     });
 }
@@ -37,7 +38,7 @@ test('calls componentDidMount', t => {
         dispatch
       },
       childContextTypes: {
-        dispatch: React.PropTypes.func,
+        dispatch: PropTypes.func,
       },
     });
 

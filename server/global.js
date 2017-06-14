@@ -1,4 +1,4 @@
-const SERVER_URL = process.env.SERVER_URL;
+const {SERVER_URL} = process.env;
 const global = {};
 
 global.apis = {

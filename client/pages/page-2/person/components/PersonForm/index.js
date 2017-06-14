@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import callApi from '../../../../../utils/fetch';
 import {addPerson} from '../../action';
 import './style.less'

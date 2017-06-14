@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 const compress = require('compression');
 const boot = require('./boot');
 const logger = require('./helper/mylogger').Logger;
-const getClientIP = require('./helper/utils').getClientIP;
+const {getClientIP} = require('./helper/utils');
 const errorHandler = require('./helper/errorHandler');
 
 const app = express();

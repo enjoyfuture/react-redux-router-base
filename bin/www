@@ -3,6 +3,7 @@
 const http = require('http');
 const config = require('../server/config');
 const app = require('../server');
+const logger = require('../server/helper/mylogger').Logger;
 
 /**
  * Create HTTP server.
@@ -34,11 +35,11 @@ function onError(error) {
   /*eslint-disable indent*/
   switch (error.code) {
     case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
+      logger.error(bind + ' requires elevated privileges');
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
+      logger.error(bind + ' is already in use');
       process.exit(1);
       break;
     default:
@@ -55,6 +56,6 @@ function onListening() {
   const bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
-  console.info('Listening on ' + bind);
-  console.info(`current env is [${process.env.NODE_ENV}]`);
+  logger.info('Listening on ' + bind);
+  logger.info(`current env is [${process.env.NODE_ENV}]`);
 }

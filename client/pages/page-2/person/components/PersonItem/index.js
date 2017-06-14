@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import callApi from '../../../../../utils/fetch';
 import {updatePerson, deletePerson} from '../../action';
 import './style.less'
@@ -84,7 +85,7 @@ class PersonItem extends Component {
   };
 
   textOrInput(field, val) {
-    const editing = this.state.editing;
+    const {editing} = this.state;
     if (editing) {
       // 这里使用可控输入框组件
       return (
@@ -98,7 +99,7 @@ class PersonItem extends Component {
 
   handleChange = (field) => {
     return (event) => {
-      const person = this.state.person;
+      const {person} = this.state;
       const val = event.target.value;
       this.setState({
         person: person.set(field, val)

@@ -3,10 +3,11 @@ import webpack from 'webpack';
 
 export default {
   entry: {
-    vendor: ['react', 'react-dom', 'redux', 'redux-thunk', 'react-redux', 'react-router',
-      'react-router-redux-fixed', 'isomorphic-fetch', 'classnames', 'immutable', 'redux-immutable',
-      'redux-devtools', 'es6-promise', 'react-addons-css-transition-group', 'react-addons-perf',
-      'redux-devtools-log-monitor', 'redux-devtools-dock-monitor', 'redux-logger']
+    vendor: ['classnames', 'es6-promise', 'immutable', 'isomorphic-fetch',
+      'prop-types', 'react', 'react-dom',
+      'react-redux', 'react-router', 'react-router-redux-fixed', 'react-transition-group',
+      'redux', 'redux-immutable', 'redux-thunk', 'react-addons-perf', 'redux-devtools',
+      'redux-devtools-dock-monitor', 'redux-devtools-log-monitor', 'redux-logger']
   },
 
   output: {

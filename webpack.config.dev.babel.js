@@ -16,15 +16,20 @@ try {
 }
 
 const webpackConfig = {
-  cache: true, //开启缓存,增量编译
-  devtool: 'source-map', //生成 source map文件
+  devtool: 'eval-source-map', // 生成 source map文件
+  target: 'web', // webpack 能够为多种环境构建编译, 默认是 'web'，可省略 https://doc.webpack-china.org/configuration/target/
   resolve: {
     //自动扩展文件后缀名
     extensions: ['.js', '.less', '.png', '.jpg', '.gif'],
     //模块别名定义，方便直接引用别名
     alias: {
       'react-router-redux': path.resolve(nodeModules, 'react-router-redux-fixed/lib/index.js'),
-    }
+    },
+    // 参与编译的文件
+    modules: [
+      'client',
+      'node_modules',
+    ],
   },
 
   // 入口文件 让webpack用哪个文件作为项目的入口
@@ -38,62 +43,67 @@ const webpackConfig = {
   // 出口 让webpack把处理完成的文件放在哪里
   output: {
     // 编译输出目录, 不能省略
-    path: path.resolve(appPath, 'dist'),
-    filename: '[name].js', //文件名称
-    publicPath: '/context/dist/' //资源上下文路径
+    path: path.resolve(appPath, 'dist'), // 打包输出目录（必选项）
+    filename: '[name].js', // 文件名称
+    //资源上下文路径，可以设置为 cdn 路径，比如 publicPath: 'http://cdn.example.com/assets/[hash]/'
+    publicPath: '/context/dist/'
   },
 
   module: {
-    loaders: [
+    rules: [
       // https://github.com/MoOx/eslint-loader
       {
         enforce: 'pre',
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'eslint-loader'
+        use: 'eslint-loader'
       },
       {
-        test: /\.js?$/,
-        loader: 'babel-loader',
+        test: /\.js$/,
         exclude: /node_modules/,
+        use: 'babel-loader',
       },
       // https://github.com/webpack/url-loader
       {
         test: /\.(png|jpg|gif)$/,
-        loader: 'url-loader',
-        query: {
-          name: '[hash].[ext]',
-          limit: 10000, // 10kb
+        use: {
+          loader: 'url-loader',
+          options: {
+            name: '[hash].[ext]',
+            limit: 10000, // 10kb
+          }
         }
       },
       {
         test: /\.(mp4|ogg|eot|woff|ttf|svg)$/,
-        loader: 'file-loader',
+        use: 'file-loader',
       },
       {
         test: /\.css/,
-        loader: 'style-loader!css-loader',
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.less/,
-        loader: 'style-loader!css-loader!less-loader',
+        use: ['style-loader', 'css-loader', 'less-loader'],
       }
     ]
   },
 
   plugins: [
     new webpack.HotModuleReplacementPlugin(), // 热部署替换模块
+    new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
-        'NODE_ENV': JSON.stringify('development'),
+        NODE_ENV: JSON.stringify('development'),
       }
     }),
     new webpack.LoaderOptionsPlugin({
+      debug: true,
       options: {
         // eslint 配置
         eslint: {
           emitError: true, // 验证失败，终止
-          configFile: '.eslintrc'
+          configFile: '.eslintrc.js'
         },
       }
     })
