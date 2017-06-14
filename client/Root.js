@@ -7,6 +7,7 @@ import {Router, useRouterHistory} from 'react-router';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import {syncHistoryWithStore, routerMiddleware} from 'react-router-redux-fixed'
 import Immutable from 'immutable';
+import callApi from './utils/fetch';
 
 //开发环境
 let DevTools;
@@ -127,3 +128,9 @@ if (process.env.NODE_ENV === 'development') {
    */
   window.Perf = Perf;
 }
+
+// 异常监控管理平台
+window.addEndListener('error', (e) => {
+  // 向平台发送错误
+
+});
