@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import callApi from '../../../../../utils/fetch';
 import {updatePerson, deletePerson} from '../../action';
-import './style.scss'
+import classNames from 'classnames/bind';
+import style from './style.scss';
+const cx = classNames.bind(style);
 
 class PersonItem extends Component {
   static propTypes = {
@@ -119,7 +121,7 @@ class PersonItem extends Component {
         <td>{this.textOrInput('firstName', firstName)}</td>
         <td>{this.textOrInput('lastName', lastName)}</td>
         <td>{firstName + lastName}</td>
-        <td className="link-group">
+        <td className={cx('link-group')}>
           <a href="" style={{display: !editing ? 'inline' : 'none'}}
              onClick={this.handleEdit}>编辑</a>
           <a href="" style={{display: editing ? 'inline' : 'none'}}

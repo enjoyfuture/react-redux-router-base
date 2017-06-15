@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames/bind';
 import callApi from '../../../../../utils/fetch';
 import {addPerson} from '../../action';
-import './style.scss'
+
+import style from './style.scss';
+const cx = classNames.bind(style);
 
 class PersonForm extends Component {
   static contextTypes = {
@@ -60,24 +63,24 @@ class PersonForm extends Component {
     const {firstName, lastName} = this.state;
     return (
       <form>
-        <div className="form-group row">
-          <label className="col-2 col-form-label">First Name</label>
-          <div className="col-4">
-            <input type="text" className="form-control" placeholder="First Name"
+        <div className={cx('form-group', 'row')}>
+          <label className={cx('col-2', 'col-form-label')}>First Name</label>
+          <div className={cx('col-4')}>
+            <input type="text" className={cx('form-control')} placeholder="First Name"
                    value={firstName} onChange={this.handleChange('firstName')}/>
           </div>
         </div>
 
-        <div className="form-group row">
-          <label className="col-2 col-form-label">Last Name</label>
-          <div className="col-4">
-            <input type="text" className="form-control" placeholder="Last Name"
+        <div className={cx('form-group', 'row')}>
+          <label className={cx('col-2', 'col-form-label')}>Last Name</label>
+          <div className={cx('col-4')}>
+            <input type="text" className={cx('form-control')} placeholder="Last Name"
                    value={lastName} onChange={this.handleChange('lastName')}/>
           </div>
         </div>
-        <div className="form-group row">
-          <div className="offset-2 col-4">
-            <button type="button" className="btn btn-primary"
+        <div className={cx('form-group', 'row')}>
+          <div className={cx('offset-2', 'col-4')}>
+            <button type="button" className={cx('btn', 'btn-primary')}
                     onClick={this.savePerson}>Save
             </button>
           </div>

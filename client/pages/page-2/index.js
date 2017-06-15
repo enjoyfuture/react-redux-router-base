@@ -13,8 +13,6 @@ import film from './film/reducer';
 import routes from './routes';
 import {context} from '../../utils/config';
 
-import '../../common/scss/main.scss';
-
 // Promise 兼容性处理
 promise.polyfill();
 

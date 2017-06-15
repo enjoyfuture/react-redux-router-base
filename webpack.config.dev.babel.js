@@ -97,11 +97,42 @@ const webpackConfig = {
       },
       {
         test: /\.css/,
-        use: ['style-loader', 'css-loader', 'postcss-loader?pack=cleaner'],
+        use: ['style-loader', {
+          loader: 'css-loader',
+          options: {
+            sourceMap: true,
+            modules: true,
+            localIdentName: '[name]__[local]__[hash:base64:5]'
+          }
+        }, {
+          loader: 'postcss-loader',
+          options: {
+            pack: 'cleaner',
+            sourceMap: true,
+          }
+        }],
       },
       {
         test: /\.scss/,
-        use: ['style-loader', 'css-loader', 'postcss-loader?pack=cleaner', 'sass-loader?outputStyle=expanded'],
+        use: ['style-loader', {
+          loader: 'css-loader',
+          options: {
+            sourceMap: true,
+            modules: true,
+            localIdentName: '[name]__[local]__[hash:base64:5]'
+          }
+        }, {
+          loader: 'postcss-loader',
+          options: {
+            pack: 'cleaner',
+            sourceMap: true,
+          }
+        }, {
+          loader: 'sass-loader',
+          options: {
+            outputStyle: 'expanded',
+          }
+        }],
       }
     ]
   },

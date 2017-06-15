@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import ReactCSSTransitionGroup from 'react-transition-group';
-import classNames from 'classnames';
+import {CSSTransitionGroup} from 'react-transition-group';
 import Immutable from 'immutable';
 import {getFilmList} from '../../action';
 import {setCache} from '../../../../../common/action/caches';
 import FilmList from '../FilmList';
 
-import './style.scss'
+import mainCss from '../../../../../utils/main-css';
 
 class Film extends Component {
   static propTypes = {
@@ -79,25 +78,25 @@ class Film extends Component {
      */
     return (
       <div>
-        <ul className="nav nav-pills">
-          <li className="nav-item">
-            <a className={classNames('nav-link', activeTab === 'all' ? 'active' : '')}
-               onClick={this.switchTab('all')}>全部</a>
+        <ul className={mainCss('nav', 'nav-pills')}>
+          <li className={mainCss('nav-item')}>
+            <a className={mainCss('nav-link', activeTab === 'all' ? 'active' : '')}
+               onClick={this.switchTab('all')} href="#">全部</a>
           </li>
-          <li className="nav-item">
-            <a className={classNames('nav-link', activeTab === 'popularity' ? 'active' : '')}
-               onClick={this.switchTab('popularity')}>人气</a>
+          <li className={mainCss('nav-item')}>
+            <a className={mainCss('nav-link', activeTab === 'popularity' ? 'active' : '')}
+               onClick={this.switchTab('popularity')} href="#">人气</a>
           </li>
         </ul>
-        <ReactCSSTransitionGroup
+        <CSSTransitionGroup
           component="div"
           transitionName={transitionName}
           transitionEnterTimeout={500}
           transitionLeaveTimeout={200}>
-          <div className="tab-content mt-1" key={activeTab}>
+          <div className={mainCss('mt-1')} key={activeTab}>
             <FilmList film={film} activeTab={activeTab}/>
           </div>
-        </ReactCSSTransitionGroup>
+        </CSSTransitionGroup>
       </div>
     );
   }

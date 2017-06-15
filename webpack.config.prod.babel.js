@@ -83,7 +83,9 @@ const webpackConfig = {
           use: [{
             loader: 'css-loader',
             options: {
-              sourceMap: true
+              sourceMap: true,
+              modules: true,
+              localIdentName: '[local][hash:base64:5]'
             }
           }, {
             loader: 'postcss-loader',
@@ -103,7 +105,9 @@ const webpackConfig = {
           use: [{
             loader: 'css-loader',
             options: {
-              sourceMap: true
+              sourceMap: true,
+              modules: true,
+              localIdentName: '[local][hash:base64:5]'
             }
           }, {
             loader: 'postcss-loader',

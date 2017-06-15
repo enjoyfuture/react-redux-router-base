@@ -1,9 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Link} from 'react-router';
+import classNames from 'classnames/bind';
 import PersonItem from '../PersonItem';
 import {getPersonList} from '../../action';
-import './style.scss'
+
+import mainCss from '../../../../../utils/main-css';
+import style from './style.scss';
+const cx = classNames.bind(style);
 
 class PersonList extends Component {
   static propTypes = {
@@ -47,7 +51,7 @@ class PersonList extends Component {
 
     if (!paging) {
       return (
-        <div className="page-loading">载入中，请稍后 ...</div>
+        <div className={cx('page-loading')}>载入中，请稍后 ...</div>
       );
     }
 
@@ -56,8 +60,8 @@ class PersonList extends Component {
 
     if (items.size === 0) {
       return (
-        <div className="no-items">
-          <div className="no-items-icon"></div>
+        <div className={cx('no-items')}>
+          <div className={cx('no-items-icon')}></div>
           <p>暂无记录</p>
         </div>
       );
@@ -65,8 +69,8 @@ class PersonList extends Component {
 
     return (
       <div>
-        <table className="table">
-          <thead className="thead-inverse">
+        <table className={cx('table')}>
+          <thead className={cx('thead-inverse')}>
             <tr>
               <th>#</th>
               <th>First Name</th>
@@ -95,15 +99,15 @@ class PersonList extends Component {
     const lastPage = paging && paging.get('lastPage');
     return (
       <div>
-        <div className="mb-1">
-          <Link className="btn btn-primary" to="/person/create">Add Person</Link>
+        <div className={mainCss('mb-1')}>
+          <Link className={cx('btn', 'btn-primary')} to="/person/create">Add Person</Link>
         </div>
         {this.renderList()}
-        <div className="btn-group">
-          <button type="button" className="btn btn-primary" disabled={lastPage}
+        <div className={cx('btn-group')}>
+          <button type="button" className={cx('btn', 'btn-primary')} disabled={lastPage}
                   onClick={this.loadMore}>Load More
           </button>
-          <button type="button" className="btn btn-info"
+          <button type="button" className={cx('btn', 'btn-info')}
                   onClick={this.refresh}>Refresh
           </button>
         </div>

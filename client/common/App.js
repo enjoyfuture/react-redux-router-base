@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import className from 'classnames';
 import Header from './components/Header'
 import Footer from './components/Footer';
 import {clearToast} from './action/toast';
+
+import mainCss from '../utils/main-css';
 
 export class App extends Component {
 
@@ -40,8 +41,8 @@ export class App extends Component {
 
     return (
       <div
-        className={className('toast-panel', effect || '')}>
-        <div className="toast">{content}</div>
+        className={mainCss('toast-panel', effect || '')}>
+        <div className={mainCss('toast')}>{content}</div>
       </div>
     );
   }
@@ -52,7 +53,7 @@ export class App extends Component {
     } = this.props;
 
     return (
-      <div className="main">
+      <div className={mainCss('main')}>
         {this.renderToast()}
         <Header />
         {children}

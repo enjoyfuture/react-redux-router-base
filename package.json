@@ -1,6 +1,6 @@
 {
   "name": "node-react-redux-base-demo",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "wangyanjun",
   "description": "node-react-redux-base-demo",
   "keywords": [
@@ -71,13 +71,12 @@
     "css-loader": "^0.28.4",
     "enzyme": "^2.8.2",
     "eslint": "^4.0.0",
-    "eslint-loader": "^1.7.1",
+    "eslint-loader": "^1.8.0",
     "eslint-plugin-ava": "^4.2.0",
     "eslint-plugin-flowtype": "^2.34.0",
     "eslint-plugin-react": "^7.1.0",
     "extract-text-webpack-plugin": "^2.1.2",
     "file-loader": "^0.11.2",
-    "immutable": "^3.8.1",
     "jsdom": "^11.0.0",
     "mock-css-modules": "^1.0.0",
     "nock": "^9.0.2",
