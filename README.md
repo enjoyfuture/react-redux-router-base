@@ -1,4 +1,4 @@
-# node-react-redux-base-demo
+# node-react-redux-base
 
 ## Server 
 
@@ -123,7 +123,7 @@ We need to add the following files in html page.
 
 ## Issue
 
-http://gitlab.cbpmgt.com/fe-team/node-react-redux-base-demo/issues
+http://gitlab.cbpmgt.com/fe-team/node-react-redux-base/issues
 
 ## Change Log
 

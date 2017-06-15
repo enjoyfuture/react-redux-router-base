@@ -1,8 +1,8 @@
 {
-  "name": "node-react-redux-base-demo",
+  "name": "node-react-redux-base",
   "version": "0.2.0",
   "author": "wangyanjun",
-  "description": "node-react-redux-base-demo",
+  "description": "node-react-redux-base",
   "keywords": [
     "react",
     "router",
@@ -111,13 +111,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@gitlab.cbpmgt.com:fe-team/node-react-redux-base-demo.git"
+    "url": "git@gitlab.cbpmgt.com:fe-team/node-react-redux-base.git"
   },
   "license": "MIT",
   "bugs": {
-    "url": "http://gitlab.cbpmgt.com/fe-team/node-react-redux-base-demo/issues"
+    "url": "http://gitlab.cbpmgt.com/fe-team/node-react-redux-base/issues"
   },
-  "homepage": "http://gitlab.cbpmgt.com/fe-team/node-react-redux-base-demo#readme",
+  "homepage": "http://gitlab.cbpmgt.com/fe-team/node-react-redux-base#readme",
   "ava": {
     "files": [
       "client/**/*.spec.js"
