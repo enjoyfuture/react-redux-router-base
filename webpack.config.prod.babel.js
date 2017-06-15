@@ -4,6 +4,7 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import MappingPlugin from 'webpack-mapping-plugin';
 import precss from 'precss';
 import autoprefixer from 'autoprefixer';
+import flexbugs from 'postcss-flexbugs-fixes';
 
 const appPath = path.resolve(__dirname, 'public');
 const nodeModules = path.resolve(__dirname, 'node_modules');
@@ -112,8 +113,16 @@ const webpackConfig = {
           }, {
             loader: 'postcss-loader',
             options: {
-              pack: 'cleaner',
               sourceMap: true,
+              plugins: [
+                precss,
+                flexbugs,
+                autoprefixer({
+                  flexbox: 'no-2009',
+                  browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 35', 'Firefox >= 38',
+                    'Android >= 4.4', 'iOS >=8', 'Safari >= 8']
+                })
+              ]
             }
           }, {
             loader: 'sass-loader', options: {
@@ -121,7 +130,6 @@ const webpackConfig = {
               outputStyle: 'compressed'
             }
           }],
-          // publicPath: '/public/dist/'
         })
       }
     ],
@@ -162,17 +170,6 @@ const webpackConfig = {
        loaders 的压缩模式将在 webpack 3 或后续版本中取消。
        为了兼容旧的 loaders，loaders 可以通过插件来切换到压缩模式：*/
       minimize: true,
-      options: {
-        postcss () {
-          return {
-            defaults: [precss, autoprefixer],
-            cleaner: [autoprefixer({
-              flexbox: 'no-2009',
-              browsers: ['Chrome >= 35', 'Firefox >= 38', 'Android >= 4.4', 'iOS >=8', 'Safari >= 8']
-            })]
-          };
-        },
-      }
     })
   ],
 };
