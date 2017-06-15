@@ -11,7 +11,7 @@ import home from './reducer';
 import App from '../../common/App';
 import HomePage from './HomePage';
 
-import '../../common/less/main.less';
+import '../../common/scss/main.scss';
 
 // Promise 兼容性处理
 promise.polyfill();

@@ -11,8 +11,9 @@ import person from './person/reducer';
 import film from './film/reducer';
 
 import routes from './routes';
+import {context} from '../../utils/config';
 
-import '../../common/less/main.less';
+import '../../common/scss/main.scss';
 
 // Promise 兼容性处理
 promise.polyfill();
@@ -26,6 +27,6 @@ const reducers = combineReducers({
 });
 
 render(
-  <Root routes={routes} reducers={reducers} basename="/context/page2"/>,
+  <Root routes={routes} reducers={reducers} basename={`${context}/page2`}/>,
   document.getElementById('layout')
 );

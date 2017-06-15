@@ -9,7 +9,7 @@ import routing from '../../common/reducers/routing';
 import toast from '../../common/reducers/toast';
 import App from '../../common/App';
 import AboutPage from './AboutPage';
-import '../../common/less/main.less';
+import '../../common/scss/main.scss';
 
 // Promise 兼容性处理
 promise.polyfill();

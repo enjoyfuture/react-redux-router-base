@@ -8,8 +8,12 @@ import autoprefixer from 'autoprefixer';
 const appPath = path.resolve(__dirname, 'public');
 const nodeModules = path.resolve(__dirname, 'node_modules');
 
+// 定义根目录上下文，因为有的项目是用二级路径区分的，
+// 如果没有二级路径区分，可以设为 '', 如 http://ft.jd.com
+const context = '/context';
+
 // multiple extract instances
-const extractLess = new ExtractTextPlugin({
+const extractScss = new ExtractTextPlugin({
   filename: 'css/[name].[chunkhash].css',
   allChunks: true
 });
@@ -21,7 +25,7 @@ const extractCSS = new ExtractTextPlugin({
 const webpackConfig = {
   devtool: 'source-map', // 生成 source-map文件 原始源码
   resolve: {
-    extensions: ['.js', '.jsx', '.css', '.less'],
+    extensions: ['.js', '.css', '.scss'],
     //模块别名定义，方便直接引用别名
     alias: {
       'react-router-redux': path.resolve(nodeModules, 'react-router-redux-fixed/lib/index.js'),
@@ -46,8 +50,8 @@ const webpackConfig = {
   output: {
     path: path.join(appPath, 'dist'),
     filename: '[name].[chunkhash].js',
-    publicPath: '/context/dist/',
-    sourceMapFilename: '[name].map',
+    publicPath: `${context}/dist/`,
+    sourceMapFilename: 'map/[file].map',
   },
 
   module: {
@@ -76,17 +80,44 @@ const webpackConfig = {
         test: /\.css$/,
         use: extractCSS.extract({
           fallback: 'style-loader',
-          use: ['css-loader', 'postcss-loader?pack=cleaner'],
-          publicPath: '/public/dist'
+          use: [{
+            loader: 'css-loader',
+            options: {
+              sourceMap: true
+            }
+          }, {
+            loader: 'postcss-loader',
+            options: {
+              pack: 'cleaner',
+              sourceMap: true,
+            }
+          }],
+          // publicPath: '/public/dist/' 这里如设置会覆盖 output 中的 publicPath
         })
       },
       {
-        test: /\.less/,
+        test: /\.scss/,
         exclude: /node_modules/,
-        use: extractLess.extract({
+        use: extractScss.extract({
           fallback: 'style-loader',
-          use: ['css-loader', 'postcss-loader?pack=cleaner', 'less-loader'],
-          publicPath: '/public/dist'
+          use: [{
+            loader: 'css-loader',
+            options: {
+              sourceMap: true
+            }
+          }, {
+            loader: 'postcss-loader',
+            options: {
+              pack: 'cleaner',
+              sourceMap: true,
+            }
+          }, {
+            loader: 'sass-loader', options: {
+              sourceMap: true,
+              outputStyle: 'compressed'
+            }
+          }],
+          // publicPath: '/public/dist/'
         })
       }
     ],
@@ -107,10 +138,10 @@ const webpackConfig = {
       names: ['vendor', 'manifest'],
       filename: '[name].[chunkhash].js',
     }),
-    extractLess,
+    extractScss,
     extractCSS,
     new MappingPlugin({
-      basePath: '/context/dist/',
+      basePath: `${context}/dist/`,
     }),
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: true,
@@ -121,7 +152,7 @@ const webpackConfig = {
         except: [] // 设置不混淆变量名
       }
     }),
-    new webpack.BannerPlugin({banner: 'Banner', raw: true, entryOnly: true}),
+    // new webpack.BannerPlugin({banner: 'Banner', raw: true, entryOnly: true}),
     new webpack.LoaderOptionsPlugin({
       /*UglifyJsPlugin 不再压缩 loaders。在未来很长一段时间里，需要通过设置 minimize:true 来压缩 loaders。
        loaders 的压缩模式将在 webpack 3 或后续版本中取消。

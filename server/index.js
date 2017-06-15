@@ -13,9 +13,6 @@ const errorHandler = require('./helper/errorHandler');
 
 const app = express();
 
-//页面上下文，根路径，nginx 会卸载掉前缀 context
-const context = process.env.NODE_ENV === 'product' ? '/' : '/context/';
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -29,11 +26,7 @@ app.use(require('./helper/requestLogger').create(logger));
 
 logger.info(`process.env.NODE_ENV is [${process.env.NODE_ENV}]`);
 
-if (process.env.NODE_ENV === 'product') {
-  app.use(express.static(path.join(__dirname, '../public')));
-} else {
-  app.use('/context', express.static(path.join(__dirname, '../public')));
-}
+app.use(process.env.URL_CONTEXT, express.static(path.join(__dirname, '../public')));
 
 if (process.env.NODE_ENV === 'development') {
   const webpackConfig = require('../webpack.config.dev.babel');

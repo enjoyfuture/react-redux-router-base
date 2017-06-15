@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {hello, clearHello} from './action';
 import {setToast} from '../../common/action/toast';
-import './home.less';
+import './home.scss';
 
 export class Home extends Component {
   static propTypes = {

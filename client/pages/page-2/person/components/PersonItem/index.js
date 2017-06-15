@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import callApi from '../../../../../utils/fetch';
 import {updatePerson, deletePerson} from '../../action';
-import './style.less'
+import './style.scss'
 
 class PersonItem extends Component {
   static propTypes = {

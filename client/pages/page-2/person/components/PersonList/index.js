@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {Link} from 'react-router';
 import PersonItem from '../PersonItem';
 import {getPersonList} from '../../action';
-import './style.less'
+import './style.scss'
 
 class PersonList extends Component {
   static propTypes = {

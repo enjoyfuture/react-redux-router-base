@@ -6,6 +6,7 @@ const path = require('path');
 const serialize = require('serialize-javascript');
 const handlebars = require('handlebars');
 const logger = require('./helper/mylogger').Logger;
+const {URL_CONTEXT} = require('./config');
 
 const env = process.env.NODE_ENV;
 
@@ -15,8 +16,8 @@ const fileMapping = env === 'development' ? null : require('../public/dist/mappi
 const rootPath = path.join(__dirname, 'routes');
 
 //页面上下文，根路径，nginx 会卸载掉前缀 context
-const context = process.env.NODE_ENV === 'product' ? '' : '/context';
-const urlPrefix = '/context/dist/';
+const context = process.env.NODE_ENV === 'product' ? '' : URL_CONTEXT;
+const urlPrefix = `${URL_CONTEXT}/dist/`;
 
 const readTmpl = (callback) => {
   fs.readFile(path.join(__dirname, 'views', 'layout.hbs'), 'utf8', (err, data) => {
@@ -102,8 +103,9 @@ function addRoute(app, routePath = rootPath) {
          <link rel='stylesheet' href="${fileMapping[`${urlPrefix}${page}.css`]}">`;
 
     const vendor = env === 'development'
-      ? '<script src="/context/dll/vendor.dll.js"></script>'
-      : `<script src="${fileMapping[`${urlPrefix}vendor.js`]}"></script>`;
+      ? `<script src="${URL_CONTEXT}/dll/vendor.dll.js"></script>`
+      : `<script src="${fileMapping[`${urlPrefix}manifest.js`]}"></script>
+         <script src="${fileMapping[`${urlPrefix}vendor.js`]}"></script>`;
     const pageScript = env === 'development'
       ? `<script src="${urlPrefix}${page}.js"></script>`
       : `<script src="${fileMapping[`${urlPrefix}${page}.js`]}"></script>`;
@@ -111,7 +113,8 @@ function addRoute(app, routePath = rootPath) {
     const data = {
       title, scriptHtml,
       script: vendor + pageScript,
-      links
+      links,
+      context: URL_CONTEXT
     };
 
     if (template) {

@@ -1,10 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import {context} from '../../utils/config';
 
 const Header = () => {
   const {pathname} = document.location;
-  const context = '/context';//路径上下文，根据实际业务定义
   return (
     <nav className="header-nav">
       <a href={`${context}/home`}

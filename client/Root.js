@@ -130,7 +130,7 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // 异常监控管理平台
-window.addEndListener('error', (e) => {
+window.addEventListener('error', (e) => {
   // 向平台发送错误
 
 });

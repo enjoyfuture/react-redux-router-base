@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {setToast} from '../../../../../common/action/toast';
-import './style.less';
+import './style.scss';
 
 export class Com1 extends Component {
   static contextTypes = {

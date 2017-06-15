@@ -6,6 +6,10 @@ const hotMiddlewareScript = 'webpack-hot-middleware/client?path=/__webpack_hmr&t
 const appPath = path.resolve(__dirname, 'public');
 const nodeModules = path.resolve(__dirname, 'node_modules');
 
+// 定义根目录上下文，因为有的项目是用二级路径区分的，
+// 如果没有二级路径区分，可以设为 '', 如 http://ft.jd.com
+const context = '/context';
+
 //判断 dll 文件是否已生成
 let dllExist = false;
 try {
@@ -46,7 +50,7 @@ const webpackConfig = {
     path: path.resolve(appPath, 'dist'), // 打包输出目录（必选项）
     filename: '[name].js', // 文件名称
     //资源上下文路径，可以设置为 cdn 路径，比如 publicPath: 'http://cdn.example.com/assets/[hash]/'
-    publicPath: '/context/dist/'
+    publicPath: `${context}/dist/`,
   },
 
   module: {
@@ -57,6 +61,19 @@ const webpackConfig = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: 'eslint-loader'
+      },
+      {
+        enforce: 'pre',
+        test: /\.scss/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'sasslint-loader',
+          options: {
+            configFile: '.sass-lint.yml',
+            emitError: true,
+            failOnWarning: true
+          }
+        }
       },
       {
         test: /\.js$/,
@@ -80,11 +97,11 @@ const webpackConfig = {
       },
       {
         test: /\.css/,
-        use: ['style-loader', 'css-loader'],
+        use: ['style-loader', 'css-loader', 'postcss-loader?pack=cleaner'],
       },
       {
-        test: /\.less/,
-        use: ['style-loader', 'css-loader', 'less-loader'],
+        test: /\.scss/,
+        use: ['style-loader', 'css-loader', 'postcss-loader?pack=cleaner', 'sass-loader?outputStyle=expanded'],
       }
     ]
   },

@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import ReactCSSTransitionGroup from 'react-transition-group';
 import classNames from 'classnames';
 import Immutable from 'immutable';
 import {getFilmList} from '../../action';
 import {setCache} from '../../../../../common/action/caches';
 import FilmList from '../FilmList';
 
-import './style.less'
+import './style.scss'
 
 class Film extends Component {
   static propTypes = {

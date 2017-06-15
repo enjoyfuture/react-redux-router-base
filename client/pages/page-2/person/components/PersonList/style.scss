@@ -1,0 +1,19 @@
+@import "../../../../../common/scss/components/loading";
+@import "../../../../../common/scss/components/table";
+@import "../../../../../common/scss/components/btn";
+
+.no-items {
+  > p {
+    margin-top: 5px;
+    color: #999;
+    text-align: center;
+  }
+  > .no-items-icon {
+    display: block;
+    width: 90px;
+    height: 90px;
+    margin: 0 auto;
+    background: url("./no_items.png") no-repeat;
+    background-size: 100% 100%;
+  }
+}

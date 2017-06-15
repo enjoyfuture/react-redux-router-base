@@ -1,5 +1,5 @@
 import React from 'react';
-import './about.less';
+import './about.scss';
 
 import reactLogo from './images/react-logo.svg';
 import reduxLogo from './images/redux-logo.png';

@@ -5,7 +5,7 @@ test('ErrorHandler Test: 500 error', t => {
   const error = new Error();
   error.errorCode = 500;
   const message = errorHandler(error);
-  t.is(message, '服务器出错');
+  t.is(message, '请求失败');
 });
 
 test('ErrorHandler Test: using errorMsg', t => {
