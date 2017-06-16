@@ -1,5 +1,5 @@
 const express = require('express');
-const service = require('../service/page-1');
+const service = require('../../service/page-1');
 const router = express.Router();
 
 router.post('/list', (req, res, next) => {

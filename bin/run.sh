@@ -8,7 +8,14 @@
 
 export appName="react-node-demo"
 export PATH=/export/local/node/bin:/export/local/pm2/bin:$PATH
-export PM2_HOME=/export/local/pm2-home
+#export PM2_HOME=/export/local/pm2-home
+
+#根据输入参数设置不同的pm2_home,输入参数在service脚本中指定
+if [ $2 -a $2 = "beta" ]; then
+    export PM2_HOME=/export/local/pm2-home-demo #测试环境带上项目名称防止pm2_home冲突
+else
+    export PM2_HOME=/export/local/pm2-home #非测试环境一定要用pm2-home！！！！
+fi
 
 baseDir=`cd $(dirname $0);pwd`
 logPath="/export/log/$appName"

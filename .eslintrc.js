@@ -131,7 +131,7 @@ module.exports = {
     "radix": 2, // 在调用 parseInt 应该指定基数
     "require-await": 2, // 对于 async 表达式，必须有对应的 await 表达式
     "vars-on-top": 0, // 所有变量声明是否都放在函数最上面或过程快最上面
-    "wrap-iife": [2, "any"], // 立即执行函数是里面包裹还是外面包裹，默认是外面包裹，即 outside
+    "wrap-iife": [0, "any"], // 立即执行函数是里面包裹还是外面包裹，默认是外面包裹，即 outside
     "yoda": 2, // 不允许使用 yoda 条件表达式，常量值在前的比较表达式，比如： if(1 === a){ }
 
     // Variables

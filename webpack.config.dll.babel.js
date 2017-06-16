@@ -3,8 +3,8 @@ import webpack from 'webpack';
 
 export default {
   entry: {
-    vendor: ['classnames', 'es6-promise', 'immutable', 'isomorphic-fetch',
-      'prop-types', 'react', 'react-dom',
+    vendor: ['classnames', 'es6-promise', 'history/lib/createBrowserHistory', 'immutable',
+      'isomorphic-fetch', 'prop-types', 'react', 'react-dom',
       'react-redux', 'react-router', 'react-router-redux-fixed', 'react-transition-group',
       'redux', 'redux-immutable', 'redux-thunk', 'react-addons-perf', 'redux-devtools',
       'redux-devtools-dock-monitor', 'redux-devtools-log-monitor', 'redux-logger']

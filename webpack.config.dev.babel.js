@@ -48,7 +48,7 @@ const webpackConfig = {
   output: {
     // 编译输出目录, 不能省略
     path: path.resolve(appPath, 'dist'), // 打包输出目录（必选项）
-    filename: '[name].js', // 文件名称
+    filename: '[name].bundle.js', // 文件名称
     //资源上下文路径，可以设置为 cdn 路径，比如 publicPath: 'http://cdn.example.com/assets/[hash]/'
     publicPath: `${context}/dist/`,
   },

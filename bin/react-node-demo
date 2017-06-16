@@ -18,7 +18,7 @@ fi
 echo -n $"Starting $prog: "
 [ -f $exec_dir/start.sh ] || exit 2
 [ -x $exec_dir/start.sh ] || exit 2
-$exec_dir/start.sh
+$exec_dir/start.sh beta
 retval=$?
 }
 
@@ -31,7 +31,7 @@ echo $exec_dir
 echo -n $"Stopping $prog: "
 [ -f $exec_dir/stop.sh ] || exit 2 
 [ -x $exec_dir/stop.sh ] || exit 2
-$exec_dir/stop.sh
+$exec_dir/stop.sh beta
 retval=$?
 #retval=0
 }

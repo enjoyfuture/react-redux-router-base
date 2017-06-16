@@ -5,7 +5,7 @@ import {createStore, applyMiddleware, compose} from 'redux';
 import thunk from 'redux-thunk';
 import {Router, useRouterHistory} from 'react-router';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
-import {syncHistoryWithStore, routerMiddleware} from 'react-router-redux-fixed'
+import {syncHistoryWithStore, routerMiddleware} from 'react-router-redux-fixed';
 import Immutable from 'immutable';
 import callApi from './utils/fetch';
 
@@ -84,7 +84,7 @@ const Root = ({routes, reducers, basename}) => {
     basename: basename ? basename : '/'
   });
   //初始化 store
-  const store = configureStore(browserHistory, reducers, Immutable.fromJS({}));
+  const store = configureStore(browserHistory, reducers, Immutable.fromJS(window.__initialState__ || {}));
   const history = syncHistoryWithStore(browserHistory, store, {
     selectLocationState: createSelectLocationState(),
     adjustUrlOnReplay: true

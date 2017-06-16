@@ -6,29 +6,35 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const compress = require('compression');
-const boot = require('./boot');
+const apiRouter = require('./routes/api-route-loader');
+const pageRouter = require('./routes/page-routes');
 const logger = require('./helper/mylogger').Logger;
 const {getClientIP} = require('./helper/utils');
 const errorHandler = require('./helper/errorHandler');
 
+const isDev = process.env.NODE_ENV === 'development';
+const isProduct = process.env.NODE_ENV === 'product';
 const app = express();
+
+logger.info(`process.env.NODE_ENV is [${process.env.NODE_ENV}]`);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
-
-app.use(compress());//开启Gzip
+//非生产环境开启Gzip，生产环境nginx会开启gzip
+if (!isProduct) {
+  app.use(compress());
+}
 app.use(bodyParser.json({limit: '20mb'}));//设置前端post提交最大内容
 app.use(bodyParser.urlencoded({limit: '20mb', extended: false}));
 app.use(bodyParser.text());
 app.use(cookieParser());
 app.use(require('./helper/requestLogger').create(logger));
 
-logger.info(`process.env.NODE_ENV is [${process.env.NODE_ENV}]`);
+// 因为 Nginx 会卸载 context
+app.use(isProduct ? '' : process.env.URL_CONTEXT, express.static(path.join(__dirname, '../public')));
 
-app.use(process.env.URL_CONTEXT, express.static(path.join(__dirname, '../public')));
-
-if (process.env.NODE_ENV === 'development') {
+if (isDev) {
   const webpackConfig = require('../webpack.config.dev.babel');
   const webpack = require('webpack');
   const compiler = webpack(webpackConfig);
@@ -58,7 +64,8 @@ app.use((req, res, next) => {
 });
 
 // load routers
-boot(app);
+apiRouter(app);
+pageRouter(app);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {

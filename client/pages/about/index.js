@@ -9,6 +9,7 @@ import routing from '../../common/reducers/routing';
 import toast from '../../common/reducers/toast';
 import App from '../../common/App';
 import AboutPage from './AboutPage';
+import {context} from '../../utils/config';
 import '../../common/scss/main.scss';
 
 // Promise 兼容性处理
@@ -26,6 +27,6 @@ const reducers = combineReducers({
 });
 
 render(
-  <Root routes={routes} reducers={reducers} basename="/context/about"/>,
+  <Root routes={routes} reducers={reducers} basename={`${context}/about`}/>,
   document.getElementById('layout')
 );

@@ -1,5 +1,19 @@
 # node-react-redux-base
 
+## 关于 url 二级路径即上下文 context 的说明
+
+* 有的项目根路径为 '' ，比如 http://ft.jd.com
+* 有的项目根路径为 '/abs' ，比如 http://ft.jd.com/abs
+
+基础项目中 context 设置为 '/context'，如果实际项目中 context 是 '' 或其他值，需要修改项目中对应的变量值
+
+* /client/utils/config.js     context
+* /server/config/beta/index.js   URL_CONTEXT
+* /server/config/beta/index.js   URL_CONTEXT
+* /server/config/beta/index.js   URL_CONTEXT
+* webpack.config.dev.babel.js    context
+* webpack.config.prod.babel.js   context 
+
 ## Server 
 
 ### generate dll file
