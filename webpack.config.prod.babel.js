@@ -140,6 +140,7 @@ const webpackConfig = {
     new webpack.optimize.AggressiveMergingPlugin(),
     //用来保证编译过程不出错
     new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.optimize.ModuleConcatenationPlugin(), // Scope Hoisting-作用域提升
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('production'),

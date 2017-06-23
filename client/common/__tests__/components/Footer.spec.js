@@ -9,5 +9,5 @@ test('renders the footer properly', t => {
   );
 
   t.is(wrapper.find('p').length, 1);
-  t.is(wrapper.find('p').first().text(), 'Copyright © 2016-2017 京东金融科技业务部前端');
+  t.is(wrapper.find('p').first().text(), 'Copyright © 2016-2017 joy-web');
 });

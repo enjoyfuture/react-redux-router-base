@@ -140,6 +140,7 @@ const webpackConfig = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(), // 热部署替换模块
     new webpack.NoEmitOnErrorsPlugin(),
+    new webpack.optimize.ModuleConcatenationPlugin(), // Scope Hoisting-作用域提升
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('development'),

@@ -12,6 +12,5 @@ const props = {
 
 test('render children', t => {
   const wrapper = shallow(<Person {...props} />);
-  t.truthy(wrapper.hasClass('person'));
   t.truthy(wrapper.children(), children);
 });

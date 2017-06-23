@@ -108,8 +108,12 @@ npm run check-coverage
 
 ## Issue
 
-http://gitlab.cbpmgt.com/fe-team/node-react-redux-base/issues
+https://github.com/joy-web/react-redux-router-base/issues
 
 ## Change Log
 
 Please view [here](./CHANGELOG.md)
+
+## 相关参考
+
+* [css module for react](https://github.com/camsong/blog/issues/5)

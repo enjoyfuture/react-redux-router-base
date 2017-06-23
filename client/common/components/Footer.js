@@ -6,7 +6,7 @@ const Footer = () => {
     <footer className={mainCss('footer-assist')}>
       <div className={mainCss('footer')}>
         <div className={mainCss('container')}>
-          <p className={mainCss('copyright')}>Copyright &copy; 2016-2017 京东金融科技业务部前端</p>
+          <p className={mainCss('copyright')}>Copyright &copy; 2016-2017 joy-web</p>
         </div>
       </div>
     </footer>
