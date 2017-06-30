@@ -128,8 +128,13 @@ const webpackConfig = {
             sourceMap: true,
           }
         }, {
+          // Webpack loader that resolves relative paths in url() statements
+          // based on the original source file
+          loader: 'resolve-url-loader',
+        }, {
           loader: 'sass-loader',
           options: {
+            sourceMap: true, // 必须保留
             outputStyle: 'expanded',
           }
         }],
