@@ -10,7 +10,7 @@
 * /server/config/beta/index.js   URL_CONTEXT
 * /server/config/development/index.js   URL_CONTEXT
 * /server/config/product/index.js   URL_CONTEXT
-* webpack.build.babel.js    context
+* webpack.build.babel.js    process.env.URL_CONTEXT
 
 ## Server 
 
