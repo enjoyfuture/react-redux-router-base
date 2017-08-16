@@ -62,7 +62,7 @@ class Film extends Component {
 
   // CSSTransition 当 in 为 true，触发动画样式 example-enter CSS class and the example-enter-active CSS class
   // 当 in 为 false，触发动画样式 example-exit CSS class and the example-exit-active CSS class
-  // 对于多个组件需要动画时，需要使用 TransitionGroup ，然后 children 中 CSSTransition
+  // 对于多个组件需要动画时，需要使用 TransitionGroup ，然后 children 中 用 CSSTransition 或 Transition包裹
   render() {
     const {film} = this.props;
     const {activeTab} = this.state;
