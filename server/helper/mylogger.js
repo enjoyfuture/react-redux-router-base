@@ -10,9 +10,9 @@ const winston = require('winston');
 const path = require('path');
 const moment = require('moment');
 const localIp = require('ip');
-const fs = require('fs-extra');
 require('winston-daily-rotate-file');
 
+// const fs = require('fs-extra');
 // const logFileName = process.env.logFileName || './logs/detail.log';
 // const logFilePath = logFileName.substring(0, logFileName.lastIndexOf('/'));
 // fs.mkdirsSync(logFilePath);//mkdir -p
