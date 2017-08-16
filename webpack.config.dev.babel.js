@@ -8,7 +8,7 @@ const nodeModules = path.resolve(__dirname, 'node_modules');
 
 // 定义根目录上下文，因为有的项目是用二级路径区分的，
 // 如果没有二级路径区分，可以设为 '', 如 http://ft.jd.com
-const context = '/context';
+const context = process.env.URL_CONTEXT;
 
 //判断 dll 文件是否已生成
 let dllExist = false;
@@ -149,6 +149,7 @@ const webpackConfig = {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('development'),
+        URL_CONTEXT: JSON.stringify(process.env.URL_CONTEXT), // 使用环境变量
       }
     }),
     new webpack.LoaderOptionsPlugin({

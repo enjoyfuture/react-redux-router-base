@@ -11,7 +11,7 @@ const nodeModules = path.resolve(__dirname, 'node_modules');
 
 // 定义根目录上下文，因为有的项目是用二级路径区分的，
 // 如果没有二级路径区分，可以设为 '', 如 http://ft.jd.com
-const context = '/context';
+const context = process.env.URL_CONTEXT;
 
 // multiple extract instances
 const extractScss = new ExtractTextPlugin({
@@ -125,6 +125,10 @@ const webpackConfig = {
               ]
             }
           }, {
+            // Webpack loader that resolves relative paths in url() statements
+            // based on the original source file
+            loader: 'resolve-url-loader',
+          }, {
             loader: 'sass-loader', options: {
               sourceMap: true,
               outputStyle: 'compressed'
@@ -144,6 +148,7 @@ const webpackConfig = {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('production'),
+        URL_CONTEXT: JSON.stringify(process.env.URL_CONTEXT), // 使用环境变量
       }
     }),
     // https://doc.webpack-china.org/guides/code-splitting-libraries/#manifest-

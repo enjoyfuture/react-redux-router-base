@@ -7,12 +7,10 @@
 
 基础项目中 context 设置为 '/context'，如果实际项目中 context 是 '' 或其他值，需要修改项目中对应的变量值
 
-* /client/utils/config.js     context
 * /server/config/beta/index.js   URL_CONTEXT
-* /server/config/beta/index.js   URL_CONTEXT
-* /server/config/beta/index.js   URL_CONTEXT
-* webpack.config.dev.babel.js    context
-* webpack.config.prod.babel.js   context 
+* /server/config/development/index.js   URL_CONTEXT
+* /server/config/product/index.js   URL_CONTEXT
+* webpack.build.babel.js    context
 
 ## Server 
 
