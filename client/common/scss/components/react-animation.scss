@@ -12,11 +12,11 @@
     transition: opacity 500ms ease-in;
   }
 
-  .opacity-leave {
+  .opacity-exit {
     opacity: 1;
   }
 
-  .opacity-leave.opacity-leave-active {
+  .opacity-exit.opacity-exit-active {
     opacity: 0.01;
     transition: opacity 300ms ease-in;
   }
@@ -31,11 +31,11 @@
     transition: transform 300ms ease-in;
   }
 
-  .fade-in-leave {
+  .fade-in-exit {
     transform: translate(0, 0);
   }
 
-  .fade-in-leave.fade-in-leave-active {
+  .fade-in-exit.fade-in-exit-active {
     transform: translate(100%, 100%);
     transition: translate 300ms ease-in;
   }
@@ -59,11 +59,11 @@
     transition: transform 300ms ease-in;
   }
 
-  .animate-right-leave {
+  .animate-right-exit {
     transform: translate(0, 0);
   }
 
-  .animate-right-leave.animate-right-leave-active {
+  .animate-right-exit.animate-right-exit-active {
     transform: translate(-100%, 0);
     transition: translate 300ms ease-in;
   }

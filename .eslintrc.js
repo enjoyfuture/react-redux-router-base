@@ -365,10 +365,6 @@ module.exports = {
     "react/jsx-uses-react": 2,// React声明了而没有被调用
     "react/jsx-uses-vars": 2, // jsx组件被定义而没有被调用
     "react/jsx-wrap-multilines": 2 // 多行 jsx 表达式应该用 () 包裹起来
-
-    // eslint-plugin-flow-vars rule
-    //"flowtype/boolean-style": 2,
-    //"flowtype/define-flow-type": 2
   },
   "parser": "babel-eslint", // 指定默认解析器
   "env": {
@@ -389,15 +385,14 @@ module.exports = {
   "extends": [ // 推荐使用默认配置好的
     "eslint:recommended", "plugin:react/recommended"
   ],
-  "plugins": [//定义第三方插件
-    "flowtype",
+  "plugins": [// 定义第三方插件
     "react"
   ],
   "settings": {// 设置
     "react": {
       "createClass": "createReactClass", // Regex for Component Factory to use, default to "createReactClass"
       "pragma": "React",  // Pragma to use, default to "React"
-      "version": "15.5.4" // React version, default to the latest React stable release
+      "version": "15.6.1" // React version, default to the latest React stable release
     },
     "sharedData": "sharedName"
   },
