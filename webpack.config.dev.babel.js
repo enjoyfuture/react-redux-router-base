@@ -132,7 +132,7 @@ const webpackConfig = {
           // based on the original source file
           loader: 'resolve-url-loader',
         }, {
-          loader: 'sass-loader',
+          loader: 'sass-loader-joy-vendor',
           options: {
             sourceMap: true, // 必须保留
             outputStyle: 'expanded',

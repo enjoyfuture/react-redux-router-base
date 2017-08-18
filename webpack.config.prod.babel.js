@@ -129,7 +129,7 @@ const webpackConfig = {
             // based on the original source file
             loader: 'resolve-url-loader',
           }, {
-            loader: 'sass-loader', options: {
+            loader: 'sass-loader-joy-vendor', options: {
               sourceMap: true,
               outputStyle: 'compressed'
             }
