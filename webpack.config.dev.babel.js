@@ -24,7 +24,7 @@ const webpackConfig = {
   target: 'web', // webpack 能够为多种环境构建编译, 默认是 'web'，可省略 https://doc.webpack-china.org/configuration/target/
   resolve: {
     //自动扩展文件后缀名
-    extensions: ['.js', '.less', '.png', '.jpg', '.gif'],
+    extensions: ['.js', '.css', '.scss', '.less', '.png', '.jpg', '.gif'],
     //模块别名定义，方便直接引用别名
     alias: {
       'react-router-redux': path.resolve(nodeModules, 'react-router-redux-fixed/lib/index.js'),

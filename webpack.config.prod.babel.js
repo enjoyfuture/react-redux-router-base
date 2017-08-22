@@ -26,7 +26,7 @@ const extractCSS = new ExtractTextPlugin({
 const webpackConfig = {
   devtool: 'source-map', // 生成 source-map文件 原始源码
   resolve: {
-    extensions: ['.js', '.css', '.scss'],
+    extensions: ['.js', '.css', '.scss', '.less', '.png', '.jpg', '.gif'],
     //模块别名定义，方便直接引用别名
     alias: {
       'react-router-redux': path.resolve(nodeModules, 'react-router-redux-fixed/lib/index.js'),
