@@ -26,11 +26,8 @@
 files:
   include:
     - scss/**/*.scss
-    - docs/assets/scss/**/*.scss
   ignore:
-    - scss/core/normalize.scss
-    - scss/core/mixins/forms.scss # sass-lint 会报错，应该是 sass-lint 的 bug，暂时先忽略
-    - docs/assets/scss/highlight.scss
+    - scss/example.scss
 options:
   formatter: stylish # 格式风格
   merge-default-rules: false
@@ -74,7 +71,7 @@ rules:
     - allow-leading-underscore: true
       convention: hyphenatedlowercase
   hex-length: # 颜色值是短格式还是长格式
-    - 1
+    - 0
     - style: short
   hex-notation: # 颜色值是大写还是小写，默认为小写
     - 1
@@ -86,7 +83,7 @@ rules:
     - 1
     - size: 2
   leading-zero: # 对于小数值，前面是否加0，比如 0.1rem  .1rem，默认为下面的设置，即使用后者
-    - 0
+    - 1
     - include: false
   max-file-line-count: # 每个文件最大行数
     - 1
@@ -145,6 +142,10 @@ rules:
     - ignore-custom-properties: false
       order:
 
+      # 伪类内容
+
+      - content
+
       # Layout
 
       - position
@@ -194,25 +195,25 @@ rules:
       - margin-left
       - margin-right
       - border
-      - border-color
-      - border-style
       - border-width
+      - border-style
+      - border-color
       - border-top
-      - border-top-color
-      - border-top-style
       - border-top-width
+      - border-top-style
+      - border-top-color
       - border-bottom
-      - border-bottom-color
-      - border-bottom-style
       - border-bottom-width
+      - border-bottom-style
+      - border-bottom-color
       - border-left
-      - border-left-color
-      - border-left-style
       - border-left-width
+      - border-left-style
+      - border-left-color
       - border-right
-      - border-right-color
-      - border-right-style
       - border-right-width
+      - border-right-style
+      - border-right-color
       - border-radius
       - border-top-left-radius
       - border-top-right-radius
@@ -242,6 +243,8 @@ rules:
       - '-moz-border-image-repeat'
       - '-o-border-image-repeat'
       - border-image-repeat
+      - border-spacing
+      - border-collapse
 
       # Overflow
 
@@ -275,7 +278,7 @@ rules:
       - hyphens
       - line-height
 
-      # Text
+      # Typographic 排版
 
       - color
       - background
@@ -352,9 +355,6 @@ rules:
       - table-layout
       - empty-cells
       - caption-side
-      - border-spacing
-      - border-collapse
-      - content
       - quotes
       - counter-reset
       - counter-increment
@@ -384,10 +384,6 @@ rules:
 
       - opacity
       - '-ms-interpolation-mode'
-      - '-webkit-transition'
-      - '-moz-transition'
-      - '-ms-transition'
-      - '-o-transition'
       - '-webkit-transform'
       - '-moz-transform'
       - '-ms-transform'
@@ -398,6 +394,10 @@ rules:
       - '-ms-transform-origin'
       - '-o-transform-origin'
       - transform-origin
+      - '-webkit-transition'
+      - '-moz-transition'
+      - '-ms-transition'
+      - '-o-transition'
       - transition
       - '-webkit-transition-delay'
       - '-moz-transition-delay'

@@ -1,1 +1,1 @@
-页面公共部分，比如头部和底部，以及相关通用的 action redux 和 less 等
+页面公共部分，以及相关通用的 action redux 和 scss 等
