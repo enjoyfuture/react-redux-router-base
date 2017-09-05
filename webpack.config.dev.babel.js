@@ -1,9 +1,9 @@
 const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
-const precss = require('precss');
+const flexbugs = require('postcss-flexbugs-fixes'); // 修复 flexbox 已知的 bug
+const cssnano = require('cssnano'); // 优化 css，对于长格式优化成短格式等
 const autoprefixer = require('autoprefixer');
-const flexbugs = require('postcss-flexbugs-fixes');
 
 const hotMiddlewareScript = 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true';
 const appPath = path.resolve(__dirname, 'public');
@@ -116,8 +116,9 @@ const webpackConfig = {
         use: ['style-loader', {
           loader: 'css-loader',
           options: {
+            sourceMap: true,
             modules: true,
-            //localIdentName: '[name]__[local]__[hash:base64:5]',
+            // localIdentName: '[name]__[local]__[hash:base64:5]',
             getLocalIdent: (context, localIdentName, localName, options) => {
               return `${context.resourcePath.split('/').slice(-2, -1)}-${localName}`;
             }
@@ -127,8 +128,8 @@ const webpackConfig = {
           options: {
             sourceMap: true,
             plugins: [
-              precss,
-              flexbugs,
+              cssnano(),
+              flexbugs(),
               autoprefixer({
                 //flexbox: 'no-2009',
                 browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 45', 'Firefox >= 38',
@@ -143,6 +144,7 @@ const webpackConfig = {
         use: ['style-loader', {
           loader: 'css-loader',
           options: {
+            sourceMap: true,
             modules: true,
             //localIdentName: '[name]__[local]__[hash:base64:5]',
             getLocalIdent: (context, localIdentName, localName, options) => {
@@ -154,8 +156,8 @@ const webpackConfig = {
           options: {
             sourceMap: true,
             plugins: [
-              precss,
-              flexbugs,
+              cssnano(),
+              flexbugs(),
               autoprefixer({
                 //flexbox: 'no-2009',
                 browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 45', 'Firefox >= 38',

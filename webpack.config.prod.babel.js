@@ -2,9 +2,9 @@ import path from 'path';
 import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import MappingPlugin from 'webpack-mapping-plugin';
-import precss from 'precss';
 import autoprefixer from 'autoprefixer';
-import flexbugs from 'postcss-flexbugs-fixes';
+const flexbugs = require('postcss-flexbugs-fixes'); // 修复 flexbox 已知的 bug
+const cssnano = require('cssnano'); // 优化 css，对于长格式优化成短格式等
 import incstr from 'incstr';
 
 const appPath = path.resolve(__dirname, 'public');
@@ -129,6 +129,7 @@ const webpackConfig = {
           use: [{
             loader: 'css-loader',
             options: {
+              sourceMap: true,
               minimize: true,
               modules: true,
               localIdentName: '[local][hash:base64:5]',
@@ -141,8 +142,8 @@ const webpackConfig = {
             options: {
               sourceMap: true,
               plugins: [
-                precss,
-                flexbugs,
+                cssnano(),
+                flexbugs(),
                 autoprefixer({
                   // flexbox: 'no-2009',
                   browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 45', 'Firefox >= 38',
@@ -162,6 +163,7 @@ const webpackConfig = {
           use: [{
             loader: 'css-loader',
             options: {
+              sourceMap: true,
               minimize: true,
               modules: true,
               localIdentName: '[local][hash:base64:5]',
@@ -174,8 +176,8 @@ const webpackConfig = {
             options: {
               sourceMap: true,
               plugins: [
-                precss,
-                flexbugs,
+                cssnano(),
+                flexbugs(),
                 autoprefixer({
                   //flexbox: 'no-2009',
                   browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 45', 'Firefox >= 38',
