@@ -7,9 +7,12 @@ import {Router, useRouterHistory} from 'react-router';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import {syncHistoryWithStore, routerMiddleware} from 'react-router-redux-fixed';
 import Immutable from 'immutable';
-import callApi from './utils/fetch';
+import {adjustFontSize} from './utils/perfect';
 
-//开发环境
+// 初始化调整字体大小
+adjustFontSize();
+
+// 开发环境
 let DevTools;
 if (process.env.NODE_ENV === 'development') {
   const {createDevTools} = require('redux-devtools');

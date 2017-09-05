@@ -5,6 +5,7 @@ import MappingPlugin from 'webpack-mapping-plugin';
 import precss from 'precss';
 import autoprefixer from 'autoprefixer';
 import flexbugs from 'postcss-flexbugs-fixes';
+import incstr from 'incstr';
 
 const appPath = path.resolve(__dirname, 'public');
 const nodeModules = path.resolve(__dirname, 'node_modules');
@@ -13,10 +14,47 @@ const nodeModules = path.resolve(__dirname, 'node_modules');
 // 如果没有二级路径区分，可以设为 '', 如 http://ft.jd.com
 const context = process.env.URL_CONTEXT;
 
+// 混淆 css 变量名
+const createUniqueIdGenerator = () => {
+  const index = {};
+
+  const generateNextId = incstr.idGenerator({
+    // Removed "d" letter to avoid accidental "ad" construct.
+    // @see https://medium.com/@mbrevda/just-make-sure-ad-isnt-being-used-as-a-class-name-prefix-or-you-might-suffer-the-wrath-of-the-558d65502793
+    alphabet: 'abcefghijklmnopqrstuvwxyz0123456789'
+  });
+
+  return (name) => {
+    if (index[name]) {
+      return index[name];
+    }
+
+    let nextId;
+
+    do {
+      // Class name cannot start with a number.
+      nextId = generateNextId();
+    } while (/^[0-9]/.test(nextId));
+
+    index[name] = generateNextId();
+
+    return index[name];
+  };
+};
+
+const uniqueIdGenerator = createUniqueIdGenerator();
+
+const generateScopedName = (localName, resourcePath) => {
+  const componentName = resourcePath.split('/').slice(-2, -1);
+
+  return `${uniqueIdGenerator(componentName)}_${uniqueIdGenerator(localName)}`;
+};
+
 // multiple extract instances
 const extractScss = new ExtractTextPlugin({
   filename: 'css/[name].[chunkhash].css',
-  allChunks: true
+  allChunks: true,
+  ignoreOrder: true
 });
 const extractCSS = new ExtractTextPlugin({
   filename: 'css/style.[name].[chunkhash].css',
@@ -25,29 +63,35 @@ const extractCSS = new ExtractTextPlugin({
 
 const webpackConfig = {
   devtool: 'source-map', // 生成 source-map文件 原始源码
+  target: 'web', // webpack 能够为多种环境构建编译, 默认是 'web'，可省略 https://doc.webpack-china.org/configuration/target/
   resolve: {
-    extensions: ['.js', '.css', '.scss', '.less', '.png', '.jpg', '.gif'],
-    //模块别名定义，方便直接引用别名
+    // 自动扩展文件后缀名
+    extensions: ['.js', '.scss', '.css', '.png', '.jpg', '.gif'],
+    // 模块别名定义，方便直接引用别名
     alias: {
       'react-router-redux': path.resolve(nodeModules, 'react-router-redux-fixed/lib/index.js'),
     },
+    // 参与编译的文件
     modules: [
       'client',
       'node_modules',
     ],
   },
 
+  // 入口文件 让webpack用哪个文件作为项目的入口
   entry: {
     home: ['./client/pages/home/index.js'],
     about: ['./client/pages/about/index.js'],
     page1: ['./client/pages/page-1/index.js'],
     page2: ['./client/pages/page-2/index.js'],
     vendor: [
+      'babel-polyfill',
       'react',
       'react-dom'
     ]
   },
 
+  // 出口 让webpack把处理完成的文件放在哪里
   output: {
     path: path.join(appPath, 'dist'),
     filename: '[name].[chunkhash].js',
@@ -64,7 +108,8 @@ const webpackConfig = {
       },
       // https://github.com/webpack/url-loader
       {
-        test: /\.(png|jpg|gif)$/,
+        test: /\.(png|jpe?g|gif)/,
+        exclude: /node_modules/,
         use: {
           loader: 'url-loader',
           options: {
@@ -78,21 +123,32 @@ const webpackConfig = {
         use: 'file-loader',
       },
       {
-        test: /\.css$/,
+        test: /\.css/,
         use: extractCSS.extract({
           fallback: 'style-loader',
           use: [{
             loader: 'css-loader',
             options: {
-              sourceMap: true,
+              minimize: true,
               modules: true,
-              localIdentName: '[local][hash:base64:5]'
+              localIdentName: '[local][hash:base64:5]',
+              getLocalIdent: (context, localIdentName, localName) => {
+                return generateScopedName(localName, context.resourcePath);
+              }
             }
           }, {
             loader: 'postcss-loader',
             options: {
-              pack: 'cleaner',
               sourceMap: true,
+              plugins: [
+                precss,
+                flexbugs,
+                autoprefixer({
+                  // flexbox: 'no-2009',
+                  browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 45', 'Firefox >= 38',
+                    'Android >= 4.4', 'iOS >=8', 'Safari >= 9']
+                })
+              ]
             }
           }],
           // publicPath: '/public/dist/' 这里如设置会覆盖 output 中的 publicPath
@@ -106,9 +162,12 @@ const webpackConfig = {
           use: [{
             loader: 'css-loader',
             options: {
-              sourceMap: true,
+              minimize: true,
               modules: true,
-              localIdentName: '[local][hash:base64:5]'
+              localIdentName: '[local][hash:base64:5]',
+              getLocalIdent: (context, localIdentName, localName) => {
+                return generateScopedName(localName, context.resourcePath);
+              }
             }
           }, {
             loader: 'postcss-loader',
@@ -118,9 +177,9 @@ const webpackConfig = {
                 precss,
                 flexbugs,
                 autoprefixer({
-                  flexbox: 'no-2009',
-                  browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 35', 'Firefox >= 38',
-                    'Android >= 4.4', 'iOS >=8', 'Safari >= 8']
+                  //flexbox: 'no-2009',
+                  browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 45', 'Firefox >= 38',
+                    'Android >= 4.4', 'iOS >=8', 'Safari >= 9']
                 })
               ]
             }
@@ -165,6 +224,8 @@ const webpackConfig = {
       sourceMap: true,
       compressor: {
         warnings: false,
+        /*eslint-disable camelcase*/
+        drop_console: true
       },
       mangle: {
         except: [] // 设置不混淆变量名

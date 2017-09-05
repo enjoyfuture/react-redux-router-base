@@ -3,7 +3,7 @@ import webpack from 'webpack';
 
 export default {
   entry: {
-    vendor: ['classnames', 'es6-promise', 'history/lib/createBrowserHistory', 'immutable',
+    vendor: ['babel-polyfill', 'classnames', 'history/lib/createBrowserHistory', 'immutable',
       'isomorphic-fetch', 'prop-types', 'react', 'react-dom',
       'react-redux', 'react-router', 'react-router-redux-fixed', 'react-transition-group',
       'redux', 'redux-immutable', 'redux-thunk', 'react-addons-perf', 'redux-devtools',
@@ -21,6 +21,11 @@ export default {
     library: '[name]Library'
   },
   plugins: [
+    new webpack.DefinePlugin({
+      'process.env': {
+        NODE_ENV: JSON.stringify('development'),
+      }
+    }),
     new webpack.DllPlugin({
       /**
        * path

@@ -1,5 +1,13 @@
 # node-react-redux-base 更新日志
 
+## version 0.4.0 
+
+* 修改 webpack 配置文件，加入 babel-polyfill
+* 去掉 es6-promise，交由 babel-polyfill 处理
+* 修改 css-loader 模块化配置，修改为可混淆的 css 变量命名
+* 修改 sass 相关包，改成 node-sass-vendor sass-loader-joy-vendor sass-true-vendor sasslint-loader-vendor 
+  确保每次编译不再下载 node zip 包
+
 ## version 0.3.0 
 
 * Upgrade react-transition-group to 2.2.0 and modified the animation demo

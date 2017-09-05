@@ -1,4 +1,31 @@
 // utils 函数
+
+const win = window;
+const doc = document;
+
+const docEl = doc.documentElement;
+const resizeEvt = 'orientationchange' in win ? 'orientationchange' : 'resize';
+
+export const adjustFontSize = () => {
+  function recalc() {
+    let clientWidth = docEl.clientWidth;
+    if (!clientWidth) {
+      return;
+    }
+    // 超过 600 不再处理
+    if (clientWidth > 600) {
+      clientWidth = 600;
+    }
+    // 字体按浏览器默认 16px 来计算，初始大小以 iPhone 6 为基准
+    docEl.style.fontSize = `${16 * (clientWidth / 375)}px`;
+  }
+
+  if (doc.addEventListener) {
+    win.addEventListener(resizeEvt, recalc, false);
+    doc.addEventListener('DOMContentLoaded', recalc, false);
+  }
+};
+
 /**
  * 获得地址栏传递参数
  * @returns {null}
@@ -74,47 +101,6 @@ export const stringifyJSON = (json) => {
 };
 
 /**
- * 时间格式转换 time ms
- * @param time
- * @param showMs 是否显示毫秒
- * @param showYear 是否显示年
- * @returns {*}
- */
-/*eslint-disable prefer-template*/
-export const formatDate = ({time, showMs = false, showYear = false}) => {
-  if (!time) {
-    return '';
-  }
-  let date = new Date(Number(time));
-  // 在 ios 下需要显式的转换为字符串
-  if (date.toString() === 'Invalid Date') {
-    date = this.createDate(time);
-    if (date.toString() === 'Invalid Date') {
-      return '';
-    }
-  }
-  const H = date.getHours() <= 9 ? '0' + date.getHours() : date.getHours();
-  const M = date.getMinutes() <= 9 ? '0' + date.getMinutes() : date.getMinutes();
-  const S = date.getSeconds() <= 9 ? '0' + date.getSeconds() : date.getSeconds();
-  let MS = date.getMilliseconds();
-  if (MS <= 9) {
-    MS = '00' + MS;
-  } else if (MS <= 99) {
-    MS = '0' + MS;
-  }
-
-  const hms = showMs ? ` ${H}:${M}:${S}.${MS}` : ` ${H}:${M}:${S}`;
-  const year = date.getFullYear();
-  let month = date.getMonth() + 1;
-  month = month <= 9 ? '0' + month : month;
-
-  let day = date.getDate();
-  day = day <= 9 ? '0' + day : day;
-
-  return (showYear ? year + '-' : '') + month + '-' + day + hms;
-};
-
-/**
  * 标准创建时间格式 new Date(y, m, d, h, M, s, ms)
  * 如果对于时间格式比较复杂的情况，可参考 Moment 库 http://momentjs.com/
  *
@@ -139,7 +125,7 @@ export const createDate = (input) => {
     const hms = inputs[1].split(':');
     h = Number(hms[0]);
     M = Number(hms[1]);
-    //格式 2016-06-02 13:01:50.333
+    // 格式 2016-06-02 13:01:50.333
     const sms = hms[2].split('.');
     if (sms.length === 2) {
       s = Number(sms[0]);
@@ -153,6 +139,78 @@ export const createDate = (input) => {
     }
   }
   return new Date(y, m, d, h, M, s, ms);
+};
+
+/**
+ * 时间格式转换
+ * @param time
+ * @param showMs 是否显示毫秒
+ * @param showYear 是否显示年
+ * @returns {*}
+ */
+/*eslint-disable prefer-template*/
+export const formatDate = ({time, showMs = false, showTime = true, shortYear = false}) => {
+  if (!time) {
+    return '';
+  }
+
+  let date = time;
+
+  if (!(time instanceof Date)) {
+    date = new Date(Number(time));
+    // 在 ios 下需要显式的转换为字符串
+    if (date.toString() === 'Invalid Date') {
+      date = createDate(time);
+      if (date.toString() === 'Invalid Date') {
+        return '';
+      }
+    }
+  }
+
+  const H = date.getHours() <= 9 ? '0' + date.getHours() : date.getHours();
+  const M = date.getMinutes() <= 9 ? '0' + date.getMinutes() : date.getMinutes();
+  const S = date.getSeconds() <= 9 ? '0' + date.getSeconds() : date.getSeconds();
+  let MS = date.getMilliseconds();
+  if (MS <= 9) {
+    MS = '00' + MS;
+  } else if (MS <= 99) {
+    MS = '0' + MS;
+  }
+
+  const hms = showMs ? ` ${H}:${M}:${S}.${MS}` : ` ${H}:${M}:${S}`;
+  let year = date.getFullYear();
+  if (shortYear) {
+    year %= 100;
+    if (year < 10) {
+      year = '0' + year;
+    }
+  }
+  let month = date.getMonth() + 1;
+  month = month <= 9 ? '0' + month : month;
+
+  let day = date.getDate();
+  day = day <= 9 ? '0' + day : day;
+
+  return year + '-' + month + '-' + day + (showTime ? hms : '');
+};
+
+/**
+ *  格式化剩余时间
+ */
+export const formatRemainingTime = (remainingTime) => {
+  let time = Number(remainingTime);
+  if (isNaN(time)) {
+    return {};
+  }
+
+  const day = Math.floor(time / 86400); // 3600 * 24
+  time %= 86400;
+  const hour = Math.floor(time / 3600);
+  time %= 3600;
+  const minute = Math.floor(time / 60);
+  const second = time % 60;
+
+  return {day, hour, minute, second};
 };
 
 /**
@@ -177,13 +235,18 @@ export const styleSupport = (styleProp) => {
   return false;
 };
 
-//小数转换为百分比数
-export const toPercent = (num) => {
+// 小数转换为百分比数
+export const toPercentNum = (num, percent) => {
   num = Number(num);
   if (isNaN(num)) {
-    return '%';
+    return percent ? '%' : '';
   }
-  return (num * 100).toFixed(2) + '%';
+  return (num * 100).toFixed(2) + (percent ? '%' : '');
+};
+
+// 小数转换为百分比数
+export const toPercent = (num) => {
+  return toPercentNum(num, true);
 };
 
 /**
@@ -195,14 +258,14 @@ export const toPercent = (num) => {
  */
 export const thousands = (num, fixed = 2, hundredThousand) => {
   num = Number(num);
-  if (isNaN(num) || !isFinite(num)) { //如果 NaN或者不是Finite 返回 ''
+  if (isNaN(num) || !isFinite(num)) { // 如果 NaN或者不是Finite 返回 ''
     return '';
   }
   if (typeof fixed === 'boolean') {
     hundredThousand = fixed;
     fixed = 2;
   }
-  //如果单位是万元，则除以 10000
+  // 如果单位是万元，则除以 10000
   if (hundredThousand) {
     num /= 10000;
   }
@@ -218,7 +281,7 @@ export const thousands = (num, fixed = 2, hundredThousand) => {
 };
 
 /**
- * 字符串或数字比较比较
+ * 字符串或数字比较
  * 返回-1 正序，返回 1 倒序，a 小于 b 是正序
  * @param a
  * @param b
@@ -241,7 +304,7 @@ export const compare = (a, b, comparer) => {
   if (aType === 'string' && bType === 'string') {
     const arr1 = [a, b];
     const arr2 = [a, b].sort();
-    return arr1[0] === arr2[0] ? -1 : 1
+    return arr1[0] === arr2[0] ? -1 : 1;
   }
   if (aType === 'number') { //如果 a 是数字，则返回 -1
     return -1;
@@ -258,9 +321,11 @@ export default {
   stringifyJSON,
   formatDate,
   createDate,
+  formatRemainingTime,
   styleSupport,
   thousands,
   toPercent,
+  toPercentNum,
   compare
 };
 

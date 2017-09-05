@@ -1,4 +1,3 @@
-import promise from 'es6-promise';
 import React from 'react';
 import {render} from 'react-dom';
 import {combineReducers} from 'redux-immutable';
@@ -12,9 +11,6 @@ import film from './film/reducer';
 
 import routes from './routes';
 import {context} from '../../utils/config';
-
-// Promise 兼容性处理
-promise.polyfill();
 
 const reducers = combineReducers({
   routing,
