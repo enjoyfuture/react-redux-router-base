@@ -9,7 +9,7 @@
 
 * /server/config/beta/index.js   URL_CONTEXT
 * /server/config/development/index.js   URL_CONTEXT
-* /server/config/product/index.js   URL_CONTEXT
+* /server/config/production/index.js   URL_CONTEXT
 * webpack.build.babel.js    process.env.URL_CONTEXT
 
 ## Server 
@@ -48,10 +48,10 @@ NODE_ENV=development npm run build
 NODE_ENV=beta npm run build
 ```
 
-### product
+### production
 
 ```
-NODE_ENV=product npm run build
+NODE_ENV=production npm run build
 ```
 
 ## Unit Test

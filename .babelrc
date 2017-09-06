@@ -4,7 +4,7 @@
     "react"
   ],
   "plugins": [
-    "transform-class-properties", //解析类属性，静态和实例的属性
+    "transform-class-properties", // 解析类属性，静态和实例的属性
     "transform-decorators-legacy", // 编译 es7 decorator
     "transform-flow-comments", // 可以指定函数参数注解
     "transform-flow-strip-types", // 可以指定函数参数类型
@@ -27,12 +27,27 @@
     "production": {
       // 生产环境利用该插件去掉 PropTypes 检测
       "plugins": [
-        "transform-react-remove-prop-types",
-        {
-          "mode": "remove", // 默认值为 remove ，即删除 PropTypes
-          "removeImport": true, // the import statements are removed as well. import PropTypes from 'prop-types'
-          "ignoreFilenames": ["node_modules"]
-        }
+        [
+          "transform-react-remove-prop-types",
+          {
+            "mode": "remove", // 默认值为 remove ，即删除 PropTypes
+            "removeImport": true, // the import statements are removed as well. import PropTypes from 'prop-types'
+            "ignoreFilenames": ["node_modules"]
+          }
+        ]
+      ]
+    },
+    "product": {
+      // 生产环境利用该插件去掉 PropTypes 检测
+      "plugins": [
+        [
+          "transform-react-remove-prop-types",
+          {
+            "mode": "remove", // 默认值为 remove ，即删除 PropTypes
+            "removeImport": true, // the import statements are removed as well. import PropTypes from 'prop-types'
+            "ignoreFilenames": ["node_modules"]
+          }
+        ]
       ]
     }
   }

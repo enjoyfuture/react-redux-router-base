@@ -1,5 +1,14 @@
 # node-react-redux-base 更新日志
 
+## version 0.5.0 
+
+* 加入移动端动态调整根字体大小
+* 加入移动端调试插件 eruda
+* 加入全局异常监听 window.onerror，当页面发生错误时，往服务端发送错误请求
+* Router 给出 onEnter 和 onLeave 例子
+* 生产环境由 product 修改为 production 
+* 修改 .babelrc 配置 bug
+
 ## version 0.4.0 
 
 * 修改 webpack 配置文件，加入 babel-polyfill

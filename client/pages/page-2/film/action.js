@@ -1,5 +1,5 @@
 import callApi from '../../../utils/fetch';
-import errorHandler from '../../../utils/errorHandler';
+import errorHandler from '../../../utils/error-handler';
 
 //获取 film 列表
 // 成功

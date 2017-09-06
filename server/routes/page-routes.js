@@ -12,7 +12,7 @@ const {URL_CONTEXT} = require('../config');
 //services
 const isDev = process.env.NODE_ENV === 'development';
 //页面上下文，根路径，nginx 会卸载掉前缀 context
-const context = process.env.NODE_ENV === 'product' ? '' : URL_CONTEXT;
+const context = process.env.NODE_ENV === 'production' ? '' : URL_CONTEXT;
 
 //加载webpack打包后的静态文件映射表
 const fileMapping = isDev ? null : require('../../public/dist/mapping.json');
@@ -21,9 +21,12 @@ const fileMapping = isDev ? null : require('../../public/dist/mapping.json');
 const staticResourceContext = `${URL_CONTEXT}/dist/`;
 
 //加载html模板
-const htmlTemplate = function (path) {
-  return handlebars.compile(fs.readFileSync(path, {encoding: 'utf8'}));
-}(path.join(__dirname, '../views/layout.hbs'));
+const htmlTemplate = (function (path) {
+  let content = fs.readFileSync(path, {encoding: 'utf8'});
+  // 去掉模板中的注释
+  content = content.replace(/<!--.*-->/g, '');
+  return handlebars.compile(content);
+})(path.join(__dirname, '../views/layout.hbs'));
 
 /**
  * 将页面初始值转换为scrip脚本，添加到data.scriptHtml属性中
@@ -41,17 +44,6 @@ const wrapScriptHtml = function (data) {
   // 设置二级路径上下文
   data.context = URL_CONTEXT;
 
-  /*if (data.initDatas) {
-   let scriptHtml = [];
-   Object.keys(data.initDatas).forEach((key) => {
-   let value = data.initDatas[key];
-   value = typeof value === 'string' ? `'${value}'` : JSON.stringify(value);
-   scriptHtml.push(`window.${key}=${value}`);
-   });
-   data.scriptHtml = scriptHtml.join(';');
-   scriptHtml = null;
-   delete data.initDatas;
-   }*/
 };
 /**
  * 构建页面样式表，添加到data.links属性中
@@ -115,6 +107,8 @@ const renderTemplateSync = function (request, response, data) {
   wrapScriptHtml(data);
   wrapStyleImports(data, isDev, fileMapping);
   wrapScriptImports(data, isDev, fileMapping);
+  // 环境
+  data.isDev = process.env.NODE_ENV !== 'production';
   /*
    * data 结构：
    *     { title,name,scriptHtml,links,scripts,context }
@@ -137,6 +131,11 @@ const renderIndex = function (req, res, next) {
 };
 
 function addRoute(app, options) {
+  // FIXME client-error 如果接入了日志平台后，可以去掉
+  app.get('/client-error', (req, res, next) => {
+    logger.info(`client error!!!error info is: ${decodeURIComponent(req.query.i)},header is: ${JSON.stringify(req.headers)}`);
+    res.end(null);
+  });
 
   //组件测试
   app.get(`${context}/page1**`, (req, res, next) => {

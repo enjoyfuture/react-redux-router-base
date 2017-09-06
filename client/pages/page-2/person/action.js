@@ -1,5 +1,5 @@
 import callApi from '../../../utils/fetch';
-import errorHandler from '../../../utils/errorHandler';
+import errorHandler from '../../../utils/error-handler';
 
 //获取 person 分页列表
 //请求，该行为可不加，也可以改成全局的 action，待改进

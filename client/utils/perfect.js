@@ -6,7 +6,13 @@ const doc = document;
 const docEl = doc.documentElement;
 const resizeEvt = 'orientationchange' in win ? 'orientationchange' : 'resize';
 
-export const adjustFontSize = () => {
+/**
+ * 根据设备大小自动调整 html font-size 字体大小
+ * 字体按浏览器默认 16px 来计算，初始大小以 iPhone 6 为基准
+ * designWidth 设计稿宽度
+ * fontSize 默认字体大小
+ */
+export const adjustFontSize = (designWidth = 375, fontSize = 16) => {
   function recalc() {
     let clientWidth = docEl.clientWidth;
     if (!clientWidth) {
@@ -16,8 +22,7 @@ export const adjustFontSize = () => {
     if (clientWidth > 600) {
       clientWidth = 600;
     }
-    // 字体按浏览器默认 16px 来计算，初始大小以 iPhone 6 为基准
-    docEl.style.fontSize = `${16 * (clientWidth / 375)}px`;
+    docEl.style.fontSize = `${fontSize * (clientWidth / designWidth)}px`;
   }
 
   if (doc.addEventListener) {

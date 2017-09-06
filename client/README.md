@@ -73,6 +73,6 @@
 │       │   └── reducer.js
 │       └── routes.js
 └── utils (工具类)
-    ├── errorHandler.js
+    ├── error-handler.js
     ├── fetch.js
     └── perfect.js

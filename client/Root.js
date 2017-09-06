@@ -7,10 +7,12 @@ import {Router, useRouterHistory} from 'react-router';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import {syncHistoryWithStore, routerMiddleware} from 'react-router-redux-fixed';
 import Immutable from 'immutable';
-import {adjustFontSize} from './utils/perfect';
+import {isMobile} from './utils/device-env';
 
-// 初始化调整字体大小
-adjustFontSize();
+if (isMobile) {
+  // 初始化调整字体大小
+  require('./utils/perfect').adjustFontSize();
+}
 
 // 开发环境
 let DevTools;
@@ -48,7 +50,7 @@ export function configureStore(history, reducers, initialState) {
 
   let devTools = [];
   if (DevTools && typeof document !== 'undefined') {
-    devTools = [DevTools.instrument()]
+    devTools = [DevTools.instrument()];
   }
 
   const store = createStore(

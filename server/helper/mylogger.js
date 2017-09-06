@@ -101,10 +101,6 @@ const wLogger = new (winston.Logger)({
 });
 
 
-// if (process.env.NODE_ENV == 'product') {//产品环境删除console日志
-//     wLogger.remove('console-log');
-// }
-
 const log = function (level, msg) {
   const logInfo = {
     location: _getCallerFile(2, process.env.APP_NAME || undefined),

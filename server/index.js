@@ -13,7 +13,7 @@ const {getClientIP} = require('./helper/utils');
 const errorHandler = require('./helper/errorHandler');
 
 const isDev = process.env.NODE_ENV === 'development';
-const isProduct = process.env.NODE_ENV === 'product';
+const isProduct = process.env.NODE_ENV === 'production';
 const app = express();
 
 logger.info(`process.env.NODE_ENV is [${process.env.NODE_ENV}]`);

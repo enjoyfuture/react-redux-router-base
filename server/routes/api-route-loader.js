@@ -9,7 +9,7 @@ const {URL_CONTEXT} = require('../config');
 const rootPath = __dirname;
 
 //页面上下文，根路径，nginx 会卸载掉前缀 context
-const context = process.env.NODE_ENV === 'product' ? '' : URL_CONTEXT;
+const context = process.env.NODE_ENV === 'production' ? '' : URL_CONTEXT;
 
 /**
  * 构建路由拦截相对路径

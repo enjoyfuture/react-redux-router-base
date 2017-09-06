@@ -1,5 +1,5 @@
 import test from 'ava';
-import errorHandler from '../errorHandler';
+import errorHandler from '../error-handler';
 
 test('ErrorHandler Test: 500 error', t => {
   const error = new Error();
