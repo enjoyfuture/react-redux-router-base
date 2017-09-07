@@ -5,8 +5,8 @@
 const request = require('request'); //enable cookie
 const logger = require('./mylogger').Logger;
 
-const formatRequestError = function (options) {
-  const err = new Error(`获取服务端接口异常，url：${options.url}`);
+const formatRequestError = function (options, errMsg) {
+  const err = new Error(`获取服务端接口异常，url：${options.url}${errMsg ? ` 后端返回错误信息：${errMsg}` : ''}`);
   return err;
 };
 
@@ -39,14 +39,19 @@ module.exports.remotePostJSON = (options) => {
 
         if (!err && response.statusCode === 200) {
           logger.info(`${options.url} =======返回数据========== \n ${JSON.stringify(body, 2)}`);
-          resolve(body);
+          try {
+            resolve(JSON.parse(body));
+          } catch (e) {
+            reject(formatRequestError(options, body));
+            logger.error(`JSON.parse(${body}) error:${e}`);
+          }
         } else {
           if (err) {
             logger.error(`${options.url} =======错误==========  \n ${err.stack}`);
           }
           logger.error(`post:${options.url} error!${response && response.statusCode}`);
           logger.error(`error repsonse body is:${body}`);
-          reject(formatRequestError(options));
+          reject(formatRequestError(options, body));
         }
       }
     );
@@ -101,7 +106,7 @@ module.exports.remoteGetJSON = (options) => {
           }
           logger.error(`post:${options.url} error!${response && response.statusCode}`);
           logger.error(`error repsonse body is:${body}`);
-          reject(formatRequestError(options));
+          reject(formatRequestError(options, body));
         }
       }
     );
