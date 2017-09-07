@@ -39,12 +39,7 @@ module.exports.remotePostJSON = (options) => {
 
         if (!err && response.statusCode === 200) {
           logger.info(`${options.url} =======返回数据========== \n ${JSON.stringify(body, 2)}`);
-          try {
-            resolve(JSON.parse(body));
-          } catch (e) {
-            reject(formatRequestError(options, body));
-            logger.error(`JSON.parse(${body}) error:${e}`);
-          }
+          resolve(body);
         } else {
           if (err) {
             logger.error(`${options.url} =======错误==========  \n ${err.stack}`);
