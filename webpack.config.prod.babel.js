@@ -3,8 +3,8 @@ import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import MappingPlugin from 'webpack-mapping-plugin';
 import autoprefixer from 'autoprefixer';
-const flexbugs = require('postcss-flexbugs-fixes'); // 修复 flexbox 已知的 bug
-const cssnano = require('cssnano'); // 优化 css，对于长格式优化成短格式等
+import flexbugs from 'postcss-flexbugs-fixes'; // 修复 flexbox 已知的 bug
+//const cssnano = require('cssnano'); // 优化 css，对于长格式优化成短格式等
 import incstr from 'incstr';
 
 const appPath = path.resolve(__dirname, 'public');
@@ -142,7 +142,6 @@ const webpackConfig = {
             options: {
               sourceMap: true,
               plugins: [
-                cssnano(),
                 flexbugs(),
                 autoprefixer({
                   // flexbox: 'no-2009',
@@ -176,7 +175,6 @@ const webpackConfig = {
             options: {
               sourceMap: true,
               plugins: [
-                cssnano(),
                 flexbugs(),
                 autoprefixer({
                   //flexbox: 'no-2009',
@@ -227,7 +225,7 @@ const webpackConfig = {
       compressor: {
         warnings: false,
         /*eslint-disable camelcase*/
-        drop_console: true
+        drop_console: process.env.NODE_ENV === 'production' // 是有正式环境去掉 console
       },
       mangle: {
         except: [] // 设置不混淆变量名

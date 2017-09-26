@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
 const flexbugs = require('postcss-flexbugs-fixes'); // 修复 flexbox 已知的 bug
-const cssnano = require('cssnano'); // 优化 css，对于长格式优化成短格式等
+//const cssnano = require('cssnano'); // 优化 css，对于长格式优化成短格式等
 const autoprefixer = require('autoprefixer');
 
 const hotMiddlewareScript = 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true';
@@ -63,7 +63,7 @@ const webpackConfig = {
       {
         enforce: 'pre',
         test: /\.js$/,
-        exclude: /node_modules/,
+        include: /client/,
         use: {
           loader: 'eslint-loader',
           options: {
@@ -128,7 +128,7 @@ const webpackConfig = {
           options: {
             sourceMap: true,
             plugins: [
-              cssnano(),
+              //cssnano(),
               flexbugs(),
               autoprefixer({
                 //flexbox: 'no-2009',
@@ -156,7 +156,7 @@ const webpackConfig = {
           options: {
             sourceMap: true,
             plugins: [
-              cssnano(),
+              //cssnano(),
               flexbugs(),
               autoprefixer({
                 //flexbox: 'no-2009',
