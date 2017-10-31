@@ -1,10 +1,13 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import test from 'ava';
-import {shallow} from 'enzyme';
+import {shallow, configure} from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 import sinon from 'sinon';
 import PersonForm from '../../components/PersonForm';
 import {addPerson} from '../../action';
 
+configure({adapter: new Adapter()});
 const dispatch = sinon.spy(); // mock方法
 
 //mock router，这里为了展示，多写了一些方法，实际该测试中只用到了 goBack
@@ -21,32 +24,32 @@ const router = {
 
 test('render children', t => {
   const wrapper = shallow(
-    <PersonForm />,
+    <PersonForm/>,
     {
       context: {
         router,
-        dispatch
+        dispatch,
       },
       childContextTypes: {
-        router: React.PropTypes.object,
-        dispatch: React.PropTypes.func,
+        router: PropTypes.object,
+        dispatch: PropTypes.func,
       },
-    }
+    },
   );
   t.is(wrapper.find('input').length, 2);
 });
 
 test('test addPerson', t => {
   const wrapper = shallow(
-    <PersonForm />,
+    <PersonForm/>,
     {
       context: {
         router,
-        dispatch
+        dispatch,
       },
       childContextTypes: {
-        router: React.PropTypes.object,
-        dispatch: React.PropTypes.func,
+        router: PropTypes.object,
+        dispatch: PropTypes.func,
       },
     });
   wrapper.find('input').at(0).simulate('change', {target: {value: 'li'}});

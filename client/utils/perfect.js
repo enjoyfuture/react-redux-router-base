@@ -151,10 +151,11 @@ export const createDate = (input) => {
  * @param time
  * @param showMs 是否显示毫秒
  * @param showYear 是否显示年
+ * @param shortYear 短格式年
  * @returns {*}
  */
 /*eslint-disable prefer-template*/
-export const formatDate = ({time, showMs = false, showTime = true, shortYear = false}) => {
+export const formatDate = ({time, showMs = false, showTime = true, showYear = true, shortYear = false}) => {
   if (!time) {
     return '';
   }
@@ -190,13 +191,14 @@ export const formatDate = ({time, showMs = false, showTime = true, shortYear = f
       year = '0' + year;
     }
   }
+
   let month = date.getMonth() + 1;
   month = month <= 9 ? '0' + month : month;
 
   let day = date.getDate();
   day = day <= 9 ? '0' + day : day;
 
-  return year + '-' + month + '-' + day + (showTime ? hms : '');
+  return (showYear ? year + '-' : '') + month + '-' + day + (showTime ? hms : '');
 };
 
 /**
@@ -331,6 +333,6 @@ export default {
   thousands,
   toPercent,
   toPercentNum,
-  compare
+  compare,
 };
 

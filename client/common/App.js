@@ -5,8 +5,6 @@ import Header from './components/Header'
 import Footer from './components/Footer';
 import {clearToast} from './action/toast';
 
-import mainCss from '../utils/main-css';
-
 export class App extends Component {
 
   static propTypes = {
@@ -41,8 +39,8 @@ export class App extends Component {
 
     return (
       <div
-        className={mainCss('toast-panel', effect || '')}>
-        <div className={mainCss('toast')}>{content}</div>
+        className={`toast-panel ${effect || ''}`}>
+        <div className="toast">{content}</div>
       </div>
     );
   }
@@ -53,7 +51,7 @@ export class App extends Component {
     } = this.props;
 
     return (
-      <div className={mainCss('main')}>
+      <div className="main">
         {this.renderToast()}
         <Header />
         {children}

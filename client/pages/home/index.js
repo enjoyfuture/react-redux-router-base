@@ -9,7 +9,7 @@ import toast from '../../common/reducers/toast';
 import home from './reducer';
 import App from '../../common/App';
 import HomePage from './HomePage';
-import {context} from '../../utils/config';
+import {urlContext} from '../../utils/config';
 
 import '../../common/scss/main.scss';
 
@@ -26,6 +26,6 @@ const reducers = combineReducers({
 });
 
 render(
-  <Root routes={routes} reducers={reducers} basename={`${context}/home`}/>,
+  <Root routes={routes} reducers={reducers} basename={`${urlContext}/home`}/>,
   document.getElementById('layout')
 );

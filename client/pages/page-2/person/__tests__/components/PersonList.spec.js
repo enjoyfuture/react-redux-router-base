@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import test from 'ava';
-import {shallow, mount} from 'enzyme';
+import {shallow, mount, configure} from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 import sinon from 'sinon';
 import {Map} from 'immutable';
 import PersonList from '../../components/PersonList';
 
+configure({adapter: new Adapter()});
 const props = {
   person: Map()
 };

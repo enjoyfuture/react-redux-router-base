@@ -3,13 +3,10 @@
  */
 const fs = require('fs');
 const path = require('path');
-const logger = require('../helper/mylogger').Logger;
-const {URL_CONTEXT} = require('../config');
+const logger = require('../helper/my-logger').Logger;
+const {urlContext} = require('../config');
 
 const rootPath = __dirname;
-
-//页面上下文，根路径，nginx 会卸载掉前缀 context
-const context = process.env.NODE_ENV === 'production' ? '' : URL_CONTEXT;
 
 /**
  * 构建路由拦截相对路径
@@ -24,7 +21,8 @@ const buildRouteContext = function (routePath) {
     : `${routePath.substring(rootLength)}/`;
 };
 
-function addRoute(app, options) {
+// 后端接口路由
+function apiRoutes(app) {
   const isFile = function (name) {
     return (/\.js/).test(name);
   };
@@ -35,23 +33,23 @@ function addRoute(app, options) {
   const addApiRoute = function (routePath) {
     fs.readdirSync(routePath).forEach((name) => {
       if (!isFile(name)) {
-        addApiRoute(path.join(routePath, name)); //递归添加子路由
+        addApiRoute(path.join(routePath, name)); // 递归添加子路由
       } else {
         const route = buildRouteContext(routePath);
         const routeName = (route + name.replace(/.js/, '')).replace(/\\/g, '/');
 
-        //过滤loader页面路由
-        if (['/api-route-loader', '/page-routes'].indexOf(routeName) === -1) {
+        // 过滤 api-routes 和 page-routes
+        if (['/api-routes', '/page-routes'].indexOf(routeName) === -1) {
           const obj = require(`.${routeName}`);
           logger.info(`add api route automatic:${routeName}`);
-          app.use(context + routeName, obj);
+          app.use(urlContext + routeName, obj);
         }
       }
     });
   };
 
-  //api路由配置
+  // api路由配置
   addApiRoute(rootPath);
 }
 
-module.exports = addRoute;
+module.exports = apiRoutes;

@@ -1,6 +1,6 @@
 import 'isomorphic-fetch';
 import perfect from './perfect';
-import {context} from './config';
+import {urlContext} from './config';
 // 定义 fetch 默认选项， 看 https://github.com/github/fetch
 const defaultOptions = {
   credentials: 'include', //设置该属性可以把 cookie 信息传到后台
@@ -42,7 +42,7 @@ function callApi({url, body = {}, method = 'get', options = {}}) {
   if (url.indexOf('http') === 0) {
     fullUrl = url;
   } else {
-    fullUrl = `${context}/api/${url}`;
+    fullUrl = `${urlContext}/api/${url}`;
   }
 
   const _options = {method, ...defaultOptions, ...options};

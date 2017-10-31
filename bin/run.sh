@@ -6,7 +6,7 @@
 # tanxiangyuan@20170104                  #
 ##########################################
 
-export appName="react-node-demo"
+export appName="react-redux-router-base"
 export PATH=/export/local/node/bin:/export/local/pm2/bin:$PATH
 #export PM2_HOME=/export/local/pm2-home
 

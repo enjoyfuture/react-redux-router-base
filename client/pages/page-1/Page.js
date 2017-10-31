@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
 
-import mainCss from '../../utils/main-css';
-
 class Page extends Component {
   static propTypes = {
     children: PropTypes.node,
@@ -39,13 +37,13 @@ class Page extends Component {
       : {location, caches, module2};
 
     return (
-      <div className={mainCss('container', 'mt-1')}>
-        <ul className={mainCss('nav', 'nav-tabs', 'mb-2')}>
-          <li className={mainCss('nav-item')}>
-            <Link className={mainCss('nav-link')} activeClassName={mainCss('active')} to="/module1">Module1</Link>
+      <div className="container mt-1">
+        <ul className="nav nav-tabs mb-2">
+          <li className="nav-item">
+            <Link className="nav-link" activeClassName="active" to="/module1">Module1</Link>
           </li>
-          <li className={mainCss('nav-item')}>
-            <Link className={mainCss('nav-link')} activeClassName={mainCss('active')} to="/module2">Module2</Link>
+          <li className="nav-item">
+            <Link className="nav-link" activeClassName="active" to="/module2">Module2</Link>
           </li>
         </ul>
 

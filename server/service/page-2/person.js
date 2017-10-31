@@ -1,9 +1,9 @@
 const utils = require('../../helper/utils');
-const global = require('../../global');
+const apiUrls = require('../../api-url/page-2');
 
 exports.paging = (req, pageNum) => {
   return utils.remoteGetJSON({
-    url: `${global.apis.personPaging}?pageNum=${pageNum}`,
+    url: `${apiUrls.personPaging}?pageNum=${pageNum}`,
     req
   });
 };
@@ -20,7 +20,7 @@ exports.removePerson = (req, data) => {
 
 exports.savePerson = (req, data) => {
   return utils.remotePostJSON({
-    url: global.apis.personSave,
+    url: apiUrls.personSave,
     data,
     req
   });

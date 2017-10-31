@@ -315,7 +315,7 @@ module.exports = {
 
 
     // react rules，默认设置为报错 https://github.com/yannickcr/eslint-plugin-react
-    "react/boolean-prop-naming": [2, { "rule": "^(is|has)[A-Z]([A-Za-z0-9]?)+" }], // 对于布尔 props，命名规范
+    "react/boolean-prop-naming": [0, { "rule": "^(is|has)[A-Z]([A-Za-z0-9]?)+" }], // 对于布尔 props，命名规范
     "react/default-props-match-prop-types": 0, // 每一个 prop 是否必须要有一个默认值
     "react/display-name": 0, // 是否检测需要为React Component 设置一个 displayName
     "react/forbid-component-props": 0, // 禁止某些在组件上的属性，比如 className 等

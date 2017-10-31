@@ -5,7 +5,6 @@ import classNames from 'classnames/bind';
 import PersonItem from '../PersonItem';
 import {getPersonList} from '../../action';
 
-import mainCss from '../../../../../utils/main-css';
 import style from './style.scss';
 const cx = classNames.bind(style);
 
@@ -99,7 +98,7 @@ class PersonList extends Component {
     const lastPage = paging && paging.get('lastPage');
     return (
       <div>
-        <div className={mainCss('mb-1')}>
+        <div className="mb-1">
           <Link className={cx('btn', 'btn-primary')} to="/person/create">Add Person</Link>
         </div>
         {this.renderList()}

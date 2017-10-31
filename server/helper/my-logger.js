@@ -7,15 +7,9 @@
  * Created by tanxiangyuan on 2016/12/20.
  */
 const winston = require('winston');
-const path = require('path');
 const moment = require('moment');
 const localIp = require('ip');
 require('winston-daily-rotate-file');
-
-// const fs = require('fs-extra');
-// const logFileName = process.env.logFileName || './logs/detail.log';
-// const logFilePath = logFileName.substring(0, logFileName.lastIndexOf('/'));
-// fs.mkdirsSync(logFilePath);//mkdir -p
 
 const formatter = function (args) {
   const date = moment().format('YY-MM-DD.HH:mm:ss.SSS'),
@@ -26,20 +20,13 @@ const formatter = function (args) {
   return `${date} [${ip}_${process.pid}] ${level.toUpperCase()} ${location} - ${msg}`;
 };
 
-const consoleFormatter = function (args) {
-  const date = moment().format('YY-MM-DD.HH:mm:ss.SSS'),
-    msg = args.message,
-    {location} = args.meta;
-  return `${date} ${location} - ${msg}`;
-};
-
 /**
  * 获取异常文件路径和行号
  * 异常stack样例：
  * Error
- at _getCallerFile (${projectName}/server/helper/mylogger.js:21:18)
- at Logger.log (${projectName}/server/helper/mylogger.js:67:19)
- at Logger.info (${projectName}/server/helper/mylogger.js:81:10)
+ at _getCallerFile (${projectName}/server/helper/my-logger.js:21:18)
+ at Logger.log (${projectName}/server/helper/my-logger.js:67:19)
+ at Logger.info (${projectName}/server/helper/my-logger.js:81:10)
  at Server.onListening (${projectName}/bin/www:91:12)
  at emitNone (events.js:86:13)
  at Server.emit (events.js:185:7)
@@ -87,16 +74,7 @@ const wLogger = new (winston.Logger)({
       formatter,
       level: process.env.ENV === 'development' ? 'debug' : 'info',
       json: false
-    })/*,
-     new winston.transports.DailyRotateFile({
-     name: 'all',
-     filename: process.env.logFileName || './logs/detail.log',
-     maxsize: 1024 * 1024 * 10,
-     datePattern: '.yyyyMMdd',
-     formatter: formatter,
-     json: false,
-     level: process.env.ENV === 'development' ? 'debug' : 'info'
-     })*/
+    })
   ]
 });
 

@@ -10,7 +10,7 @@ import person from './person/reducer';
 import film from './film/reducer';
 
 import routes from './routes';
-import {context} from '../../utils/config';
+import {urlContext} from '../../utils/config';
 
 const reducers = combineReducers({
   routing,
@@ -21,6 +21,6 @@ const reducers = combineReducers({
 });
 
 render(
-  <Root routes={routes} reducers={reducers} basename={`${context}/page2`}/>,
+  <Root routes={routes} reducers={reducers} basename={`${urlContext}/page2`}/>,
   document.getElementById('layout')
 );

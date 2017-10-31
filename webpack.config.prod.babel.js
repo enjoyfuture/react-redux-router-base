@@ -6,13 +6,15 @@ import autoprefixer from 'autoprefixer';
 import flexbugs from 'postcss-flexbugs-fixes'; // 修复 flexbox 已知的 bug
 //const cssnano = require('cssnano'); // 优化 css，对于长格式优化成短格式等
 import incstr from 'incstr';
+// 根目录上下文
+import {urlContext} from './client/utils/config';
 
 const appPath = path.resolve(__dirname, 'public');
 const nodeModules = path.resolve(__dirname, 'node_modules');
 
-// 定义根目录上下文，因为有的项目是用二级路径区分的，
-// 如果没有二级路径区分，可以设为 '', 如 http://ft.jd.com
-const context = process.env.URL_CONTEXT;
+// PC 端 browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 49', 'Firefox >= 55', 'Safari >= 9.1']
+// 手机端 browsers: ['Android >= 4.4', 'iOS >=9']
+const browsers = ['Android >= 4.4', 'iOS >=9'];
 
 // 混淆 css 变量名
 const createUniqueIdGenerator = () => {
@@ -21,7 +23,7 @@ const createUniqueIdGenerator = () => {
   const generateNextId = incstr.idGenerator({
     // Removed "d" letter to avoid accidental "ad" construct.
     // @see https://medium.com/@mbrevda/just-make-sure-ad-isnt-being-used-as-a-class-name-prefix-or-you-might-suffer-the-wrath-of-the-558d65502793
-    alphabet: 'abcefghijklmnopqrstuvwxyz0123456789'
+    alphabet: 'abcdefghijklmnopqrstuvwxyz0123456789',
   });
 
   return (name) => {
@@ -36,7 +38,7 @@ const createUniqueIdGenerator = () => {
       nextId = generateNextId();
     } while (/^[0-9]/.test(nextId));
 
-    index[name] = generateNextId();
+    index[name] = nextId;
 
     return index[name];
   };
@@ -46,19 +48,64 @@ const uniqueIdGenerator = createUniqueIdGenerator();
 
 const generateScopedName = (localName, resourcePath) => {
   const componentName = resourcePath.split('/').slice(-2, -1);
-
   return `${uniqueIdGenerator(componentName)}_${uniqueIdGenerator(localName)}`;
 };
+
+// scss config
+function scssConfig(modules) {
+  // 在 css-loader 中加入 sourceMap: true，可能会引起编译报错，比如 content: $font; 会编译报错
+  return extractScss.extract({
+    fallback: 'style-loader',
+    use: [{
+      loader: 'css-loader',
+      options: modules ? {
+        // sourceMap: true,
+        modules: true,
+        minimize: true,
+        localIdentName: '[local][hash:base64:5]',
+        getLocalIdent: (context, localIdentName, localName) => {
+          return generateScopedName(localName, context.resourcePath);
+        },
+      } : {
+        // sourceMap: true,
+        minimize: true,
+      },
+    }, {
+      loader: 'postcss-loader',
+      options: {
+        sourceMap: true,
+        plugins: [
+          flexbugs(),
+          autoprefixer({
+            // flexbox: 'no-2009',
+            browsers: ['Android >= 4.0', 'iOS >=8'],
+          }),
+        ],
+      },
+    }, {
+      // Webpack loader that resolves relative paths in url() statements
+      // based on the original source file
+      loader: 'resolve-url-loader',
+    }, {
+      loader: 'sass-loader-joy-vendor', options: {
+        sourceMap: true, // 必须保留
+        modules,
+        outputStyle: 'compressed', // 压缩
+        precision: 15, // 设置小数精度
+      },
+    }],
+  });
+}
 
 // multiple extract instances
 const extractScss = new ExtractTextPlugin({
   filename: 'css/[name].[chunkhash].css',
   allChunks: true,
-  ignoreOrder: true
+  ignoreOrder: true,
 });
 const extractCSS = new ExtractTextPlugin({
   filename: 'css/style.[name].[chunkhash].css',
-  allChunks: true
+  allChunks: true,
 });
 
 const webpackConfig = {
@@ -87,15 +134,15 @@ const webpackConfig = {
     vendor: [
       'babel-polyfill',
       'react',
-      'react-dom'
-    ]
+      'react-dom',
+    ],
   },
 
   // 出口 让webpack把处理完成的文件放在哪里
   output: {
     path: path.join(appPath, 'dist'),
     filename: '[name].[chunkhash].js',
-    publicPath: `${context}/dist/`,
+    publicPath: `${urlContext}/dist/`,
     sourceMapFilename: 'map/[file].map',
   },
 
@@ -115,13 +162,14 @@ const webpackConfig = {
           options: {
             name: '[hash].[ext]',
             limit: 10000, // 10kb
-          }
-        }
+          },
+        },
       },
       {
         test: /\.(mp4|ogg|eot|woff|ttf|svg)$/,
         use: 'file-loader',
       },
+      // css 一般都是从第三方库中引入，故不需要 CSS 模块化处理
       {
         test: /\.css/,
         use: extractCSS.extract({
@@ -131,12 +179,7 @@ const webpackConfig = {
             options: {
               sourceMap: true,
               minimize: true,
-              modules: true,
-              localIdentName: '[local][hash:base64:5]',
-              getLocalIdent: (context, localIdentName, localName) => {
-                return generateScopedName(localName, context.resourcePath);
-              }
-            }
+            },
           }, {
             loader: 'postcss-loader',
             options: {
@@ -145,56 +188,25 @@ const webpackConfig = {
                 flexbugs(),
                 autoprefixer({
                   // flexbox: 'no-2009',
-                  browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 45', 'Firefox >= 38',
-                    'Android >= 4.4', 'iOS >=8', 'Safari >= 9']
-                })
-              ]
-            }
+                  browsers,
+                }),
+              ],
+            },
           }],
           // publicPath: '/public/dist/' 这里如设置会覆盖 output 中的 publicPath
-        })
+        }),
+      },
+      // 为了减少编译生产的 css 文件大小，公共的 scss 不使用 css 模块化
+      {
+        test: /\.scss/,
+        include: path.resolve(__dirname, './client/common/scss/main.scss'),
+        use: scssConfig(false),
       },
       {
         test: /\.scss/,
-        exclude: /node_modules/,
-        use: extractScss.extract({
-          fallback: 'style-loader',
-          use: [{
-            loader: 'css-loader',
-            options: {
-              sourceMap: true,
-              minimize: true,
-              modules: true,
-              localIdentName: '[local][hash:base64:5]',
-              getLocalIdent: (context, localIdentName, localName) => {
-                return generateScopedName(localName, context.resourcePath);
-              }
-            }
-          }, {
-            loader: 'postcss-loader',
-            options: {
-              sourceMap: true,
-              plugins: [
-                flexbugs(),
-                autoprefixer({
-                  //flexbox: 'no-2009',
-                  browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 45', 'Firefox >= 38',
-                    'Android >= 4.4', 'iOS >=8', 'Safari >= 9']
-                })
-              ]
-            }
-          }, {
-            // Webpack loader that resolves relative paths in url() statements
-            // based on the original source file
-            loader: 'resolve-url-loader',
-          }, {
-            loader: 'sass-loader-joy-vendor', options: {
-              sourceMap: true,
-              outputStyle: 'compressed'
-            }
-          }],
-        })
-      }
+        exclude: path.resolve(__dirname, './client/common/scss/main.scss'),
+        use: scssConfig(true),
+      },
     ],
   },
 
@@ -207,8 +219,7 @@ const webpackConfig = {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('production'),
-        URL_CONTEXT: JSON.stringify(process.env.URL_CONTEXT), // 使用环境变量
-      }
+      },
     }),
     // https://doc.webpack-china.org/guides/code-splitting-libraries/#manifest-
     new webpack.optimize.CommonsChunkPlugin({
@@ -218,18 +229,18 @@ const webpackConfig = {
     extractScss,
     extractCSS,
     new MappingPlugin({
-      basePath: `${context}/dist/`,
+      basePath: `${urlContext}/dist/`,
     }),
     new webpack.optimize.UglifyJsPlugin({
       sourceMap: true,
       compressor: {
         warnings: false,
         /*eslint-disable camelcase*/
-        drop_console: process.env.NODE_ENV === 'production' // 是有正式环境去掉 console
+        drop_console: process.env.NODE_ENV === 'production' // 只有正式环境去掉 console
       },
       mangle: {
         except: [] // 设置不混淆变量名
-      }
+      },
     }),
     // new webpack.BannerPlugin({banner: 'Banner', raw: true, entryOnly: true}),
     new webpack.LoaderOptionsPlugin({
@@ -237,7 +248,7 @@ const webpackConfig = {
        loaders 的压缩模式将在 webpack 3 或后续版本中取消。
        为了兼容旧的 loaders，loaders 可以通过插件来切换到压缩模式：*/
       minimize: true,
-    })
+    }),
   ],
 };
 

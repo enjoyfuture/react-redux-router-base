@@ -24,7 +24,7 @@
     <meta name="format-detection" content="telephone=no">
     <!--禁止android上自动识别邮箱-->
     <meta name="format-detection" content="email=no">
-    <link rel="icon" href="{{{context}}}/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="{{{urlContext}}}/favicon.ico" type="image/x-icon">
 
     <!-- dsn 预加载 -->
 
@@ -41,22 +41,6 @@
     <!--嵌入式控制台 -->
     <script>
       (function () {
-        <!-- 开发环境，包括 development 和 beta -->
-        {{#if isDev}}
-          var isDebug = /eruda=true/.test(document.cookie) || /eruda=true/.test(window.location.href) || localStorage.getItem('active-eruda') === 'true';
-          if (isDebug) {
-            var src = '{{{context}}}/eruda.min.js';
-            var script = document.getElementsByTagName('script')[0];
-            var js = document.createElement('script');
-            js.src = src;
-            js.async = true;
-            js.onload = function () {
-              eruda.init();
-            };
-            script.parentNode.insertBefore(js, script);
-          }
-        {{/if}}
-
         var _make_rnd = function () {
           return (+new Date()) + '.r' + Math.floor(Math.random() * 1000);
         };

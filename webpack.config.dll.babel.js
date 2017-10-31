@@ -6,7 +6,7 @@ export default {
     vendor: ['babel-polyfill', 'classnames', 'history/lib/createBrowserHistory', 'immutable',
       'isomorphic-fetch', 'prop-types', 'react', 'react-dom',
       'react-redux', 'react-router', 'react-router-redux-fixed', 'react-transition-group',
-      'redux', 'redux-immutable', 'redux-thunk', 'react-addons-perf', 'redux-devtools',
+      'redux', 'redux-immutable', 'redux-thunk', 'redux-devtools',
       'redux-devtools-dock-monitor', 'redux-devtools-log-monitor', 'redux-logger']
   },
 

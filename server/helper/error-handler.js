@@ -1,4 +1,4 @@
-//定义错误 code
+// 定义错误 code
 const errorCode = {
   '001': '连接失败，请稍后重试',
 };

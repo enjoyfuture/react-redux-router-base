@@ -5,22 +5,19 @@ const fs = require('fs');
 const path = require('path');
 const serialize = require('serialize-javascript');
 const handlebars = require('handlebars');
-const httpTool = require('./../helper/utils');
-const logger = require('../helper/mylogger').Logger;
-const {URL_CONTEXT} = require('../config');
+const logger = require('../helper/my-logger').Logger;
+const {urlContext, nodeEnv} = require('../config');
 
-//services
-const isDev = process.env.NODE_ENV === 'development';
-//页面上下文，根路径，nginx 会卸载掉前缀 context
-const context = process.env.NODE_ENV === 'production' ? '' : URL_CONTEXT;
+// services
+const isDev = nodeEnv === 'development';
 
 //加载webpack打包后的静态文件映射表
 const fileMapping = isDev ? null : require('../../public/dist/mapping.json');
 
-//静态文件上下文路径
-const staticResourceContext = `${URL_CONTEXT}/dist/`;
+// 静态文件上下文路径
+const staticResourceContext = `${urlContext}/dist/`;
 
-//加载html模板
+// 加载html模板
 const htmlTemplate = (function (path) {
   let content = fs.readFileSync(path, {encoding: 'utf8'});
   // 去掉模板中的注释
@@ -42,7 +39,7 @@ const wrapScriptHtml = function (data) {
   }
 
   // 设置二级路径上下文
-  data.context = URL_CONTEXT;
+  data.urlContext = urlContext;
 
 };
 /**
@@ -56,7 +53,16 @@ const wrapStyleImports = function (data, isDev, mapping) {
     return `<link href="${href}" rel="stylesheet">`;
   };
   if (!isDev) {
-    data.links = `${buildLink(mapping[`${staticResourceContext}${data.name}.css`])}`;
+    let links = buildLink(mapping[`${staticResourceContext}${data.name}.css`]);
+    // 公共的
+    if (mapping[`${staticResourceContext}vendor.css`]) {
+      links += buildLink(mapping[`${staticResourceContext}vendor.css`])
+    }
+    // 引入第三方 css
+    if (mapping[`${staticResourceContext}style.${data.name}.css`]) {
+      links += buildLink(mapping[`${staticResourceContext}style.${data.name}.css`])
+    }
+    data.links = links;
   }
 };
 
@@ -71,7 +77,7 @@ const wrapScriptImports = function (data, isDev, mapping) {
     return `<script src="${src}"></script>`;
   };
   if (isDev) {
-    data.scripts = `${buildScript(`${URL_CONTEXT}/dll/vendor.dll.js`)}
+    data.scripts = `${buildScript(`${urlContext}/dll/vendor.dll.js`)}
          ${buildScript(`${staticResourceContext}${data.name}.bundle.js`)}`;
   } else {
     data.scripts = `${buildScript(mapping[`${staticResourceContext}manifest.js`])}
@@ -126,7 +132,7 @@ const renderTemplateSync = function (request, response, data) {
 const renderIndex = function (req, res, next) {
   renderTemplateSync(req, res, {
     title: 'Home Page',
-    name: 'home'
+    name: 'home',
   });
 };
 
@@ -137,28 +143,32 @@ function addRoute(app, options) {
     res.end(null);
   });
 
-  //组件测试
-  app.get(`${context}/page1**`, (req, res, next) => {
+  // page1
+  app.get(`${urlContext}/page1**`, (req, res, next) => {
     renderTemplateSync(req, res, {
       title: 'Page1',
-      name: 'page1'
+      name: 'page1',
     });
   });
-  //组件测试
-  app.get(`${context}/page2**`, (req, res, next) => {
+
+  // page2
+  app.get(`${urlContext}/page2**`, (req, res, next) => {
     renderTemplateSync(req, res, {
       title: 'Page2',
-      name: 'page2'
+      name: 'page2',
     });
   });
-  //组件测试
-  app.get(`${context}/about**`, (req, res, next) => {
+
+  // about
+  app.get(`${urlContext}/about**`, (req, res, next) => {
     renderTemplateSync(req, res, {
       title: 'About Page',
-      name: 'about'
+      name: 'about',
     });
   });
-  app.get(`${context}/`, (req, res, next) => {
+
+  // 首页
+  app.get(`${urlContext}/`, (req, res, next) => {
     if (req.method === 'GET') { // head请求也会拦截到，在线上nginx会以head请求发送心跳请求
       renderIndex(req, res, next);
     } else {

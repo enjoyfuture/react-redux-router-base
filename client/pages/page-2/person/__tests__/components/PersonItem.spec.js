@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import test from 'ava';
-import {shallow} from 'enzyme';
+import {shallow, configure} from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 import sinon from 'sinon';
 import Immutable, {Map} from 'immutable';
 import PersonItem from '../../components/PersonItem';
 import {deletePerson} from '../../action';
 
+configure({adapter: new Adapter()});
 const props = {
   person: Map({id: 1, firstName: 'zhang', lastName: 'san'})
 };

@@ -7,12 +7,19 @@ import {Router, useRouterHistory} from 'react-router';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 import {syncHistoryWithStore, routerMiddleware} from 'react-router-redux-fixed';
 import Immutable from 'immutable';
+import injectTapEventPlugin from 'react-tap-event-plugin';
 import {isMobile} from './utils/device-env';
 
 if (isMobile) {
   // 初始化调整字体大小
   require('./utils/perfect').adjustFontSize();
 }
+
+// 对于手机端项目需要初始化 tapEvent 事件
+injectTapEventPlugin();
+
+// 预加载 scss
+import './common/scss/main.scss';
 
 // 开发环境
 let DevTools;
@@ -30,6 +37,10 @@ if (process.env.NODE_ENV === 'development') {
       <LogMonitor theme="tomorrow" preserveScrollTop={false}/>
     </DockMonitor>
   );
+
+  // 引入 eruda
+  const eruda = require('eruda');
+  eruda.init();
 }
 
 /**
@@ -122,20 +133,3 @@ Root.propTypes = {
 };
 
 export default Root;
-
-// 方便性能调试
-if (process.env.NODE_ENV === 'development') {
-  const Perf = require('react-addons-perf');
-  /**
-   * Perf.start()
-   * Perf.stop()
-   * Perf.printInclusive()
-   */
-  window.Perf = Perf;
-}
-
-// 异常监控管理平台
-window.addEventListener('error', (e) => {
-  // 向平台发送错误
-
-});

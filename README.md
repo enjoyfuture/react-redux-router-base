@@ -5,12 +5,9 @@
 * 有的项目根路径为 '' ，比如 http://ft.jd.com
 * 有的项目根路径为 '/abs' ，比如 http://ft.jd.com/abs
 
-基础项目中 context 设置为 '/context'，如果实际项目中 context 是 '' 或其他值，需要修改项目中对应的变量值
+基础项目中 urlContext 设置为 ''，如果实际项目中 urlContext  不是 ''，需要修改项目中对应的变量值
 
-* /server/config/beta/index.js   URL_CONTEXT
-* /server/config/development/index.js   URL_CONTEXT
-* /server/config/production/index.js   URL_CONTEXT
-* webpack.build.babel.js    process.env.URL_CONTEXT
+* /server/config/index.js   urlContext
 
 ## Server 
 
@@ -87,6 +84,7 @@ npm run check-coverage
 * enzyme : React测试工具，依赖 react-addons-test-utils 可以类似 jquery 风格的 api 操作react 节点
   官网：https://github.com/airbnb/enzyme
   文档：http://airbnb.io/enzyme/
+  http://airbnb.io/enzyme/docs/installation/index.html
 * sinon : 提供 fake 数据， 替换函数调用等功能
   官网：http://sinonjs.org/
 * nyc : JS code coverage tool that computes statement, line, function and branch coverage（用来检测单元测试覆盖率）
@@ -103,6 +101,19 @@ npm run check-coverage
 
 * shortcut key: control + h , open DevTool panel
 * shortcut key: control + w , change DevTool panel position
+
+### 关于 sass 的说明
+由于私服不能连接外网下载安装 node-sass 过程中需要的文件，故 forked 了包含 node-sass 依赖的包,
+重新发布了带 vendor 的 node-sass 和依赖 node-sass 的包，新的依赖包名称对应关系如下
+
+官方的依赖 | 加入 vendor 的依赖 | 官方当前版本
+--- | --- | ---
+node-sass | node-sass-vendor | 4.5.3
+sass-loader-joy-vendor | sass-loader | 6.0.6
+sass-true-vendor | sass-true |
+sasslint-loader-vendor | sasslint-loader | 0.0.1
+
+注意：如官方有新版本时，可以重新 forked 更新自定义的依赖包
 
 ## Issue
 

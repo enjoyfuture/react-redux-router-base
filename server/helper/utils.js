@@ -2,8 +2,8 @@
  * 基础的工具方法
  * @type {request}
  */
-const request = require('request'); //enable cookie
-const logger = require('./mylogger').Logger;
+const request = require('request'); // enable cookie
+const logger = require('./my-logger').Logger;
 
 const formatRequestError = function (options, errMsg) {
   const err = new Error(`获取服务端接口异常，url：${options.url}${errMsg ? ` 后端返回错误信息：${errMsg}` : ''}`);
@@ -14,6 +14,11 @@ const logTimeUse = function (start, url) {
   const end = process.hrtime();
   logger.info(`【${url}】耗时${((end[0] - start[0]) * 1e3 + (end[1] - start[1]) * 1e-6).toFixed(3)}ms`);
 };
+
+/**
+ * Post
+ * @param options
+ */
 
 module.exports.remotePostJSON = (options) => {
   const {req = {}} = options;
@@ -53,10 +58,6 @@ module.exports.remotePostJSON = (options) => {
   });
 };
 
-/**
- * get获取json数据
- * @param options
- */
 /**
  * get获取json数据
  * @param options

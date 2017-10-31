@@ -13,8 +13,7 @@ module.exports.create = function (logger) {
       if (err) {
         logger.error(`${req.method} ${decodeURIComponent(req.originalUrl || req.url)} ${res1.statusCode || undefined} ${ms} ms`);
       }
-      // logger.info(`${req.method} ${decodeURIComponent(req.originalUrl || req.url)} ${res1.statusCode || undefined} ${ms} ms - ${res1['content-length']}`);
-      //开了Gzip拿不到content-length
+      // 开了Gzip拿不到 content-length
       logger.info(`${req.method} ${decodeURIComponent(req.originalUrl || req.url)} ${res1.statusCode || undefined} ${ms} ms`);
     });
 

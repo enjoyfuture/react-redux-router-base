@@ -8,7 +8,7 @@ import routing from '../../common/reducers/routing';
 import toast from '../../common/reducers/toast';
 import App from '../../common/App';
 import AboutPage from './AboutPage';
-import {context} from '../../utils/config';
+import {urlContext} from '../../utils/config';
 import '../../common/scss/main.scss';
 
 const routes = (
@@ -23,6 +23,6 @@ const reducers = combineReducers({
 });
 
 render(
-  <Root routes={routes} reducers={reducers} basename={`${context}/about`}/>,
+  <Root routes={routes} reducers={reducers} basename={`${urlContext}/about`}/>,
   document.getElementById('layout')
 );

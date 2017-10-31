@@ -4,7 +4,6 @@ import {connect} from 'react-redux';
 import classNames from 'classnames/bind';
 import {hello, clearHello} from './action';
 import {setToast} from '../../common/action/toast';
-import mainCss from '../../utils/main-css';
 import style from './home.scss';
 const cx = classNames.bind(style);
 
@@ -36,14 +35,14 @@ export class Home extends Component {
   render() {
     const {home} = this.props;
     return (
-      <div className={cx('home')}>
-        <h1 className={mainCss('mt-3')}>
+      <div className={style.home}>
+        <h1 className="mt-3">
           React Redux Router Immutable Webpack Less etc.
         </h1>
-        <hr className={mainCss('mt-2', 'mb-2')}/>
+        <hr className="mt-2 mb-2"/>
         <div>
-          <h3 className={mainCss('mb-1')}>{home.get('content')}</h3>
-          <div className={cx('btn-group')}>
+          <h3 className="mb-1">{home.get('content')}</h3>
+          <div className={style['btn-group']}>
             <button className={cx('btn', 'btn-info')}
                     onClick={this.helloHandle()}>欢迎您来到这里
             </button>
