@@ -137,12 +137,6 @@ const renderIndex = function (req, res, next) {
 };
 
 function addRoute(app, options) {
-  // FIXME client-error 如果接入了日志平台后，可以去掉
-  app.get('/client-error', (req, res, next) => {
-    logger.info(`client error!!!error info is: ${decodeURIComponent(req.query.i)},header is: ${JSON.stringify(req.headers)}`);
-    res.end(null);
-  });
-
   // page1
   app.get(`${urlContext}/page1**`, (req, res, next) => {
     renderTemplateSync(req, res, {

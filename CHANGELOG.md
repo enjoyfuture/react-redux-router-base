@@ -3,14 +3,16 @@
 ## version 0.6.0 (2017-10-30)
 
 * 用 babel-preset-env 替换 babel-preset-2015
-* 简化了 server 端 config 配置，采用一个文件搞定
-* 修改 setup-env.js，build后修改 dist/bin/www 环境变量
+* 修改了 server 端 config 配置，增加了 base.js 基础配置
 * api url 统一放在 api-url 文件夹下，方便分类管理
 * 修改了 urlContext，统一改为 server 端设置，client 用到时从 server 端读取
 * react 升级到 v16.0.0 以及其他 npm 依赖升级
+* 在 App.js 中加入了 react 16 中的方法 componentDidCatch 用来捕获异常
 * eruda 在测试环境中采用导入的方式注入
 * scss 编译时，对于公共的 scss 文件改成不使用 css module，其他组件中使用的 scss 采用 css module 方式
 * 调整单元测试代码
+* 引入了前端异常监控脚本
+* 其他 bug 和优化处理
 
 ## version 0.5.0 (2017-9-6)
 

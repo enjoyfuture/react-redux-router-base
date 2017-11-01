@@ -38,30 +38,9 @@
     <!--服务端渲染的首屏初始值 -->
     <script>{{{scriptHtml}}}</script>
 
-    <!--嵌入式控制台 -->
-    <script>
-      (function () {
-        var _make_rnd = function () {
-          return (+new Date()) + '.r' + Math.floor(Math.random() * 1000);
-        };
-        // 全局异常监听，方便调试
-        window.onerror = function (errorMessage, scriptURI, lineNumber, columnNumber, errorObj) {
-          var errorMsg = '错误信息：' + errorMessage + ',出错文件：' + scriptURI + ',出错行号：' + lineNumber
-              + ',出错列号：' + columnNumber + ',错误详情：' + JSON.stringify(errorObj);
-          var win = window;
-          var n = 'jsFeImage_' + _make_rnd(),
-              img = win[n] = new Image();
-          img.onload = img.onerror = img.onabort = function () {
-            win[n] = null;
-            img.onload = img.onerror = img.onabort = null;
-          };
-          img.src = '/client-error?i=' + encodeURIComponent(errorMsg);
-        };
-
-      })();
-    </script>
-
     <!--页面用到的 js -->
     {{{scripts}}}
+    <!-- 异步引入前端异常监控脚本，这里应该判断测试环境和线上环境，待处理 TODO-->
+    <script async src="https://error-free.jd.com/track/stat.js" key="crossorigin" value="anonymous"></script>
   </body>
 </html>

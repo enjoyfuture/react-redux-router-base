@@ -5,3 +5,4 @@ dll
 .nyc_output
 coverage
 npm-debug.log
+server/config/index.js

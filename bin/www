@@ -1,8 +1,5 @@
 #!/usr/bin/env node
 
-// 设置环境变量，打包编译时根据环境的不同，会动态改变该值
-process.env.NODE_ENV = 'development';
-
 const http = require('http');
 const config = require('../server/config');
 const app = require('../server');
