@@ -124,7 +124,6 @@ const renderTemplateSync = function (request, response, data) {
 
 /**
  * 渲染首页
- * 会根据返回数据决定展示小白分页或系统欢迎页
  * @param req
  * @param res
  * @param next
@@ -163,7 +162,7 @@ function addRoute(app, options) {
 
   // 首页
   app.get(`${urlContext}/`, (req, res, next) => {
-    if (req.method === 'GET') { // head请求也会拦截到，在线上nginx会以head请求发送心跳请求
+    if (req.method === 'GET') {
       renderIndex(req, res, next);
     } else {
       res.end('ok');

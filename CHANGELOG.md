@@ -12,6 +12,7 @@
 * scss 编译时，对于公共的 scss 文件改成不使用 css module，其他组件中使用的 scss 采用 css module 方式
 * 调整单元测试代码
 * 引入了前端异常监控脚本
+* 新增 util session-storage.js 用来处理 sessionStorage
 * 其他 bug 和优化处理
 
 ## version 0.5.0 (2017-9-6)

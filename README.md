@@ -7,7 +7,7 @@
 
 基础项目中 urlContext 设置为 ''，如果实际项目中 urlContext  不是 ''，需要修改项目中对应的变量值
 
-* /server/config/index.js   urlContext
+* /server/config/base.js   urlContext
 
 ## Server 
 
