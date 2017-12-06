@@ -44,10 +44,10 @@ function scssConfig(modules) {
       sourceMap: true,
       // postcss plugins https://github.com/postcss/postcss/blob/master/docs/plugins.md
       plugins: [
-        //cssnano(),
+        // cssnano(),
         flexbugs(),
         autoprefixer({
-          //flexbox: 'no-2009',
+          flexbox: 'no-2009',
           browsers
         })
       ]
@@ -196,7 +196,13 @@ const webpackConfig = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(), // 热部署替换模块
     new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.optimize.ModuleConcatenationPlugin(), // Scope Hoisting-作用域提升
+    new webpack.optimize.ModuleConcatenationPlugin({ // Scope Hoisting-作用域提升
+      // 检查所有的模块
+      maxModules: Infinity,
+      // 将显示绑定失败的原因
+      optimizationBailout: true
+    }),
+    new webpack.NamedModulesPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('development'),

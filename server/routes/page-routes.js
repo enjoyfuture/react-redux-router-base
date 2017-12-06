@@ -12,7 +12,7 @@ const {urlContext, nodeEnv} = require('../config');
 const isDev = nodeEnv === 'development';
 
 //加载webpack打包后的静态文件映射表
-const fileMapping = isDev ? null : require('../../public/dist/mapping.json');
+const fileManifest = isDev ? null : require('../../public/dist/manifest.json');
 
 // 静态文件上下文路径
 const staticResourceContext = `${urlContext}/dist/`;
@@ -46,21 +46,21 @@ const wrapScriptHtml = function (data) {
  * 构建页面样式表，添加到data.links属性中
  * @param data
  * @param isDev
- * @param mapping
+ * @param manifest
  */
-const wrapStyleImports = function (data, isDev, mapping) {
+const wrapStyleImports = function (data, isDev, manifest) {
   const buildLink = function (href) {
     return `<link href="${href}" rel="stylesheet">`;
   };
   if (!isDev) {
-    let links = buildLink(mapping[`${staticResourceContext}${data.name}.css`]);
+    let links = buildLink(manifest[`${staticResourceContext}${data.name}.css`]);
     // 公共的
-    if (mapping[`${staticResourceContext}vendor.css`]) {
-      links += buildLink(mapping[`${staticResourceContext}vendor.css`])
+    if (manifest[`${staticResourceContext}vendor.css`]) {
+      links += buildLink(manifest[`${staticResourceContext}vendor.css`])
     }
     // 引入第三方 css
-    if (mapping[`${staticResourceContext}style.${data.name}.css`]) {
-      links += buildLink(mapping[`${staticResourceContext}style.${data.name}.css`])
+    if (manifest[`${staticResourceContext}style.${data.name}.css`]) {
+      links += buildLink(manifest[`${staticResourceContext}style.${data.name}.css`])
     }
     data.links = links;
   }
@@ -70,9 +70,9 @@ const wrapStyleImports = function (data, isDev, mapping) {
  * 构建页面外链脚本，添加到data.scripts属性中
  * @param data
  * @param isDev
- * @param mapping
+ * @param manifest
  */
-const wrapScriptImports = function (data, isDev, mapping) {
+const wrapScriptImports = function (data, isDev, manifest) {
   const buildScript = function (src) {
     return `<script src="${src}"></script>`;
   };
@@ -80,9 +80,9 @@ const wrapScriptImports = function (data, isDev, mapping) {
     data.scripts = `${buildScript(`${urlContext}/dll/vendor.dll.js`)}
          ${buildScript(`${staticResourceContext}${data.name}.bundle.js`)}`;
   } else {
-    data.scripts = `${buildScript(mapping[`${staticResourceContext}manifest.js`])}
-        ${buildScript(mapping[`${staticResourceContext}vendor.js`])}
-        ${buildScript(mapping[`${staticResourceContext}${data.name}.js`])}`;
+    data.scripts = `${buildScript(manifest[`${staticResourceContext}manifest.js`])}
+        ${buildScript(manifest[`${staticResourceContext}vendor.js`])}
+        ${buildScript(manifest[`${staticResourceContext}${data.name}.js`])}`;
   }
 };
 /**
@@ -111,10 +111,10 @@ const renderTemplateSync = function (request, response, data) {
   setCommonHeader(response);
 
   wrapScriptHtml(data);
-  wrapStyleImports(data, isDev, fileMapping);
-  wrapScriptImports(data, isDev, fileMapping);
+  wrapStyleImports(data, isDev, fileManifest);
+  wrapScriptImports(data, isDev, fileManifest);
   // 环境
-  data.isDev = process.env.NODE_ENV !== 'production';
+  data.isProd = process.env.NODE_ENV === 'production';
   /*
    * data 结构：
    *     { title,name,scriptHtml,links,scripts,context }

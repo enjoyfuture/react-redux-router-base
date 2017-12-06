@@ -4,7 +4,6 @@ import Root from '../../Root';
 import routes from './routes';
 import reducers from './reducers';
 import {urlContext} from '../../utils/config';
-import '../../common/scss/main.scss';
 
 
 render(

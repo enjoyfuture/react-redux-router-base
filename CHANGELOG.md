@@ -1,5 +1,13 @@
 # node-react-redux-base 更新日志
 
+## version 0.7.0 (2017-12-06)
+
+* 加入错误监控脚本
+* 加入数据平台脚本
+* webpack 持久化缓存优化 https://github.com/pigcan/blog/issues/9
+* 添加了插件 BannerPlugin
+* 用 webpack-manifest-plugin 替换插件 webpack-mapping-plugin
+
 ## version 0.6.0 (2017-10-30)
 
 * 用 babel-preset-env 替换 babel-preset-2015

@@ -40,7 +40,14 @@
 
     <!--页面用到的 js -->
     {{{scripts}}}
-    <!-- 异步引入前端异常监控脚本，这里应该判断测试环境和线上环境，待处理 TODO-->
-    <script async src="https://error-free.jd.com/track/stat.js" key="crossorigin" value="anonymous"></script>
+
+    <!-- 数据平台-埋点，区分环境，不同环境埋点不一样，需要后台配置 appid 和 appkey-->
+    {{#if isProd}}
+      <script src="//bdc.jd.com/dist/track.min.js" name="MTK" appid="xxx" appkey="xxx" async></script>
+    {{else}}
+      <script src="//172.24.6.81:8888/dist/track.min.js" name="MTK" appid="xxx" appkey="xxx" async></script>
+    {{/if}}
+    <!-- 异步引入前端异常监控脚本-->
+    <script async src="https://error-free.jd.com/track/stat.js" crossorigin="anonymous" ></script>
   </body>
 </html>
