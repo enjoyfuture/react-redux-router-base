@@ -172,7 +172,7 @@ const webpackConfig = {
               //cssnano(),
               flexbugs(),
               autoprefixer({
-                //flexbox: 'no-2009',
+                flexbox: 'no-2009',
                 browsers
               })
             ]
