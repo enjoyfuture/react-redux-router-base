@@ -10,16 +10,16 @@ import Immutable from 'immutable';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import {isMobile} from './utils/device-env';
 
+// 加载 scss
+import './scss/perfect.scss';
+
 if (isMobile) {
-  // 初始化调整字体大小
-  require('./utils/perfect').adjustFontSize();
+  // 初始化调整字体大小，通常不建议动态调整字体大小，以 html 默认的字体 16px 为准
+  // require('./utils/perfect').adjustFontSize();
 }
 
 // 对于手机端项目需要初始化 tapEvent 事件
 injectTapEventPlugin();
-
-// 预加载 scss
-import './common/scss/main.scss';
 
 // 开发环境
 let DevTools;

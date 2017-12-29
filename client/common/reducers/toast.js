@@ -1,14 +1,17 @@
 import {Map} from 'immutable';
 
-// 设置 toast 内容和效果
+// 显示 toast 并设置内容
 export default function toast(state = Map(), action) {
-  const {type, content, effect, time, error} = action;
-  if (type === 'clear_toast') {
-    return state.set('effect', effect);
-  } else if (type === 'set_toast') {
-    return state.set('content', content).set('effect', effect).set('time', time);
+  const {type, content, time, error} = action;
+  if (type === 'close-toast') {
+    if (content) {
+      return state.set('open', false).set('content', content);
+    }
+    return state.set('open', false);
+  } else if (type === 'open-toast') {
+    return state.set('content', content).set('open', true).set('time', time);
   } else if (error) {
-    return state.set('content', error).set('effect', 'enter').set('time', 3000);
+    return state.set('content', error).set('open', true).set('time', 3000);
   }
   return state;
 }

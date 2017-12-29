@@ -9,7 +9,6 @@ import toast from '../../common/reducers/toast';
 import App from '../../common/App';
 import AboutPage from './AboutPage';
 import {urlContext} from '../../utils/config';
-import '../../common/scss/main.scss';
 
 const routes = (
   <Route path="/" component={App}>

@@ -14,7 +14,7 @@ class Page extends Component {
   };
 
   static childContextTypes = {
-    dispatch: PropTypes.func
+    dispatch: PropTypes.func,
   };
 
   /**
@@ -29,7 +29,7 @@ class Page extends Component {
 
   render() {
     const {
-      children, caches, person, film, location
+      children, caches, person, film, location,
     } = this.props;
 
     const {pathname} = location;
@@ -39,17 +39,14 @@ class Page extends Component {
       : {caches, film};
 
     return (
-      <div className="container mt-1">
-        <ul className="nav nav-tabs mb-2">
-          <li className="nav-item">
-            <Link className="nav-link" activeClassName="active" to="/person">Person</Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" activeClassName="active" to="/film">Film</Link>
-          </li>
-        </ul>
-
-        {children && React.cloneElement(children, props)}
+      <div className="container m-t-3">
+        <nav className="tab-bar tab-bar-primary">
+          <Link className="tab" activeClassName="active" to="/person">Person</Link>
+          <Link className="tab" activeClassName="active" to="/film">Film</Link>
+        </nav>
+        <div className="m-t-4">
+          {children && React.cloneElement(children, props)}
+        </div>
       </div>
     );
   }
@@ -62,7 +59,7 @@ function mapStateToProps(state, ownProps) {
   return {
     person,
     film,
-    caches
+    caches,
   };
 }
 

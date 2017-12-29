@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 const Person = ({children, person}) => {
   return (
-    <div>
+    <div className="p-x-4">
       {children && React.cloneElement(children, {
         person
       })}

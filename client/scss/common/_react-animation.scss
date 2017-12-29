@@ -1,0 +1,110 @@
+/*react 动画效果*/
+
+:global {
+  // 透明效果
+  // 利用 :global 设为全局样式
+  .opacity-enter {
+    opacity: .01;
+  }
+
+  .opacity-enter.opacity-enter-active {
+    opacity: 1;
+    transition: opacity 500ms ease-in;
+  }
+
+  .opacity-exit {
+    opacity: 1;
+  }
+
+  .opacity-exit.opacity-exit-active {
+    opacity: .01;
+    transition: opacity 300ms ease-in;
+  }
+
+  // 透明加缩小效果
+  .app-animation-enter,
+  .app-animation-appear {
+    opacity: .01;
+    transform: scale(1.3, 1.3);
+  }
+
+  .app-animation-appear.app-animation-appear-active,
+  .app-animation-enter.app-animation-enter-active {
+    opacity: 1;
+    transform: scale(1, 1);
+    transition: all .35s ease-out;
+  }
+
+  //fade in 效果
+  .fade-in-enter {
+    transform: translate(-100%, -100%);
+  }
+
+  .fade-in-enter.fade-in-enter-active {
+    transform: translate(0, 0);
+    transition: transform 300ms ease-in;
+  }
+
+  .fade-in-exit {
+    transform: translate(0, 0);
+  }
+
+  .fade-in-exit.fade-in-exit-active {
+    transform: translate(100%, 100%);
+    transition: translate 300ms ease-in;
+  }
+
+  //右侧进入
+  .animate-right-appear {
+    transform: translate(100%, 0);
+  }
+
+  .animate-right-appear.animate-right-appear-active {
+    transform: translate(90%, 0);
+    transition: transform 300ms ease-in;
+  }
+
+  .animate-right-enter {
+    transform: translate(100%, 0);
+  }
+
+  .animate-right-enter.animate-right-enter-active {
+    transform: translate(0, 0);
+    transition: transform 300ms ease-in;
+  }
+
+  .animate-right-exit {
+    transform: translate(0, 0);
+  }
+
+  .animate-right-exit.animate-right-exit-active {
+    transform: translate(-100%, 0);
+    transition: translate 300ms ease-in;
+  }
+
+  //渐入效果
+  .burst-in-enter {
+    opacity: .01;
+    animation-name: burstIn;
+    animation-duration: .3s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: both;
+    backface-visibility: hidden;
+  }
+
+  .burst-in-enter.burst-in-enter-active {
+    opacity: 1;
+  }
+
+  @keyframes burstIn {
+    0% {
+      opacity: 0;
+      transform: scale(.9);
+    }
+
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}

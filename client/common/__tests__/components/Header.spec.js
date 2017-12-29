@@ -11,7 +11,7 @@ test('renders the header properly', t => {
     <Header/>,
   );
 
-  t.truthy(wrapper.find('.header-nav-item').first().containsMatchingElement('Home'));
+  t.truthy(wrapper.find('.navbar').first().containsMatchingElement('React+Redux+Router'));
 
-  t.is(wrapper.find('.header-nav-item').length, 4);
+  t.is(wrapper.find('.nav-link').length, 4);
 });

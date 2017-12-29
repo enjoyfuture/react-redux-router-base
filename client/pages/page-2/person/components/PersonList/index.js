@@ -45,7 +45,6 @@ class PersonList extends Component {
 
   renderList() {
     const {person} = this.props;
-    const isFetching = person.get('isFetching');
     const paging = person.get('paging');
 
     if (!paging) {
@@ -54,7 +53,6 @@ class PersonList extends Component {
       );
     }
 
-    const lastPage = paging.get('lastPage');
     const items = paging.get('items');
 
     if (items.size === 0) {
@@ -68,8 +66,8 @@ class PersonList extends Component {
 
     return (
       <div>
-        <table className={cx('table')}>
-          <thead className={cx('thead-inverse')}>
+        <table className="table table-thead-primary table-striped table-hover-primary">
+          <thead>
             <tr>
               <th>#</th>
               <th>First Name</th>
@@ -98,15 +96,15 @@ class PersonList extends Component {
     const lastPage = paging && paging.get('lastPage');
     return (
       <div>
-        <div className="mb-1">
-          <Link className={cx('btn', 'btn-primary')} to="/person/create">Add Person</Link>
+        <div className="m-b-4">
+          <Link className="btn btn-primary btn-raised" to="/person/create">Add Person</Link>
         </div>
         {this.renderList()}
-        <div className={cx('btn-group')}>
-          <button type="button" className={cx('btn', 'btn-primary')} disabled={lastPage}
+        <div className="btn-group">
+          <button type="button" className="btn btn-primary btn-raised" disabled={lastPage}
                   onClick={this.loadMore}>Load More
           </button>
-          <button type="button" className={cx('btn', 'btn-info')}
+          <button type="button" className="btn btn-info btn-raised"
                   onClick={this.refresh}>Refresh
           </button>
         </div>

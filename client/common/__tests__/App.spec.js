@@ -30,12 +30,6 @@ test('renders properly', t => {
   t.is(wrapper.find('Footer').length, 1);
 });
 
-test('when the component is initialized, it will not call componentDidMount', t => {
-  const spy = sinon.spy(App.prototype, 'componentDidUpdate');
-  mount(<App {...props} />);
-  t.falsy(spy.called);
-});
-
 test('allows us to set props: toast', t => {
   const wrapper = mount(<App {...props} />);
   t.is(wrapper.props().toast.get('content'), undefined);

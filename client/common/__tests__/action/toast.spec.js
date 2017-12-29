@@ -1,12 +1,11 @@
 import test from 'ava';
-import {setToast, clearToast} from '../../action/toast';
+import {openToast, closeToast} from '../../action/toast';
 
 test('should return the correct type for setToast',
   t => {
-    t.deepEqual(setToast({content: 'Toast Content', effect: 'enter', time: 2000}), {
-      type: 'set_toast',
+    t.deepEqual(openToast('Toast Content', 2000), {
+      type: 'open-toast',
       content: 'Toast Content',
-      effect: 'enter',
       time: 2000
     });
   }
@@ -14,17 +13,16 @@ test('should return the correct type for setToast',
 
 test('should return the correct type for setToast, return the default value',
   t => {
-    t.deepEqual(setToast({}), {
-      type: 'set_toast',
+    t.deepEqual(openToast(), {
+      type: 'open-toast',
       content: '',
-      effect: 'enter',
-      time: 3000
+      time: 0
     });
   }
 );
 
 test('should return the correct type for clearToast',
   t => {
-    t.deepEqual(clearToast('leave'), {type: 'clear_toast', effect: 'leave'});
+    t.deepEqual(closeToast('离开了'), {type: 'close-toast', content: '离开了'});
   }
 );

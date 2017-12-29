@@ -13,7 +13,7 @@ const FilmList = ({film, activeTab}) => {
 
   if (!items) {
     return (
-      <div className={cx('page-loading')}>载入中，请稍后 ...</div>
+      <div className="page-loading">载入中，请稍后 ...</div>
     );
   } else if (items.size === 0) {
     return (
@@ -25,12 +25,12 @@ const FilmList = ({film, activeTab}) => {
   }
 
   return (
-    <ul className={cx('list-group')}>
+    <ul className="list list-border">
       {
         //item 是每条记录，index 下标值，list 所有数据
         items.map((item, index, list) => {
           return (
-            <li key={item.get('id')} className={cx('list-group-item')}>
+            <li key={item.get('id')} className="list-item">
               <a href={item.get('link')} target="_blank">{item.get('name')}</a>
             </li>
           );

@@ -13,7 +13,7 @@ class Page extends Component {
     module2: PropTypes.object,
   };
   static childContextTypes = {
-    dispatch: PropTypes.func
+    dispatch: PropTypes.func,
   };
 
   /**
@@ -28,7 +28,7 @@ class Page extends Component {
 
   render() {
     const {
-      children, location, caches, module1, module2
+      children, location, caches, module1, module2,
     } = this.props;
 
     const {pathname} = location;
@@ -37,15 +37,11 @@ class Page extends Component {
       : {location, caches, module2};
 
     return (
-      <div className="container mt-1">
-        <ul className="nav nav-tabs mb-2">
-          <li className="nav-item">
-            <Link className="nav-link" activeClassName="active" to="/module1">Module1</Link>
-          </li>
-          <li className="nav-item">
-            <Link className="nav-link" activeClassName="active" to="/module2">Module2</Link>
-          </li>
-        </ul>
+      <div className="container m-t-1">
+        <nav className="tab-bar tab-bar-primary">
+          <Link className="tab" activeClassName="active" to="/module1">Module1</Link>
+          <Link className="tab" activeClassName="active" to="/module2">Module2</Link>
+        </nav>
 
         {children && React.cloneElement(children, props)}
       </div>

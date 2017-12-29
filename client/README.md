@@ -1,13 +1,13 @@
 # 目录结构
+```
 .
 ├── Root.js (入口，React + Router + Redux)
 ├── components (公用 react 组件，不涉及到 action 和 reducers，只需根据传入的数据来展示)
-├── common (页面公共部分，比如头部和底部，以及相关通用的 action reducers 和 scss 等)
+├── common (页面公共部分，比如头部和底部，以及相关通用的 action reducers 和 components 等)
 │   ├── App.js (页面父级组件)
 │   ├── action (定义通用 action)
 │   ├── components
 │   ├── images
-│   ├── scss
 │   └── reducers (定义通用 reducers)
 ├── pages
 │   ├── about
@@ -76,3 +76,4 @@
     ├── error-handler.js
     ├── fetch.js
     └── perfect.js
+```

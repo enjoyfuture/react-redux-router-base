@@ -1,10 +1,16 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import Header from './components/Header'
+import {Toast} from 'react-perfect-component';
+import Header from './components/Header';
 import Footer from './components/Footer';
-import {clearToast} from './action/toast';
+import {closeToast} from './action/toast';
 
+/**
+ * 根组件
+ * 对于 toast 的调用，在需要调用的地方直接调用方法 openToast，例如
+ * this.props.dispatch(openToast('轻轻的，我来了'));
+ */
 export class App extends Component {
 
   static propTypes = {
@@ -13,21 +19,9 @@ export class App extends Component {
     dispatch: PropTypes.func.isRequired,
   };
 
-  componentDidUpdate() {
-    const {
-      toast, dispatch
-    } = this.props;
-
-    if (toast && toast.get('effect') === 'enter') {
-      if (this.toastTimeoutId) {
-        clearTimeout(this.toastTimeoutId);
-      }
-      this.toastTimeoutId = setTimeout(() => {
-        dispatch(clearToast());
-        this.toastTimeoutId = null;
-      }, toast.get('time'));
-    }
-  }
+  handleClose = () => {
+    this.props.dispatch(closeToast());
+  };
 
   // React 16 新增方法，用来处理错误边界，可以捕获整个子组件树内发生的任何异常
   componentDidCatch(error, errorInfo) {
@@ -36,33 +30,20 @@ export class App extends Component {
     console.error(errorInfo);
   }
 
-  // toast 组件
-  renderToast() {
-    const {
-      toast
-    } = this.props;
-    const content = toast.get('content');
-    const effect = toast.get('effect');
-
-    return (
-      <div
-        className={`toast-panel ${effect || ''}`}>
-        <div className="toast">{content}</div>
-      </div>
-    );
-  }
-
   render() {
     const {
-      children
+      children, toast
     } = this.props;
 
+    const content = toast.get('content');
+    const open = toast.get('open');
+
     return (
-      <div className="main">
-        {this.renderToast()}
-        <Header />
+      <div>
+        <Toast duration={2000} open={open} content={content} handleClose={this.handleClose}/>
+        <Header/>
         {children}
-        <Footer />
+        <Footer/>
       </div>
     );
   }
@@ -70,7 +51,7 @@ export class App extends Component {
 
 function mapStateToProps(state) {
   return {
-    toast: state.get('toast')
+    toast: state.get('toast'),
   };
 }
 

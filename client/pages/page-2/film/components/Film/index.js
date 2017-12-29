@@ -82,24 +82,20 @@ class Film extends Component {
      * https://github.com/css-modules/css-modules/issues/84
      */
     return (
-      <div>
-        <ul className="nav nav-pills">
-          <li className="nav-item">
-            <a className={classNames('nav-link', activeTab === 'all' ? 'active' : '')}
-               onClick={this.switchTab('all')} href="#">全部</a>
-          </li>
-          <li className="nav-item">
-            <a className={classNames('nav-link', activeTab === 'popularity' ? 'active' : '')}
-               onClick={this.switchTab('popularity')} href="#">人气</a>
-          </li>
-        </ul>
+      <div className="p-x-4">
+        <div className="btn-group">
+          <a className={classNames('btn btn-raised', activeTab === 'all' ? 'btn-primary' : '')}
+             onClick={this.switchTab('all')} href="#">全部</a>
+          <a className={classNames('btn btn-raised', activeTab === 'popularity' ? 'btn-primary' : '')}
+             onClick={this.switchTab('popularity')} href="#">人气</a>
+        </div>
 
         <TransitionGroup>
           <CSSTransition key={activeTab}
                          in={activeTab === 'popularity'}
                          classNames={transitionName}
                          timeout={{exit: 500, enter: 500}}>
-            <div className="mt-1">
+            <div className="m-t-1">
               <FilmList film={film} activeTab={activeTab}/>
             </div>
           </CSSTransition>

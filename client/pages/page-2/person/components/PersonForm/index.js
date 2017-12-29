@@ -5,6 +5,7 @@ import callApi from '../../../../../utils/fetch';
 import {addPerson} from '../../action';
 
 import style from './style.scss';
+
 const cx = classNames.bind(style);
 
 class PersonForm extends Component {
@@ -17,7 +18,7 @@ class PersonForm extends Component {
     super(props, context);
     this.state = {
       firstName: '',
-      lastName: ''
+      lastName: '',
     };
   }
 
@@ -30,23 +31,23 @@ class PersonForm extends Component {
       url,
       body: {
         firstName,
-        lastName
+        lastName,
       },
-      method: 'post'
+      method: 'post',
     }).then(
       (json) => {
         const {data} = json;
         const person = {
           id: data.id,
           firstName,
-          lastName
+          lastName,
         };
         dispatch(addPerson(person));
         router.goBack();
       },
       (error) => {
 
-      }
+      },
     );
   };
 
@@ -54,7 +55,7 @@ class PersonForm extends Component {
     return (event) => {
       const val = event.target.value;
       this.setState({
-        [field]: val
+        [field]: val,
       });
     };
   };
@@ -62,30 +63,27 @@ class PersonForm extends Component {
   render() {
     const {firstName, lastName} = this.state;
     return (
-      <form>
-        <div className={cx('form-group', 'row')}>
-          <label className={cx('col-2', 'col-form-label')}>First Name</label>
-          <div className={cx('col-4')}>
-            <input type="text" className={cx('form-control')} placeholder="First Name"
+      <div className="form-panel">
+        <div className="form-field">
+          <label htmlFor="firstName">First Name</label>
+          <div className="input input-primary" id="firstName">
+            <input type="text" className="input-field" placeholder="First Name"
                    value={firstName} onChange={this.handleChange('firstName')}/>
           </div>
         </div>
 
-        <div className={cx('form-group', 'row')}>
-          <label className={cx('col-2', 'col-form-label')}>Last Name</label>
-          <div className={cx('col-4')}>
-            <input type="text" className={cx('form-control')} placeholder="Last Name"
+        <div className="form-field">
+          <label htmlFor="lastName">Last Name</label>
+          <div className="input input-primary" id="lastName">
+            <input type="text" className="input-field" placeholder="Last Name"
                    value={lastName} onChange={this.handleChange('lastName')}/>
           </div>
         </div>
-        <div className={cx('form-group', 'row')}>
-          <div className={cx('offset-2', 'col-4')}>
-            <button type="button" className={cx('btn', 'btn-primary')}
-                    onClick={this.savePerson}>Save
-            </button>
-          </div>
+
+        <div className="btn-group m-t-2">
+          <button className="btn btn-raised btn-primary" onClick={this.savePerson}>Save</button>
         </div>
-      </form>
+      </div>
     );
   }
 }

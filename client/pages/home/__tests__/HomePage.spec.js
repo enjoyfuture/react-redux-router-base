@@ -5,7 +5,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import {Map} from 'immutable';
 import sinon from 'sinon';
 import {hello, clearHello} from '../action';
-import {setToast} from '../../../common/action/toast';
+import {openToast} from '../../../common/action/toast';
 import {Home} from '../HomePage';
 
 configure({adapter: new Adapter()});
@@ -58,7 +58,7 @@ test('calling toastHandle dispatches setToast', t => {
     },
   });
   t.truthy(dispatch.callCount === 4);
-  t.truthy(dispatch.calledWith(setToast({
-    content: '你好，这是一个 Toast，来体验 React 的美妙之处吧。希望能给你带去快乐！',
-  })));
+  t.truthy(dispatch.calledWith(openToast(
+    '你好，这是一个 Toast，来体验 React 的美妙之处吧。希望能给你带去快乐！',
+  )));
 });

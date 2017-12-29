@@ -1,0 +1,10 @@
+// 这里之所以定义 html 为 position: relative; 主要为了实现，不论页面高度如何，底部始终在最下面显示
+
+html {
+  position: relative;
+}
+
+html, body {
+  height: auto;
+  min-height: 100%;
+}

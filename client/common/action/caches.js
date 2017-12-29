@@ -3,7 +3,7 @@
 // 读取实际数据时，还是从 state 中读取
 export function setCache(key, value = true) {
   return {
-    type: 'set_cache',
+    type: 'set-cache',
     key,
     value
   };
@@ -12,7 +12,7 @@ export function setCache(key, value = true) {
 //删除一个或多个缓存
 export function removeCache(keys) {
   return {
-    type: 'remove_cache',
+    type: 'remove-cache',
     keys
   };
 }
@@ -20,6 +20,6 @@ export function removeCache(keys) {
 //清空所有缓存
 export function clearCache() {
   return {
-    type: 'clear_cache'
+    type: 'clear-cache'
   };
 }

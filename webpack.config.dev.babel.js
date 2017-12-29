@@ -182,12 +182,12 @@ const webpackConfig = {
       // 为了减少编译生产的 css 文件大小，公共的 scss 不使用 css 模块化
       {
         test: /\.scss/,
-        include: path.resolve(__dirname, './client/common/scss/main.scss'),
+        include: path.resolve(__dirname, './client/scss/perfect.scss'),
         use: scssConfig(false),
       },
       {
         test: /\.scss/,
-        exclude: path.resolve(__dirname, './client/common/scss/main.scss'),
+        exclude: path.resolve(__dirname, './client/scss/perfect.scss'),
         use: scssConfig(true),
       }
     ]

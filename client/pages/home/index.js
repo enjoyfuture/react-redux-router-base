@@ -11,8 +11,6 @@ import App from '../../common/App';
 import HomePage from './HomePage';
 import {urlContext} from '../../utils/config';
 
-import '../../common/scss/main.scss';
-
 const routes = (
   <Route path="/" component={App}>
     <IndexRoute component={HomePage}/>

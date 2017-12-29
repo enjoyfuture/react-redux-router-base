@@ -201,12 +201,12 @@ const webpackConfig = {
       // 为了减少编译生产的 css 文件大小，公共的 scss 不使用 css 模块化
       {
         test: /\.scss/,
-        include: path.resolve(__dirname, './client/common/scss/main.scss'),
+        include: path.resolve(__dirname, './client/scss/perfect.scss'),
         use: scssConfig(false),
       },
       {
         test: /\.scss/,
-        exclude: path.resolve(__dirname, './client/common/scss/main.scss'),
+        exclude: path.resolve(__dirname, './client/scss/perfect.scss'),
         use: scssConfig(true),
       },
     ],
@@ -232,8 +232,8 @@ const webpackConfig = {
     extractCSS,
     // 以下两个插件可以解决持久化缓存，但由于用到了模块化，混淆的 css 名导致无法缓存
     // 故先注释掉，待后续解决了，再打开，或者不使用 css Module 时
-    // new webpack.HashedModuleIdsPlugin(),
-    // new webpack.NamedChunksPlugin(),
+    new webpack.HashedModuleIdsPlugin(),
+    new webpack.NamedChunksPlugin(),
     // https://doc.webpack-china.org/guides/code-splitting-libraries/#manifest-
     new webpack.optimize.CommonsChunkPlugin({
       name: ['vendor', 'manifest'], // 或 runtime
