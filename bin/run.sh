@@ -50,8 +50,12 @@ else
         pm2 start ${baseDir}/www --name "$appName" -l "$logFile" -o "/dev/null" -e "/dev/null" -i max --merge-logs
     elif [ $1 = "stop" ]; then
         #echo "stop"
-        #注意：一个pm2不能部署多个应用。切记！切记！
-        kill $(ps aux | grep -i 'pm2' | grep -v grep | awk '{print $2}')
+        if [ $2 -a $2 = "beta" ]; then
+            pm2 delete all
+        else
+            #注意：生产环境一个pm2不能部署多个应用。切记！切记！
+            kill $(ps aux | grep -i 'pm2' | grep -v grep | awk '{print $2}')
+        fi
     else
         echo "ERROR! Please enter param: start or stop"
         echo "demo: sh ./bin/run.sh start"
