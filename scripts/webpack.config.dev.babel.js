@@ -5,7 +5,7 @@ const flexbugs = require('postcss-flexbugs-fixes'); // 修复 flexbox 已知的 
 //const cssnano = require('cssnano'); // 优化 css，对于长格式优化成短格式等
 const autoprefixer = require('autoprefixer');
 // 根目录上下文
-const {urlContext} = require( '../client/utils/config');
+const {urlContext} = require('../client/utils/config');
 
 const hotMiddlewareScript = 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true';
 const appPath = path.resolve(__dirname, '../public');
@@ -136,7 +136,33 @@ const webpackConfig = {
         use: {
           loader: 'babel-loader',
           options: {
-            cacheDirectory: true
+            babelrc: false,
+            cacheDirectory: true,
+            presets: [
+              'react', 'stage-3', ['env', {
+                modules: false,
+                targets: {
+                  browsers: [
+                    'iOS >= 9',
+                    'Android >= 4.4'
+                  ]
+                },
+                useBuiltIns: true,
+              }],
+            ],
+            plugins: [
+              'syntax-dynamic-import', //支持'import()'
+              'transform-class-properties', //解析类属性，静态和实例的属性
+              'transform-object-assign', //polyfill object-assign
+              [
+                "transform-react-remove-prop-types",
+                {
+                  mode: "remove", // 默认值为 remove ，即删除 PropTypes
+                  removeImport: true, // the import statements are removed as well. import PropTypes from 'prop-types'
+                  ignoreFilenames: ["node_modules"]
+                }
+              ]
+            ]
           }
         }
       },

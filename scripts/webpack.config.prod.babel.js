@@ -4,10 +4,11 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import ManifestPlugin from 'webpack-manifest-plugin';
 import autoprefixer from 'autoprefixer';
 import flexbugs from 'postcss-flexbugs-fixes'; // 修复 flexbox 已知的 bug
+import Webpack2Polyfill from 'webpack2-polyfill-plugin';
 //const cssnano = require('cssnano'); // 优化 css，对于长格式优化成短格式等
 import incstr from 'incstr';
 // 根目录上下文
-import {urlContext} from '../client/utils/config';
+import { urlContext } from '../client/utils/config';
 
 const appPath = path.resolve(__dirname, '../public');
 const nodeModules = path.resolve(__dirname, '../node_modules');
@@ -152,7 +153,35 @@ const webpackConfig = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: 'babel-loader',
+        use: {
+          loader: 'babel-loader',
+          options: {
+            babelrc: false,
+            cacheDirectory: true,
+            presets: [
+              'react', 'stage-3', ['env', {
+                modules: false,
+                targets: {
+                  browsers
+                },
+                useBuiltIns: true,
+              }],
+            ],
+            plugins: [
+              'syntax-dynamic-import', //支持'import()'
+              'transform-class-properties', //解析类属性，静态和实例的属性
+              'transform-object-assign', //polyfill object-assign
+              [
+                "transform-react-remove-prop-types",
+                {
+                  mode: "remove", // 默认值为 remove ，即删除 PropTypes
+                  removeImport: true, // the import statements are removed as well. import PropTypes from 'prop-types'
+                  ignoreFilenames: ["node_modules"]
+                }
+              ]
+            ]
+          }
+        },
       },
       // https://github.com/webpack/url-loader
       {
@@ -161,7 +190,7 @@ const webpackConfig = {
         use: {
           loader: 'url-loader',
           options: {
-            name: '[hash].[ext]',
+            name: '[hash:8].[ext]',
             limit: 10000, // 10kb
           },
         },
@@ -212,10 +241,10 @@ const webpackConfig = {
   },
 
   plugins: [
+    new Webpack2Polyfill(),
+    new webpack.NoEmitOnErrorsPlugin(),
     // 用来优化生成的代码 chunk，合并相同的代码
     new webpack.optimize.AggressiveMergingPlugin(),
-    // 用来保证编译过程不出错
-    new webpack.NoEmitOnErrorsPlugin(),
     new webpack.optimize.ModuleConcatenationPlugin({// Scope Hoisting-作用域提升
       // 检查所有的模块
       maxModules: Infinity,
