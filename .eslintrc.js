@@ -195,7 +195,8 @@ module.exports = {
     "id-length": 0, // 定义变量名或属性名的最小最大长度
     "id-match": 2, // 规范变量名或属性名的命名规范
     "indent": [0, 2, {
-      "SwitchCase": 1, "VariableDeclarator": {"var": 1, "let": 1, "const": 1},
+      "SwitchCase": 1,
+      "VariableDeclarator": {"var": 1, "let": 1, "const": 1},
       "FunctionDeclaration": {"parameters": "first"}
     }], // 缩进，我们采用2个空格来缩进
     "jsx-quotes": 0, // jsx属性值应该用双引号
@@ -408,7 +409,7 @@ module.exports = {
     "react": {
       "createClass": "createReactClass", // Regex for Component Factory to use, default to "createReactClass"
       "pragma": "React",  // Pragma to use, default to "React"
-      "version": "15.6.1" // React version, default to the latest React stable release
+      "version": "16.2.0" // React version, default to the latest React stable release
     },
     "sharedData": "sharedName"
   },

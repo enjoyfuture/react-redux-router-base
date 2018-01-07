@@ -7,10 +7,10 @@ import flexbugs from 'postcss-flexbugs-fixes'; // 修复 flexbox 已知的 bug
 //const cssnano = require('cssnano'); // 优化 css，对于长格式优化成短格式等
 import incstr from 'incstr';
 // 根目录上下文
-import {urlContext} from './client/utils/config';
+import {urlContext} from '../client/utils/config';
 
-const appPath = path.resolve(__dirname, 'public');
-const nodeModules = path.resolve(__dirname, 'node_modules');
+const appPath = path.resolve(__dirname, '../public');
+const nodeModules = path.resolve(__dirname, '../node_modules');
 
 // PC 端 browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 49', 'Firefox >= 55', 'Safari >= 9.1']
 // 手机端 browsers: ['Android >= 4.4', 'iOS >=9']
@@ -100,12 +100,12 @@ function scssConfig(modules) {
 
 // multiple extract instances
 const extractScss = new ExtractTextPlugin({
-  filename: 'css/[name].[contenthash].css',
+  filename: 'css/[name].[contenthash:8].css',
   allChunks: true,
   ignoreOrder: true,
 });
 const extractCSS = new ExtractTextPlugin({
-  filename: 'css/style.[name].[contenthash].css',
+  filename: 'css/style.[name].[contenthash:8].css',
   allChunks: true,
 });
 
@@ -134,7 +134,6 @@ const webpackConfig = {
     page1: ['./client/pages/page-1/index.js'],
     page2: ['./client/pages/page-2/index.js'],
     vendor: [
-      'babel-polyfill',
       'react',
       'react-dom',
     ],
@@ -143,7 +142,7 @@ const webpackConfig = {
   // 出口 让webpack把处理完成的文件放在哪里
   output: {
     path: path.join(appPath, 'dist'),
-    filename: '[name].[chunkhash].js',
+    filename: '[name].[chunkhash:8].js',
     publicPath: `${urlContext}/dist/`,
     sourceMapFilename: 'map/[file].map',
   },
@@ -201,12 +200,12 @@ const webpackConfig = {
       // 为了减少编译生产的 css 文件大小，公共的 scss 不使用 css 模块化
       {
         test: /\.scss/,
-        include: path.resolve(__dirname, './client/scss/perfect.scss'),
+        include: path.resolve(appPath, './client/scss/perfect.scss'),
         use: scssConfig(false),
       },
       {
         test: /\.scss/,
-        exclude: path.resolve(__dirname, './client/scss/perfect.scss'),
+        exclude: path.resolve(appPath, './client/scss/perfect.scss'),
         use: scssConfig(true),
       },
     ],
@@ -235,9 +234,7 @@ const webpackConfig = {
     new webpack.HashedModuleIdsPlugin(),
     new webpack.NamedChunksPlugin(),
     // https://doc.webpack-china.org/guides/code-splitting-libraries/#manifest-
-    new webpack.optimize.CommonsChunkPlugin({
-      name: ['vendor', 'manifest'], // 或 runtime
-    }),
+    new webpack.optimize.CommonsChunkPlugin('vendor'),
     new ManifestPlugin({
       basePath: `${urlContext}/dist/`,
     }),

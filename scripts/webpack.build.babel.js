@@ -1,5 +1,5 @@
 if (process.env.NODE_ENV === undefined) {
-  console.log('NODE_ENV is undefind! use default [beta].');
+  console.log('NODE_ENV is undefind! use default [development].');
   process.env.NODE_ENV = 'development';
 }
 console.log(`process.env.NODE_ENV=${process.env.NODE_ENV}.`);
