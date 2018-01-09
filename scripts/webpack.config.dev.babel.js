@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
 const flexbugs = require('postcss-flexbugs-fixes'); // 修复 flexbox 已知的 bug
-//const cssnano = require('cssnano'); // 优化 css，对于长格式优化成短格式等
+const cssnano = require('cssnano'); // 优化 css，对于长格式优化成短格式等
 const autoprefixer = require('autoprefixer');
 // 根目录上下文
 const {urlContext} = require('../client/utils/config');
@@ -44,7 +44,9 @@ function scssConfig(modules) {
       sourceMap: true,
       // postcss plugins https://github.com/postcss/postcss/blob/master/docs/plugins.md
       plugins: [
-        // cssnano(),
+        cssnano({
+          autoprefixer: false
+        }),
         flexbugs(),
         autoprefixer({
           flexbox: 'no-2009',
@@ -195,7 +197,9 @@ const webpackConfig = {
           options: {
             sourceMap: true,
             plugins: [
-              //cssnano(),
+              cssnano({
+                autoprefixer: false
+              }),
               flexbugs(),
               autoprefixer({
                 flexbox: 'no-2009',

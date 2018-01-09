@@ -5,7 +5,8 @@ import ManifestPlugin from 'webpack-manifest-plugin';
 import autoprefixer from 'autoprefixer';
 import flexbugs from 'postcss-flexbugs-fixes'; // 修复 flexbox 已知的 bug
 import Webpack2Polyfill from 'webpack2-polyfill-plugin';
-//const cssnano = require('cssnano'); // 优化 css，对于长格式优化成短格式等
+
+const cssnano = require('cssnano'); // 优化 css，对于长格式优化成短格式等
 import incstr from 'incstr';
 // 根目录上下文
 import { urlContext } from '../client/utils/config';
@@ -24,7 +25,7 @@ const createUniqueIdGenerator = () => {
   const generateNextId = incstr.idGenerator({
     // Removed "d" letter to avoid accidental "ad" construct.
     // @see https://medium.com/@mbrevda/just-make-sure-ad-isnt-being-used-as-a-class-name-prefix-or-you-might-suffer-the-wrath-of-the-558d65502793
-    alphabet: 'abcdefghijklmnopqrstuvwxyz0123456789',
+    alphabet: 'abcefghijklmnopqrstuvwxyz0123456789_',
   });
 
   return (name) => {
@@ -49,7 +50,7 @@ const uniqueIdGenerator = createUniqueIdGenerator();
 
 const generateScopedName = (localName, resourcePath) => {
   const componentName = resourcePath.split('/').slice(-2, -1);
-  return `${uniqueIdGenerator(componentName)}_${uniqueIdGenerator(localName)}`;
+  return uniqueIdGenerator(`${componentName}_${localName}`);
 };
 
 // scss config
@@ -73,10 +74,17 @@ function scssConfig(modules) {
         minimize: true,
       },
     }, {
+      // Webpack loader that resolves relative paths in url() statements
+      // based on the original source file
+      loader: 'resolve-url-loader',
+    }, {
       loader: 'postcss-loader',
       options: {
         sourceMap: true,
         plugins: [
+          cssnano({
+            autoprefixer: false
+          }),
           flexbugs(),
           autoprefixer({
             flexbox: 'no-2009',
@@ -84,10 +92,6 @@ function scssConfig(modules) {
           }),
         ],
       },
-    }, {
-      // Webpack loader that resolves relative paths in url() statements
-      // based on the original source file
-      loader: 'resolve-url-loader',
     }, {
       loader: 'sass-loader-joy-vendor', options: {
         sourceMap: true, // 必须保留
@@ -191,7 +195,7 @@ const webpackConfig = {
           loader: 'url-loader',
           options: {
             name: '[hash:8].[ext]',
-            limit: 10000, // 10kb
+            limit: 8192, // 8kb
           },
         },
       },
@@ -211,10 +215,17 @@ const webpackConfig = {
               minimize: true,
             },
           }, {
+            // Webpack loader that resolves relative paths in url() statements
+            // based on the original source file
+            loader: 'resolve-url-loader',
+          }, {
             loader: 'postcss-loader',
             options: {
               sourceMap: true,
               plugins: [
+                cssnano({
+                  autoprefixer: false
+                }),
                 flexbugs(),
                 autoprefixer({
                   flexbox: 'no-2009',
