@@ -11,7 +11,8 @@ import incstr from 'incstr';
 // 根目录上下文
 import { urlContext } from '../client/utils/config';
 
-const appPath = path.resolve(__dirname, '../public');
+const appRoot = path.resolve(__dirname, '../');
+const appPath = path.resolve(appRoot, 'public');
 const nodeModules = path.resolve(__dirname, '../node_modules');
 
 // PC 端 browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 49', 'Firefox >= 55', 'Safari >= 9.1']
@@ -240,12 +241,12 @@ const webpackConfig = {
       // 为了减少编译生产的 css 文件大小，公共的 scss 不使用 css 模块化
       {
         test: /\.scss/,
-        include: path.resolve(appPath, './client/scss/perfect.scss'),
+        include: path.resolve(appRoot, './client/scss/perfect.scss'),
         use: scssConfig(false),
       },
       {
         test: /\.scss/,
-        exclude: path.resolve(appPath, './client/scss/perfect.scss'),
+        exclude: path.resolve(appRoot, './client/scss/perfect.scss'),
         use: scssConfig(true),
       },
     ],

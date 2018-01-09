@@ -8,7 +8,8 @@ const autoprefixer = require('autoprefixer');
 const {urlContext} = require('../client/utils/config');
 
 const hotMiddlewareScript = 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true';
-const appPath = path.resolve(__dirname, '../public');
+const appRoot = path.resolve(__dirname, '../');
+const appPath = path.resolve(appRoot, 'public');
 const nodeModules = path.resolve(__dirname, '../node_modules');
 
 // PC 端 browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 49', 'Firefox >= 55', 'Safari >= 9.1']
@@ -39,6 +40,10 @@ function scssConfig(modules) {
       sourceMap: true,
     }
   }, {
+    // Webpack loader that resolves relative paths in url() statements
+    // based on the original source file
+    loader: 'resolve-url-loader',
+  }, {
     loader: 'postcss-loader',
     options: {
       sourceMap: true,
@@ -54,10 +59,6 @@ function scssConfig(modules) {
         })
       ]
     }
-  }, {
-    // Webpack loader that resolves relative paths in url() statements
-    // based on the original source file
-    loader: 'resolve-url-loader',
   }, {
     loader: 'sass-loader-joy-vendor',
     options: {
@@ -212,12 +213,12 @@ const webpackConfig = {
       // 为了减少编译生产的 css 文件大小，公共的 scss 不使用 css 模块化
       {
         test: /\.scss/,
-        include: path.resolve(appPath, './client/scss/perfect.scss'),
+        include: path.resolve(appRoot, './client/scss/perfect.scss'),
         use: scssConfig(false),
       },
       {
         test: /\.scss/,
-        exclude: path.resolve(appPath, './client/scss/perfect.scss'),
+        exclude: path.resolve(appRoot, './client/scss/perfect.scss'),
         use: scssConfig(true),
       }
     ]
