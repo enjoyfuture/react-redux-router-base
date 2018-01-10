@@ -8,7 +8,7 @@
 
 export appName="react-redux-router-base"
 
-if [ ! -d "/export/local/node-v6.9.1" ]; then
+if [ -d "/export/local/node-v6.9.1" ]; then
     # 生产环境node环境变量设置
     export PATH=/export/local/node-v6.9.1/bin:/export/local/pm2-2.9.1/bin:$PATH
 else
