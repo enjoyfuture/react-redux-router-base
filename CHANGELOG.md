@@ -1,5 +1,15 @@
 # node-react-redux-base 更新日志
 
+## futures
+* 引入简化版immutable.js
+* 优化redux使用模式
+
+## version 0.9.0 (2019-01-09)
+
+* 调整项目目录结构，新增scripts目录
+* webpack配置优化，启用cssnano
+* 加入import()动态分包机制
+
 ## version 0.8.0 (2017-12-29)
 
 * 使用样式库 perfect-css 重写了页面
