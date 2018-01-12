@@ -9,7 +9,7 @@ export function setCache(key, value = true) {
   };
 }
 
-//删除一个或多个缓存
+// 删除一个或多个缓存
 export function removeCache(keys) {
   return {
     type: 'remove-cache',
@@ -17,7 +17,7 @@ export function removeCache(keys) {
   };
 }
 
-//清空所有缓存
+// 清空所有缓存
 export function clearCache() {
   return {
     type: 'clear-cache'

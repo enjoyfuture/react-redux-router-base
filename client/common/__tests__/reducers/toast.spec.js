@@ -3,7 +3,7 @@ import Immutable, {Map} from 'immutable';
 import {openToast, closeToast} from '../../action/toast';
 import toast from '../../reducers/toast';
 
-test('action for setToast is working',
+test('action for openToast is working',
   t => {
     const action = openToast('Toast Test');
     const stateAfter = Map({content: 'Toast Test', open: true, time: 0});
@@ -11,17 +11,17 @@ test('action for setToast is working',
   }
 );
 
-test('action for setToast is working, the case: "error param"', t => {
+test('action for openToast is working, the case: "error param"', t => {
   return t.true(Immutable.is(toast(Map(), {error: 'Error Message'}),
     Map({content: 'Error Message', open: true, time: 3000})))
 });
 
-test('action for setToast is working, the case: the default value', t => {
+test('action for openToast is working, the case: the default value', t => {
   return t.true(Immutable.is(toast(undefined, {}),
     Map()))
 });
 
-test('action for clearToast is working',
+test('action for closeToast is working',
   t => {
     t.true(Immutable.is(toast(Map(), closeToast()), Map({open: false})));
   }
