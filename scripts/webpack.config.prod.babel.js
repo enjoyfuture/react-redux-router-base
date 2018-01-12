@@ -177,11 +177,11 @@ const webpackConfig = {
               'transform-class-properties', //解析类属性，静态和实例的属性
               'transform-object-assign', //polyfill object-assign
               [
-                "transform-react-remove-prop-types",
+                'transform-react-remove-prop-types',
                 {
-                  mode: "remove", // 默认值为 remove ，即删除 PropTypes
+                  mode: 'remove', // 默认值为 remove ，即删除 PropTypes
                   removeImport: true, // the import statements are removed as well. import PropTypes from 'prop-types'
-                  ignoreFilenames: ["node_modules"]
+                  ignoreFilenames: ['node_modules']
                 }
               ]
             ]
