@@ -2,14 +2,15 @@ const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
 const flexbugs = require('postcss-flexbugs-fixes'); // 修复 flexbox 已知的 bug
-//const cssnano = require('cssnano'); // 优化 css，对于长格式优化成短格式等
+const cssnano = require('cssnano'); // 优化 css，对于长格式优化成短格式等
 const autoprefixer = require('autoprefixer');
 // 根目录上下文
-const {urlContext} = require( './client/utils/config');
+const {urlContext} = require('../client/utils/config');
 
 const hotMiddlewareScript = 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true';
-const appPath = path.resolve(__dirname, 'public');
-const nodeModules = path.resolve(__dirname, 'node_modules');
+const appRoot = path.resolve(__dirname, '../');
+const appPath = path.resolve(appRoot, 'public');
+const nodeModules = path.resolve(__dirname, '../node_modules');
 
 // PC 端 browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 49', 'Firefox >= 55', 'Safari >= 9.1']
 // 手机端 browsers: ['Android >= 4.4', 'iOS >=9']
@@ -39,12 +40,18 @@ function scssConfig(modules) {
       sourceMap: true,
     }
   }, {
+    // Webpack loader that resolves relative paths in url() statements
+    // based on the original source file
+    loader: 'resolve-url-loader',
+  }, {
     loader: 'postcss-loader',
     options: {
       sourceMap: true,
       // postcss plugins https://github.com/postcss/postcss/blob/master/docs/plugins.md
       plugins: [
-        // cssnano(),
+        cssnano({
+          autoprefixer: false
+        }),
         flexbugs(),
         autoprefixer({
           flexbox: 'no-2009',
@@ -52,10 +59,6 @@ function scssConfig(modules) {
         })
       ]
     }
-  }, {
-    // Webpack loader that resolves relative paths in url() statements
-    // based on the original source file
-    loader: 'resolve-url-loader',
   }, {
     loader: 'sass-loader-joy-vendor',
     options: {
@@ -87,10 +90,10 @@ const webpackConfig = {
 
   // 入口文件 让webpack用哪个文件作为项目的入口
   entry: {
-    home: ['babel-polyfill', './client/pages/home/index.js', hotMiddlewareScript],
-    about: ['babel-polyfill', './client/pages/about/index.js', hotMiddlewareScript],
-    page1: ['babel-polyfill', './client/pages/page-1/index.js', hotMiddlewareScript],
-    page2: ['babel-polyfill', './client/pages/page-2/index.js', hotMiddlewareScript],
+    home: ['./client/pages/home/index.js', hotMiddlewareScript],
+    about: ['./client/pages/about/index.js', hotMiddlewareScript],
+    page1: ['./client/pages/page-1/index.js', hotMiddlewareScript],
+    page2: ['./client/pages/page-2/index.js', hotMiddlewareScript],
   },
 
   // 出口 让webpack把处理完成的文件放在哪里
@@ -120,7 +123,7 @@ const webpackConfig = {
       {
         enforce: 'pre',
         test: /\.scss/,
-        exclude: /node_modules/,
+        include: /client/,
         use: {
           loader: 'sasslint-loader-vendor',
           options: {
@@ -132,11 +135,37 @@ const webpackConfig = {
       },
       {
         test: /\.js$/,
-        exclude: /node_modules/,
+        include: /client/,
         use: {
           loader: 'babel-loader',
           options: {
-            cacheDirectory: true
+            babelrc: false,
+            cacheDirectory: true,
+            presets: [
+              'react', 'stage-3', ['env', {
+                modules: false,
+                targets: {
+                  browsers: [
+                    'iOS >= 9',
+                    'Android >= 4.4'
+                  ]
+                },
+                useBuiltIns: true,
+              }],
+            ],
+            plugins: [
+              'syntax-dynamic-import', //支持'import()'
+              'transform-class-properties', //解析类属性，静态和实例的属性
+              'transform-object-assign', //polyfill object-assign
+              [
+                "transform-react-remove-prop-types",
+                {
+                  mode: "remove", // 默认值为 remove ，即删除 PropTypes
+                  removeImport: true, // the import statements are removed as well. import PropTypes from 'prop-types'
+                  ignoreFilenames: ["node_modules"]
+                }
+              ]
+            ]
           }
         }
       },
@@ -169,7 +198,9 @@ const webpackConfig = {
           options: {
             sourceMap: true,
             plugins: [
-              //cssnano(),
+              cssnano({
+                autoprefixer: false
+              }),
               flexbugs(),
               autoprefixer({
                 flexbox: 'no-2009',
@@ -182,12 +213,12 @@ const webpackConfig = {
       // 为了减少编译生产的 css 文件大小，公共的 scss 不使用 css 模块化
       {
         test: /\.scss/,
-        include: path.resolve(__dirname, './client/scss/perfect.scss'),
+        include: path.resolve(appRoot, './client/scss/perfect.scss'),
         use: scssConfig(false),
       },
       {
         test: /\.scss/,
-        exclude: path.resolve(__dirname, './client/scss/perfect.scss'),
+        exclude: path.resolve(appRoot, './client/scss/perfect.scss'),
         use: scssConfig(true),
       }
     ]
@@ -217,11 +248,11 @@ const webpackConfig = {
 if (dllExist) {
   webpackConfig.plugins.push(
     new webpack.DllReferencePlugin({
-      context: __dirname,
+      context: appPath,
       /**
        * 在这里引入 manifest 文件
        */
-      manifest: require('./public/dll/vendor-manifest.json')
+      manifest: require('../public/dll/vendor-manifest.json')
     })
   );
 }

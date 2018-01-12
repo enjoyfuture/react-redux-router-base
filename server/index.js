@@ -37,7 +37,7 @@ app.use(require('./helper/request-logger').create(logger));
 app.use(urlContext, express.static(path.join(__dirname, '../public')));
 
 if (isDev) {
-  const webpackConfig = require('../webpack.config.dev.babel');
+  const webpackConfig = require('../scripts/webpack.config.dev.babel');
   const webpack = require('webpack');
   const compiler = webpack(webpackConfig);
 

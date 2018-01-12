@@ -4,13 +4,16 @@ import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import ManifestPlugin from 'webpack-manifest-plugin';
 import autoprefixer from 'autoprefixer';
 import flexbugs from 'postcss-flexbugs-fixes'; // 修复 flexbox 已知的 bug
-//const cssnano = require('cssnano'); // 优化 css，对于长格式优化成短格式等
+import Webpack2Polyfill from 'webpack2-polyfill-plugin';
+
+const cssnano = require('cssnano'); // 优化 css，对于长格式优化成短格式等
 import incstr from 'incstr';
 // 根目录上下文
-import {urlContext} from './client/utils/config';
+import { urlContext } from '../client/utils/config';
 
-const appPath = path.resolve(__dirname, 'public');
-const nodeModules = path.resolve(__dirname, 'node_modules');
+const appRoot = path.resolve(__dirname, '../');
+const appPath = path.resolve(appRoot, 'public');
+const nodeModules = path.resolve(__dirname, '../node_modules');
 
 // PC 端 browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 49', 'Firefox >= 55', 'Safari >= 9.1']
 // 手机端 browsers: ['Android >= 4.4', 'iOS >=9']
@@ -23,7 +26,7 @@ const createUniqueIdGenerator = () => {
   const generateNextId = incstr.idGenerator({
     // Removed "d" letter to avoid accidental "ad" construct.
     // @see https://medium.com/@mbrevda/just-make-sure-ad-isnt-being-used-as-a-class-name-prefix-or-you-might-suffer-the-wrath-of-the-558d65502793
-    alphabet: 'abcdefghijklmnopqrstuvwxyz0123456789',
+    alphabet: 'abcefghijklmnopqrstuvwxyz0123456789_',
   });
 
   return (name) => {
@@ -48,7 +51,7 @@ const uniqueIdGenerator = createUniqueIdGenerator();
 
 const generateScopedName = (localName, resourcePath) => {
   const componentName = resourcePath.split('/').slice(-2, -1);
-  return `${uniqueIdGenerator(componentName)}_${uniqueIdGenerator(localName)}`;
+  return uniqueIdGenerator(`${componentName}_${localName}`);
 };
 
 // scss config
@@ -72,10 +75,17 @@ function scssConfig(modules) {
         minimize: true,
       },
     }, {
+      // Webpack loader that resolves relative paths in url() statements
+      // based on the original source file
+      loader: 'resolve-url-loader',
+    }, {
       loader: 'postcss-loader',
       options: {
         sourceMap: true,
         plugins: [
+          cssnano({
+            autoprefixer: false
+          }),
           flexbugs(),
           autoprefixer({
             flexbox: 'no-2009',
@@ -83,10 +93,6 @@ function scssConfig(modules) {
           }),
         ],
       },
-    }, {
-      // Webpack loader that resolves relative paths in url() statements
-      // based on the original source file
-      loader: 'resolve-url-loader',
     }, {
       loader: 'sass-loader-joy-vendor', options: {
         sourceMap: true, // 必须保留
@@ -100,12 +106,12 @@ function scssConfig(modules) {
 
 // multiple extract instances
 const extractScss = new ExtractTextPlugin({
-  filename: 'css/[name].[contenthash].css',
+  filename: 'css/[name].[contenthash:8].css',
   allChunks: true,
   ignoreOrder: true,
 });
 const extractCSS = new ExtractTextPlugin({
-  filename: 'css/style.[name].[contenthash].css',
+  filename: 'css/style.[name].[contenthash:8].css',
   allChunks: true,
 });
 
@@ -134,7 +140,6 @@ const webpackConfig = {
     page1: ['./client/pages/page-1/index.js'],
     page2: ['./client/pages/page-2/index.js'],
     vendor: [
-      'babel-polyfill',
       'react',
       'react-dom',
     ],
@@ -143,7 +148,7 @@ const webpackConfig = {
   // 出口 让webpack把处理完成的文件放在哪里
   output: {
     path: path.join(appPath, 'dist'),
-    filename: '[name].[chunkhash].js',
+    filename: '[name].[chunkhash:8].js',
     publicPath: `${urlContext}/dist/`,
     sourceMapFilename: 'map/[file].map',
   },
@@ -153,7 +158,35 @@ const webpackConfig = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: 'babel-loader',
+        use: {
+          loader: 'babel-loader',
+          options: {
+            babelrc: false,
+            cacheDirectory: true,
+            presets: [
+              'react', 'stage-3', ['env', {
+                modules: false,
+                targets: {
+                  browsers
+                },
+                useBuiltIns: true,
+              }],
+            ],
+            plugins: [
+              'syntax-dynamic-import', //支持'import()'
+              'transform-class-properties', //解析类属性，静态和实例的属性
+              'transform-object-assign', //polyfill object-assign
+              [
+                "transform-react-remove-prop-types",
+                {
+                  mode: "remove", // 默认值为 remove ，即删除 PropTypes
+                  removeImport: true, // the import statements are removed as well. import PropTypes from 'prop-types'
+                  ignoreFilenames: ["node_modules"]
+                }
+              ]
+            ]
+          }
+        },
       },
       // https://github.com/webpack/url-loader
       {
@@ -162,8 +195,8 @@ const webpackConfig = {
         use: {
           loader: 'url-loader',
           options: {
-            name: '[hash].[ext]',
-            limit: 10000, // 10kb
+            name: '[hash:8].[ext]',
+            limit: 8192, // 8kb
           },
         },
       },
@@ -183,10 +216,17 @@ const webpackConfig = {
               minimize: true,
             },
           }, {
+            // Webpack loader that resolves relative paths in url() statements
+            // based on the original source file
+            loader: 'resolve-url-loader',
+          }, {
             loader: 'postcss-loader',
             options: {
               sourceMap: true,
               plugins: [
+                cssnano({
+                  autoprefixer: false
+                }),
                 flexbugs(),
                 autoprefixer({
                   flexbox: 'no-2009',
@@ -201,22 +241,22 @@ const webpackConfig = {
       // 为了减少编译生产的 css 文件大小，公共的 scss 不使用 css 模块化
       {
         test: /\.scss/,
-        include: path.resolve(__dirname, './client/scss/perfect.scss'),
+        include: path.resolve(appRoot, './client/scss/perfect.scss'),
         use: scssConfig(false),
       },
       {
         test: /\.scss/,
-        exclude: path.resolve(__dirname, './client/scss/perfect.scss'),
+        exclude: path.resolve(appRoot, './client/scss/perfect.scss'),
         use: scssConfig(true),
       },
     ],
   },
 
   plugins: [
+    new Webpack2Polyfill(),
+    new webpack.NoEmitOnErrorsPlugin(),
     // 用来优化生成的代码 chunk，合并相同的代码
     new webpack.optimize.AggressiveMergingPlugin(),
-    // 用来保证编译过程不出错
-    new webpack.NoEmitOnErrorsPlugin(),
     new webpack.optimize.ModuleConcatenationPlugin({// Scope Hoisting-作用域提升
       // 检查所有的模块
       maxModules: Infinity,
@@ -235,9 +275,7 @@ const webpackConfig = {
     new webpack.HashedModuleIdsPlugin(),
     new webpack.NamedChunksPlugin(),
     // https://doc.webpack-china.org/guides/code-splitting-libraries/#manifest-
-    new webpack.optimize.CommonsChunkPlugin({
-      name: ['vendor', 'manifest'], // 或 runtime
-    }),
+    new webpack.optimize.CommonsChunkPlugin('vendor'),
     new ManifestPlugin({
       basePath: `${urlContext}/dist/`,
     }),

@@ -3,18 +3,28 @@
 # 启动或关闭应用                           #
 # ！！修改内容！！                         #
 #      【第9行】appName的值改为自己的应用名  #
-# tanxiangyuan@20170104                  #
+# tanxiangyuan@20180109                  #
 ##########################################
 
 export appName="react-redux-router-base"
-export PATH=/export/local/node/bin:/export/local/pm2/bin:$PATH
-#export PM2_HOME=/export/local/pm2-home
+
+if [ -d "/export/local/node-v6.9.1" ]; then
+    # 生产环境node环境变量设置
+    export PATH=/export/local/node-v6.9.1/bin:/export/local/pm2-2.9.1/bin:$PATH
+else
+    # 环境变量兼容测试环境
+    export PATH=/export/local/node/bin:/export/local/pm2/bin:$PATH
+fi
 
 #根据输入参数设置不同的pm2_home,输入参数在service脚本中指定
 if [ $2 -a $2 = "beta" ]; then
     export PM2_HOME=/export/local/pm2-home-demo #测试环境带上项目名称防止pm2_home冲突
 else
-    export PM2_HOME=/export/local/pm2-home #非测试环境一定要用pm2-home！！！！
+    if [ ! -d "/export/local/pm2-home-v1.0.0" ]; then
+        export PM2_HOME=/export/local/pm2-home #测试环境
+    else
+        export PM2_HOME=/export/local/pm2-home-v1.0.0 #生产环境
+    fi
 fi
 
 baseDir=`cd $(dirname $0);pwd`
@@ -50,8 +60,12 @@ else
         pm2 start ${baseDir}/www --name "$appName" -l "$logFile" -o "/dev/null" -e "/dev/null" -i max --merge-logs
     elif [ $1 = "stop" ]; then
         #echo "stop"
-        #注意：一个pm2不能部署多个应用。切记！切记！
-        kill $(ps aux | grep -i 'pm2' | grep -v grep | awk '{print $2}')
+        if [ $2 -a $2 = "beta" ]; then
+            pm2 delete all
+        else
+            #注意：生产环境一个pm2不能部署多个应用。切记！切记！
+            kill $(ps aux | grep -i 'pm2' | grep -v grep | awk '{print $2}')
+        fi
     else
         echo "ERROR! Please enter param: start or stop"
         echo "demo: sh ./bin/run.sh start"
