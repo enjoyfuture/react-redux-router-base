@@ -34,6 +34,12 @@ const Header = () => {
               About
             </a>
           </li>
+          <li>
+            <a href={`${urlContext}/h5-example/detail`} target="_blank"
+               className={classNames('ripple ripple-primary nav-link', pathname.indexOf(`${urlContext}/h5-example`) !== -1 ? 'active' : '')}>
+              H5 Example
+            </a>
+          </li>
         </ul>
       </div>
     </header>

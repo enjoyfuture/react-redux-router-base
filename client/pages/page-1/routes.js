@@ -4,18 +4,21 @@ import App from '../../common/App';
 import Page from './Page';
 import Module1Com1 from './module-1/components/com-1';
 import Module1Com2 from './module-1/components/com-2';
+import Module2Com1 from './module-2/components/com-1';
+import UploadFile from './upload-file/components/UploadFile';
 
-const loadModules = (modulePath) => (nextState, cb) => {
-  //动态加载模块
-  import(modulePath).then((_thunk) => cb(null, _thunk.default));
+const routes = (store) => {
+  return (
+    <Route path="/" component={App}>
+      <Route path="/" component={Page}>
+        <Route path="module1" component={Module1Com1}>
+          <IndexRoute components={Module1Com2}/>
+        </Route>
+        <Route path="module2" component={Module2Com1}/>
+        <Route path="upload-file" component={UploadFile}/>
+      </Route>
+    </Route>
+  );
 };
 
-export default <Route path="/" component={App}>
-  <Route path="/" component={Page}>
-    <Route path="module1" component={Module1Com1}>
-      <IndexRoute components={Module1Com2}/>
-    </Route>
-    <Route path="module2"
-           getComponent={loadModules('./module-2/components/com-1')}/>
-  </Route>
-</Route>;
+export default routes;

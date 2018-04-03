@@ -46,8 +46,9 @@
 @import "~perfect-css/components/forms/form-field/form-field"; // Form Field 表单域
 
 // 元素组件
+@import "~perfect-css/components/elements/list/list"; // List 列表
 @import "~perfect-css/components/elements/menu/menu"; // Menu 菜单
-@import "~perfect-css/components/elements/menu/list-menu"; // List Menu 列表菜单
+@import "~perfect-css/components/elements/menu/list-menu/list-menu"; // List Menu 列表菜单
 @import "~perfect-css/components/elements/tree/tree"; // Tree 树形组件
 @import "~perfect-css/components/elements/page/page"; // Page 分页
 @import "~perfect-css/components/elements/loading/loading"; // Loading 加载
@@ -71,7 +72,6 @@
 @import "~perfect-css/components/navigation/tabs/tab-bar-scroller"; // 可滑动的 Tabs 标签页
 
 // container 容器样式
-@import "~perfect-css/components/container/list/list"; // List 列表
 @import "~perfect-css/components/container/table/table"; // Table 表格
 @import "~perfect-css/components/container/card/card"; // Card 卡片
 @import "~perfect-css/components/container/dialog/dialog"; // Dialog 对话框

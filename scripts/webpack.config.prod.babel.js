@@ -139,6 +139,7 @@ const webpackConfig = {
     about: ['./client/pages/about/index.js'],
     page1: ['./client/pages/page-1/index.js'],
     page2: ['./client/pages/page-2/index.js'],
+    'h5-example': ['./client/pages/h5-example/index.js'],
     vendor: [
       'react',
       'react-dom',

@@ -160,6 +160,14 @@ function addRoute(app, options) {
     });
   });
 
+  // h5-example
+  app.get(`${urlContext}/h5-example**`, (req, res, next) => {
+    renderTemplateSync(req, res, {
+      title: 'h5-example',
+      name: 'h5-example',
+    });
+  });
+
   // 首页
   app.get(`${urlContext}/`, (req, res, next) => {
     if (req.method === 'GET') {

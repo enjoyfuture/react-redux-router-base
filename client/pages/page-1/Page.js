@@ -41,6 +41,7 @@ class Page extends Component {
         <nav className="tab-bar tab-bar-primary">
           <Link className="tab" activeClassName="active" to="/module1">Module1</Link>
           <Link className="tab" activeClassName="active" to="/module2">Module2</Link>
+          <Link className="tab" activeClassName="active" to="/upload-file">Upload File</Link>
         </nav>
 
         {children && React.cloneElement(children, props)}

@@ -94,6 +94,7 @@ const webpackConfig = {
     about: ['./client/pages/about/index.js', hotMiddlewareScript],
     page1: ['./client/pages/page-1/index.js', hotMiddlewareScript],
     page2: ['./client/pages/page-2/index.js', hotMiddlewareScript],
+    'h5-example': ['./client/pages/h5-example/index.js', hotMiddlewareScript],
   },
 
   // 出口 让webpack把处理完成的文件放在哪里

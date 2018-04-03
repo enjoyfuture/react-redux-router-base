@@ -1,0 +1,81 @@
+// 产品详情页
+@import "../../../../../node_modules/perfect-css/components/base/variables/font";
+@import "../../../../../node_modules/perfect-css/components/base/mixins/gradients";
+@import "../../../../../node_modules/perfect-css/components/animation/mixin";
+//@import "../../../../scss/common/font";
+
+
+.investment-detail {
+  padding-bottom: 5rem;
+  background-color: #f5f5f5;
+  user-select: none;
+
+  [class*="icon-pure-caret-right"] {
+    color: #dedede;
+  }
+
+  :global {
+    .list {
+      background-color: #fff;
+    }
+    .list-item {
+      color: #333;
+      &:hover {
+        color: #333;
+        text-decoration: none;
+      }
+    }
+    .list-divider {
+      border-bottom-color: #eee;
+    }
+
+    .progress-baring {
+      background-image: linear-gradient(to right, #f5d0d1 0%, #f5d0d1 50%, #eee 100%);
+    }
+
+    .progress-bared {
+      background-color: #f5d0d1;
+    }
+  }
+}
+
+.investment-detail-header {
+  box-sizing: border-box;
+  padding: 3rem 1rem 1.25rem;
+  color: #fff;
+  @include gradient-y($start-color: #ff7836, $end-color: #cf121b);
+}
+
+.investment-spacing {
+  padding: 1rem;
+}
+
+.investment-cycle {
+  margin-top: 1px;
+  font-size: $font-size-sm;
+  background-color: #fff;
+}
+
+.investment-protocol {
+  margin-top: .5rem;
+
+  [class*="icon-pure-caret-right"] {
+    color: #dedede;
+  }
+
+  :global {
+    .list {
+      background-color: #fff;
+    }
+    .list-item {
+      color: #333;
+      &:hover {
+        color: #333;
+        text-decoration: none;
+      }
+    }
+    .list-divider {
+      border-bottom-color: #eee;
+    }
+  }
+}
