@@ -4,6 +4,19 @@
 * 引入简化版 immutable.js
 * 优化redux使用模式
 
+## version 0.10.0 (2018-04-08)
+
+* Webpack 升级到 4.x 升级参考以下文章
+  * https://juejin.im/post/5ac9b7165188255cb32e66cc
+  * [官方例子](https://github.com/webpack/webpack/tree/master/examples)
+  * https://blog.csdn.net/qq_16559905/article/details/79404173
+  * 源代码：webpack/lib/WebpackOptionsApply.js
+  * https://blog.zfanw.com/webpack-tutorial
+  * https://reacttraining.com/react-router/web/guides/code-splitting
+  * https://serverless-stack.com/chapters/code-splitting-in-create-react-app.html
+* 去掉 sass-lint ，改为 stylelint 来检测样式
+* 升级 react-router 到 4.x
+
 ## version 0.9.1 (2018-03-08)
 
 * 给出上传文件和下载文件的例子
@@ -50,7 +63,7 @@
 * 加入移动端调试插件 eruda
 * 加入全局异常监听 window.onerror，当页面发生错误时，往服务端发送错误请求
 * Router 给出 onEnter 和 onLeave 例子
-* 生产环境由 product 修改为 production 
+* 生产环境由 product 修改为 production
 * 修改 .babelrc 配置 bug
 
 ## version 0.4.0 (2017-8-18)
@@ -58,7 +71,7 @@
 * 修改 webpack 配置文件，加入 babel-polyfill
 * 去掉 es6-promise，交由 babel-polyfill 处理
 * 修改 css-loader 模块化配置，修改为可混淆的 css 变量命名
-* 修改 sass 相关包，改成 node-sass-vendor sass-loader-joy-vendor sass-true-vendor sasslint-loader-vendor 
+* 修改 sass 相关包，改成 node-sass-vendor sass-loader-joy-vendor sass-true-vendor sasslint-loader-vendor
   确保每次编译不再下载 node zip 包
 
 ## version 0.3.0 (2017-6-30)

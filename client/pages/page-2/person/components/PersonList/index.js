@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Link} from 'react-router';
+import {NavLink} from 'react-router-dom';
 import classNames from 'classnames/bind';
 import PersonItem from '../PersonItem';
 import {getPersonList} from '../../action';
@@ -97,7 +97,7 @@ class PersonList extends Component {
     return (
       <div>
         <div className="m-b-4">
-          <Link className="btn btn-primary btn-raised" to="/person/create">Add Person</Link>
+          <NavLink className="btn btn-primary btn-raised" to="/person/create">Add Person</NavLink>
         </div>
         {this.renderList()}
         <div className="btn-group">

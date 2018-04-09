@@ -9,7 +9,7 @@
 
 * /server/config/base.js   urlContext
 
-## Server 
+## Server
 
 ### generate dll file
 
@@ -28,7 +28,8 @@ npm start
 ### start server after build
 
 ```
-npm run start:prod
+npm run start:beta # 测试环境
+npm run start:prod # 线上环境
 ```
 
 ## Build
@@ -75,6 +76,11 @@ npm run check-coverage
 "check-coverage": "nyc check-coverage --statements 100 --branches 100 --functions 100 --lines 100"
 ```
 
+### 分析每个依赖模块占比，给出优化方案
+```
+npm run build-analyzer #
+npm run analyzer
+```
 
 ## Unit Test Frame
 
@@ -110,10 +116,12 @@ npm run check-coverage
 --- | --- | ---
 node-sass | node-sass-vendor | 4.5.3
 sass-loader-joy-vendor | sass-loader | 6.0.6
-sass-true-vendor | sass-true |
-sasslint-loader-vendor | sasslint-loader | 0.0.1
 
 注意：如官方有新版本时，可以重新 forked 更新自定义的依赖包
+
+## 项目搭建参考
+
+* https://github.com/notrab/create-react-app-redux
 
 ## Issue
 
@@ -126,3 +134,4 @@ Please view [here](./CHANGELOG.md)
 ## 相关参考
 
 * [css module for react](https://github.com/camsong/blog/issues/5)
+* [redux 官方例子](https://github.com/reactjs/redux/tree/master/examples)

@@ -35,10 +35,10 @@ function scssConfig(modules) {
       // localIdentName: '[path][name]-[local]_[hash:base64:5]',
       getLocalIdent: (context, localIdentName, localName, options) => {
         return `${context.resourcePath.split('/').slice(-2, -1)}-${localName}`;
-      }
+      },
     } : {
       sourceMap: true,
-    }
+    },
   }, {
     // Webpack loader that resolves relative paths in url() statements
     // based on the original source file
@@ -50,15 +50,15 @@ function scssConfig(modules) {
       // postcss plugins https://github.com/postcss/postcss/blob/master/docs/plugins.md
       plugins: [
         cssnano({
-          autoprefixer: false
+          autoprefixer: false,
         }),
         flexbugs(),
         autoprefixer({
           flexbox: 'no-2009',
-          browsers
-        })
-      ]
-    }
+          browsers,
+        }),
+      ],
+    },
   }, {
     loader: 'sass-loader-joy-vendor',
     options: {
@@ -66,11 +66,12 @@ function scssConfig(modules) {
       modules,
       outputStyle: 'expanded', // 不压缩，设为 compressed 表示压缩
       precision: 15, // 设置小数精度
-    }
+    },
   }];
 }
 
 const webpackConfig = {
+  mode: 'development',
   cache: true, // 开启缓存,增量编译
   devtool: 'eval-source-map', // 生成 source map文件
   target: 'web', // webpack 能够为多种环境构建编译, 默认是 'web'，可省略 https://doc.webpack-china.org/configuration/target/
@@ -78,9 +79,7 @@ const webpackConfig = {
     // 自动扩展文件后缀名
     extensions: ['.js', '.scss', '.css', '.png', '.jpg', '.gif'],
     // 模块别名定义，方便直接引用别名
-    alias: {
-      'react-router-redux': path.resolve(nodeModules, 'react-router-redux-fixed/lib/index.js'),
-    },
+    alias: {},
     // 参与编译的文件
     modules: [
       'client',
@@ -118,49 +117,39 @@ const webpackConfig = {
           options: {
             configFile: '.eslintrc.js',
             emitError: true, // 验证失败，终止
-          }
-        }
-      },
-      {
-        enforce: 'pre',
-        test: /\.scss/,
-        include: /client/,
-        use: {
-          loader: 'sasslint-loader-vendor',
-          options: {
-            configFile: '.sass-lint.yml',
-            emitError: true,
-            failOnWarning: true
-          }
-        }
+          },
+        },
       },
       {
         test: /\.js$/,
-        include: /client/,
+        //include: /client|node_modules\/redux/,
+        exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
           options: {
             babelrc: false,
             cacheDirectory: true,
+            // babel-preset-env 的配置可参考 https://zhuanlan.zhihu.com/p/29506685
+            // 他会自动使用插件和 polyfill
             presets: [
-              'react', 'stage-3', ['env', {
-                modules: false,
+              'react', ['env', {
+                modules: false, // 设为 false，交由 Webpack 来处理模块化
                 targets: {
-                  browsers: [
-                    'iOS >= 9',
-                    'Android >= 4.4'
-                  ]
+                  browsers,
+                  debug: true,
                 },
+                // 设为 true 会根据需要自动导入用到的 es6 新方法，而不是一次性的引入 babel-polyfill
+                // 比如使用 Promise 会导入 import "babel-polyfill/core-js/modules/es6.promise";
                 useBuiltIns: true,
               }],
             ],
             plugins: [
-              'syntax-dynamic-import', //支持'import()'
-              'transform-class-properties', //解析类属性，静态和实例的属性
-              'transform-object-assign', //polyfill object-assign
-            ]
-          }
-        }
+              'syntax-dynamic-import', // 支持'import()'
+              'transform-class-properties', // 解析类属性，静态和实例的属性
+              'transform-object-rest-spread', // 支持对象 rest
+            ],
+          },
+        },
       },
       // https://github.com/webpack/url-loader
       {
@@ -171,8 +160,8 @@ const webpackConfig = {
           options: {
             name: '[hash].[ext]',
             limit: 10000, // 10kb
-          }
-        }
+          },
+        },
       },
       {
         test: /\.(mp4|ogg|eot|woff|ttf|svg)$/,
@@ -185,22 +174,22 @@ const webpackConfig = {
           loader: 'css-loader',
           options: {
             sourceMap: true,
-          }
+          },
         }, {
           loader: 'postcss-loader',
           options: {
             sourceMap: true,
             plugins: [
               cssnano({
-                autoprefixer: false
+                autoprefixer: false,
               }),
               flexbugs(),
               autoprefixer({
                 flexbox: 'no-2009',
-                browsers
-              })
-            ]
-          }
+                browsers,
+              }),
+            ],
+          },
         }],
       },
       // 为了减少编译生产的 css 文件大小，公共的 scss 不使用 css 模块化
@@ -213,29 +202,18 @@ const webpackConfig = {
         test: /\.scss/,
         exclude: path.resolve(appRoot, './client/scss/perfect.scss'),
         use: scssConfig(true),
-      }
-    ]
+      },
+    ],
   },
 
   plugins: [
     new webpack.HotModuleReplacementPlugin(), // 热部署替换模块
-    new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.optimize.ModuleConcatenationPlugin({ // Scope Hoisting-作用域提升
-      // 检查所有的模块
-      maxModules: Infinity,
-      // 将显示绑定失败的原因
-      optimizationBailout: true
-    }),
-    new webpack.NamedModulesPlugin(),
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: JSON.stringify('development'),
-      }
+      },
     }),
-    new webpack.LoaderOptionsPlugin({
-      debug: true,
-    })
-  ]
+  ],
 };
 
 if (dllExist) {
@@ -245,8 +223,8 @@ if (dllExist) {
       /**
        * 在这里引入 manifest 文件
        */
-      manifest: require('../public/dll/vendor-manifest.json')
-    })
+      manifest: require('../public/dll/vendor-manifest.json'),
+    }),
   );
 }
 

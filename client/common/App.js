@@ -32,7 +32,7 @@ export class App extends Component {
 
   render() {
     const {
-      children, toast
+      children, toast,
     } = this.props;
 
     const content = toast.get('content');

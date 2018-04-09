@@ -5,7 +5,6 @@ import routes from './routes';
 import reducers from './reducers';
 import {urlContext} from '../../utils/config';
 
-
 render(
   <Root routes={routes} reducers={reducers} basename={`${urlContext}/page1`}/>,
   document.getElementById('layout')

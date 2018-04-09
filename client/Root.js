@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware, compose} from 'redux';
+import { ConnectedRouter, routerReducer, routerMiddleware, push} from 'react-router-redux';
 import thunk from 'redux-thunk';
-import {Router, useRouterHistory} from 'react-router';
-import createBrowserHistory from 'history/lib/createBrowserHistory';
-import {syncHistoryWithStore, routerMiddleware} from 'react-router-redux-fixed';
+import {BrowserRouter} from 'react-router-dom';
+
 import Immutable from 'immutable';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import {isMobile} from './utils/device-env';
@@ -32,15 +32,15 @@ if (process.env.NODE_ENV === 'development') {
   DevTools = createDevTools(
     <DockMonitor toggleVisibilityKey="ctrl-h"
                  changePositionKey="ctrl-w"
-                 defaultIsVisible={false}
+                 defaultIsVisible
                  defaultPosition="right">
       <LogMonitor theme="tomorrow" preserveScrollTop={false}/>
-    </DockMonitor>
+    </DockMonitor>,
   );
 
   // 引入 eruda
-  const eruda = require('eruda');
-  eruda.init();
+  import('eruda')
+    .then(eruda => eruda.init());
 }
 
 /**
@@ -50,10 +50,9 @@ if (process.env.NODE_ENV === 'development') {
  * @param initialState
  * @returns {*}
  */
-export function configureStore(history, reducers, initialState) {
+export function configureStore(reducers, initialState) {
 
-  // Installs hooks that always keep react-router and redux store in sync
-  const middleware = [thunk, routerMiddleware(history)];
+  const middleware = [thunk];
   if (process.env.NODE_ENV === 'development') { //开发环境
     const {createLogger} = require('redux-logger');
     middleware.push(createLogger());
@@ -69,67 +68,49 @@ export function configureStore(history, reducers, initialState) {
     initialState,
     compose(
       applyMiddleware(...middleware),
-      ...devTools
+      ...devTools,
     ));
 
   return store;
 }
 
-/**
- * Create enhanced history object for router
- * 使用 Immutable 后，需要重写该方法，替换 syncHistoryWithStore 中的默认 selectLocationState
- * 详情看源代码
- * @returns {function(*)}
- */
-function createSelectLocationState() {
-  let prevRoutingState, prevRoutingStateJS;
-  return (state) => {
-    const routingState = state.get('routing'); // or state.routing
-    if (typeof prevRoutingState === 'undefined' || prevRoutingState !== routingState) {
-      prevRoutingState = routingState;
-      prevRoutingStateJS = routingState.toJS();
-    }
-    return prevRoutingStateJS;
-  };
-}
 
 const Root = ({routes, reducers, basename}) => {
-  // 路由转换配置
-  // Read more https://github.com/rackt/react-router/blob/latest/docs/Glossary.md#routeconfig
-  const browserHistory = useRouterHistory(createBrowserHistory)({
-    basename: basename ? basename : '/'
-  });
-  //初始化 store
-  const store = configureStore(browserHistory, reducers, Immutable.fromJS(window.__initialState__ || {}));
-  const history = syncHistoryWithStore(browserHistory, store, {
-    selectLocationState: createSelectLocationState(),
-    adjustUrlOnReplay: true
-  });
 
-  const _routes = typeof routes === 'function' ? routes(store) : routes;
-  return DevTools ? (
-    <Provider store={store}>
-      <div>
-        <Router history={history}>
-          {_routes}
-        </Router>
-        <DevTools/>
-      </div>
-    </Provider>
-  )
-    : (
-      <Provider store={store}>
-        <Router history={history}>
-          {_routes}
-        </Router>
-      </Provider>
+  //初始化 store
+  const store = configureStore(reducers, Immutable.fromJS(window.__initialState__ || {}));
+
+  let router = null;
+
+  const Routes = routes;
+
+  if (process.env.NODE_ENV === 'development') {
+    router = (
+      <BrowserRouter basename={basename}>
+        <Provider store={store}>
+          <div>
+            <Routes/>
+            <DevTools/>
+          </div>
+        </Provider>
+      </BrowserRouter>
     );
+  } else {
+    router = (
+      <BrowserRouter basename={basename}>
+        <Provider store={store}>
+          <Routes/>
+        </Provider>
+      </BrowserRouter>
+    );
+  }
+  return router;
 };
 
 Root.propTypes = {
   routes: PropTypes.oneOfType([PropTypes.node, PropTypes.func]),
   reducers: PropTypes.func,
-  basename: PropTypes.string
+  basename: PropTypes.string,
 };
 
 export default Root;

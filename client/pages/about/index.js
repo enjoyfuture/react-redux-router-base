@@ -1,27 +1,28 @@
 import React from 'react';
 import {render} from 'react-dom';
 import {combineReducers} from 'redux-immutable';
-import {Route, IndexRoute} from 'react-router';
+import {Route} from 'react-router-dom';
 
 import Root from '../../Root';
-import routing from '../../common/reducers/routing';
 import toast from '../../common/reducers/toast';
 import App from '../../common/App';
 import AboutPage from './AboutPage';
 import {urlContext} from '../../utils/config';
 
-const routes = (
-  <Route path="/" component={App}>
-    <IndexRoute component={AboutPage}/>
-  </Route>
-);
+
+const routes = (store) => {
+  return (
+    <App>
+      <Route path="/" component={AboutPage}/>
+    </App>
+  );
+};
 
 const reducers = combineReducers({
-  routing,
-  toast
+  toast,
 });
 
 render(
   <Root routes={routes} reducers={reducers} basename={`${urlContext}/about`}/>,
-  document.getElementById('layout')
+  document.getElementById('layout'),
 );

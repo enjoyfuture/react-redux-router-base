@@ -168,6 +168,14 @@ function addRoute(app, options) {
     });
   });
 
+  // h5-example
+  app.get(`${urlContext}/demo**`, (req, res, next) => {
+    renderTemplateSync(req, res, {
+      title: 'demo',
+      name: 'demo',
+    });
+  });
+
   // 首页
   app.get(`${urlContext}/`, (req, res, next) => {
     if (req.method === 'GET') {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, IndexRoute } from 'react-router';
+import {Route, Switch} from 'react-router-dom';
 import App from '../../common/App';
 import Page from './Page';
 import Module1Com1 from './module-1/components/com-1';
@@ -9,15 +9,17 @@ import UploadFile from './upload-file/components/UploadFile';
 
 const routes = (store) => {
   return (
-    <Route path="/" component={App}>
-      <Route path="/" component={Page}>
-        <Route path="module1" component={Module1Com1}>
-          <IndexRoute components={Module1Com2}/>
-        </Route>
-        <Route path="module2" component={Module2Com1}/>
-        <Route path="upload-file" component={UploadFile}/>
-      </Route>
-    </Route>
+    <App>
+      <Page>
+        <div>
+          <Module1Com1>
+            <Route path="/module1" component={Module1Com2}/>
+          </Module1Com1>
+          <Route path="/module2" component={Module2Com1}/>
+          <Route path="/upload-file" component={UploadFile}/>
+        </div>
+      </Page>
+    </App>
   );
 };
 

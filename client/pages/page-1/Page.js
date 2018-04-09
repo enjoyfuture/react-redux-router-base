@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {Link} from 'react-router';
+import {NavLink, withRouter} from 'react-router-dom';
 
 class Page extends Component {
   static propTypes = {
@@ -39,9 +39,9 @@ class Page extends Component {
     return (
       <div className="container m-t-1">
         <nav className="tab-bar tab-bar-primary">
-          <Link className="tab" activeClassName="active" to="/module1">Module1</Link>
-          <Link className="tab" activeClassName="active" to="/module2">Module2</Link>
-          <Link className="tab" activeClassName="active" to="/upload-file">Upload File</Link>
+          <NavLink className="tab" activeClassName="active" to="/module1">Module1</NavLink>
+          <NavLink className="tab" activeClassName="active" to="/module2">Module2</NavLink>
+          <NavLink className="tab" activeClassName="active" to="/upload-file">Upload File</NavLink>
         </nav>
 
         {children && React.cloneElement(children, props)}
@@ -58,4 +58,4 @@ function mapStateToProps(state, ownProps) {
   };
 }
 
-export default connect(mapStateToProps)(Page);
+export default withRouter(connect(mapStateToProps)(Page));
