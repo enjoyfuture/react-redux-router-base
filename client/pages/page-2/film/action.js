@@ -1,38 +1,22 @@
-import callApi from '../../../utils/fetch';
-import errorHandler from '../../../utils/error-handler';
+import {CALL_API} from '../../../middlewares/api';
 
-//获取 film 列表
-// 成功
-function fetchFilmSuccess(data, type) {
+// fetch 电影数据
+function fetchFilmList(type = 'all') {
   return {
-    type: `film-${type}-success`,
-    data,
+    [CALL_API]: {
+      types: {
+        request: `film-${type}-request`,
+        success: `film-${type}-success`,
+        failure: `film-${type}-failure`
+      },
+      url: `page-2/film/${type}`
+    }
   };
 }
 
-// 失败
-function fetchFilmFailure(error) {
-  return {
-    type: 'film-list-failure',
-    error
-  };
-}
-
-//返回电影列表
+// 返回电影列表
 export function getFilmList(type) {
   return (dispatch, getState) => {
-    callApi({
-      url: `page-2/film/${type}`,
-    }).then((json) => {
-      const {data} = json;
-      if (!json) {
-        return dispatch(fetchFilmFailure('请求失败'));
-      }
-
-      return dispatch(fetchFilmSuccess(data, type));
-    }, (error) => {
-      const message = errorHandler(error);
-      return dispatch(fetchFilmFailure(message));
-    });
+    return dispatch(fetchFilmList(type));
   };
 }

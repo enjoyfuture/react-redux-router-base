@@ -1,6 +1,6 @@
 import {Map} from 'immutable';
 
-//处理缓存数据
+// 处理缓存数据
 export default function caches(state = Map(), action) {
   switch (action.type) {
   case 'set-cache':

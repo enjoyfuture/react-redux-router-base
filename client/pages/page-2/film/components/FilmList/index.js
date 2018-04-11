@@ -27,7 +27,7 @@ const FilmList = ({film, activeTab}) => {
   return (
     <ul className="list list-border">
       {
-        //item 是每条记录，index 下标值，list 所有数据
+        // item 是每条记录，index 下标值，list 所有数据
         items.map((item, index, list) => {
           return (
             <li key={item.get('id')} className="list-item">

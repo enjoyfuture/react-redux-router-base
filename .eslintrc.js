@@ -130,7 +130,7 @@ module.exports = {
     "no-useless-escape": 2, // 不必要的转义就不要转义了
     "no-useless-return": 2, // 不允许出现不必要的 return 语句
     "no-void": 2, // 不建议使用void操作符
-    "no-warning-comments": 0, // 对于注释中的 TODO FIXME XXX 等，是否给出提示，建议开发中设置为1，部署的时候设置为 2
+    "no-warning-comments": 1, // 对于注释中的 TODO FIXME XXX 等，是否给出提示，建议开发中设置为1，部署的时候设置为 2
     "no-with": 2, // 不允许使用with表达式语句
     "prefer-promise-reject-errors": 2, // 对于Promise.reject，参数必须是一个 Error 对象，比如 Promise.reject(5); 是不允许的，应该写成 Promise.reject(new Error("something bad happened"));
     "radix": 2, // 在调用 parseInt 应该指定基数
@@ -261,7 +261,7 @@ module.exports = {
     "space-in-parens": 0, // 括号和参数之间应该没有空格
     "space-infix-ops": 2, // 表达式中间应该添加空白
     "space-unary-ops": 2, // 在一元操作符前或后不应该有空白
-    "spaced-comment": [0, "always", {
+    "spaced-comment": [2, "always", {
       "line": {
         "markers": ["/"],
         "exceptions": ["-", "+"]

@@ -154,7 +154,7 @@ export const createDate = (input) => {
  * @param shortYear 短格式年
  * @returns {*}
  */
-/*eslint-disable prefer-template*/
+/* eslint-disable prefer-template */
 export const formatDate = ({time, showMs = false, showTime = true, showYear = true, shortYear = false}) => {
   if (!time) {
     return '';
@@ -313,7 +313,7 @@ export const compare = (a, b, comparer) => {
     const arr2 = [a, b].sort();
     return arr1[0] === arr2[0] ? -1 : 1;
   }
-  if (aType === 'number') { //如果 a 是数字，则返回 -1
+  if (aType === 'number') { // 如果 a 是数字，则返回 -1
     return -1;
   }
   return 1;

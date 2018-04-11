@@ -27,7 +27,7 @@ function person(state = fromJS({
     case 'person-list-success': {
       const {data, clear} = action;
       const paging = state.get('paging');
-      //初始化时或者先清空数据时
+      // 初始化时或者先清空数据时
       if (!paging || clear === true) {
         return state.set('isFetching', false).set('paging', fromJS(data));
       }

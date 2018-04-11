@@ -26,7 +26,7 @@ export default class PersonForm extends Component {
     const {firstName, lastName} = this.state;
     const url = 'page-2/person';
     const {dispatch, router} = this.context;
-    //这里没有走 action, 直接发送 fetch 请求,对于不需要维护状态的请求,我们也可以直接调用 fetch
+    // 这里没有走 action, 直接发送 fetch 请求,对于不需要维护状态的请求,我们也可以直接调用 fetch
     return callApi({
       url,
       body: {

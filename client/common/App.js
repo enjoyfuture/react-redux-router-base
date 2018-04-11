@@ -11,11 +11,16 @@ import {closeToast} from './action/toast';
  * 对于 toast 的调用，在需要调用的地方直接调用方法 openToast，例如
  * this.props.dispatch(openToast('轻轻的，我来了'));
  */
+@connect(state => ({
+  toast: state.get('toast'),
+  loading: state.get('loading'),
+}))
 export class App extends Component {
 
   static propTypes = {
     children: PropTypes.node,
     toast: PropTypes.object,
+    loading: PropTypes.object,
     dispatch: PropTypes.func.isRequired,
   };
 
@@ -32,14 +37,18 @@ export class App extends Component {
 
   render() {
     const {
-      children, toast,
+      children, toast, loading,
     } = this.props;
 
     const content = toast.get('content');
     const open = toast.get('open');
 
+    const _loading = loading.get('loading');
+    const isFetching = loading.get('isFetching');
+
     return (
       <div>
+        {_loading && isFetching ? (<div>Loading</div>) : null}
         <Toast duration={2000} open={open} content={content} handleClose={this.handleClose}/>
         <Header/>
         {children}
@@ -49,10 +58,4 @@ export class App extends Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    toast: state.get('toast'),
-  };
-}
-
-export default connect(mapStateToProps)(App);
+export default App;

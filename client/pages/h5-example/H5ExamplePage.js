@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 const H5ExamplePage = ({children}) => {
   return (
     <div>
-      {/*<div>公共部分</div>*/}
+      {/* <div>公共部分</div> */}
       {children}
     </div>
   );

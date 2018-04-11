@@ -25,7 +25,7 @@ class PersonItem extends Component {
     this.personDefault = this.props.person;
   }
 
-  //编辑
+  // 编辑
   handleEdit = (e) => {
     e.preventDefault();
     this.setState({
@@ -33,7 +33,7 @@ class PersonItem extends Component {
     });
   };
 
-  //取消编辑
+  // 取消编辑
   handleCancel = (e) => {
     e.preventDefault();
     this.setState({
@@ -42,7 +42,7 @@ class PersonItem extends Component {
     });
   };
 
-  //保存
+  // 保存
   handleSave = (e) => {
     e.preventDefault();
     const {dispatch} = this.context;

@@ -2,12 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware, compose} from 'redux';
-import { ConnectedRouter, routerReducer, routerMiddleware, push} from 'react-router-redux';
 import thunk from 'redux-thunk';
 import {BrowserRouter} from 'react-router-dom';
-
 import Immutable from 'immutable';
 import injectTapEventPlugin from 'react-tap-event-plugin';
+import api from './middlewares/api';
 import {isMobile} from './utils/device-env';
 
 // 加载 scss
@@ -28,7 +27,7 @@ if (process.env.NODE_ENV === 'development') {
   const LogMonitor = require('redux-devtools-log-monitor').default;
   const DockMonitor = require('redux-devtools-dock-monitor').default;
 
-  /*eslint-disable indent*/
+  /* eslint-disable indent */
   DevTools = createDevTools(
     <DockMonitor toggleVisibilityKey="ctrl-h"
                  changePositionKey="ctrl-w"
@@ -52,8 +51,8 @@ if (process.env.NODE_ENV === 'development') {
  */
 export function configureStore(reducers, initialState) {
 
-  const middleware = [thunk];
-  if (process.env.NODE_ENV === 'development') { //开发环境
+  const middleware = [thunk, api];
+  if (process.env.NODE_ENV === 'development') { // 开发环境
     const {createLogger} = require('redux-logger');
     middleware.push(createLogger());
   }
@@ -77,7 +76,7 @@ export function configureStore(reducers, initialState) {
 
 const Root = ({routes, reducers, basename}) => {
 
-  //初始化 store
+  // 初始化 store
   const store = configureStore(reducers, Immutable.fromJS(window.__initialState__ || {}));
 
   let router = null;

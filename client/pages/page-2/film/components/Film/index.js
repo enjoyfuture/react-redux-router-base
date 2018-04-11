@@ -30,11 +30,11 @@ export class Film extends Component {
     this.animations = ['opacity', 'fade-in', 'burst-in', 'animate-right'];
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.switchTab('all')();
   }
 
-  /*eslint-disable max-len*/
+  /* eslint-disable max-len */
   // 提高性能参考
   // https://mp.weixin.qq.com/s?__biz=MzA5NTM2MTEzNw==&mid=2736710581&idx=1&sn=4f1d6594439ef59c00a6ae02b8b2a8ee&scene=0&uin=MTM4MDEzMzQxMw%3D%3D&key=1a6dc58b177dc62684c4d35441a1ece9fae7c32fd287bc4ee392ad381e23b83f382f5bd7a4720c828268d80c2f208aa0&devicetype=iMac+MacBookPro12%2C1+OSX+OSX+10.11.6+build(15G1004)&version=11020113&lang=zh_CN&pass_ticket=D5FbIwwfJDVO%2FZY8dAdnoE5N4hN5zzu1HnU1wNa7ZnPSCdUqrPt63rJWiM6fh5xo
   shouldComponentUpdate(nextProps, nextState) {

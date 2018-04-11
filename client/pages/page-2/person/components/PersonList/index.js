@@ -28,7 +28,7 @@ export default class PersonList extends Component {
     }
   }
 
-  //加载更多
+  // 加载更多
   loadMore = () => {
     const {person} = this.props;
     const {dispatch} = this.props;
