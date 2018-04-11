@@ -40,7 +40,7 @@ export class UploadFile extends Component {
     const {fileName, fileType} = this.state;
 
     return (
-      <div className="container">
+      <div className="container m-t-4">
         <form ref="uploadForm" action="" encType="multipart/form-data" method="post" target="uploadForm"
               onSubmit={this.handleValidForm}>
 

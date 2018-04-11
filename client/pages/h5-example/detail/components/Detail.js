@@ -7,19 +7,22 @@ import {
 } from '../../../../utils/perfect';
 
 import style from './index.scss';
+import {connect} from 'react-redux';
 
 const perfect = classNamesBind.bind(style);
 
-/*eslint-disabled getter-return*/
-
-export class Detail extends Component {
+// 采用装饰器处理
+@connect(state => ({
+  detail: state.get('detail'),
+}))
+export default class Detail extends Component {
   static propTypes = {
-    projectId: PropTypes.string,
+    match: PropTypes.object,
     detail: PropTypes.object,
+    dispatch: PropTypes.func,
   };
 
   static contextTypes = {
-    dispatch: PropTypes.func,
     router: PropTypes.object,
   };
 
@@ -37,8 +40,7 @@ export class Detail extends Component {
   }
 
   componentWillMount() {
-    const {dispatch} = this.context;
-    const {projectId} = this.props;
+    const {dispatch, match: {params: {projectId}}} = this.props;
     dispatch(getDetail(projectId));
   }
 
@@ -61,10 +63,7 @@ export class Detail extends Component {
   };
 
   render() {
-    const {detail, projectId} = this.props;
-    for (let i = 0; i < 100; i++) {
-      console.info(i);
-    }
+    const {detail, match: {params: {projectId}}} = this.props;
 
     // if (!detail || !detail.get('data')) {
     //   return (
@@ -163,5 +162,3 @@ export class Detail extends Component {
     );
   }
 }
-
-export default Detail;

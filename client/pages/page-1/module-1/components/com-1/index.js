@@ -1,19 +1,40 @@
-import React from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
+import Module1Com2 from '../com-2';
 
-const Com1 = ({children, module1}) => {
-  return (
-    <div>
-      {children && React.cloneElement(children, {
-        module1
-      })}
-    </div>
-  );
-};
+@connect((state) => {
+  return {
+    module1: state.get('module1'),
+  };
+})
+export default class Com1 extends Component {
+  static propTypes = {
+    dispatch: PropTypes.func,
+    module1: PropTypes.object,
+  };
 
-Com1.propTypes = {
-  children: PropTypes.node,
-  module1: PropTypes.object
-};
+  static childContextTypes = {
+    dispatch: PropTypes.func,
+  };
 
-export default Com1;
+  /**
+   * 注意：在子组件中使用 context 的值，不要修改，只能使用或调用
+   * Updating Context
+   * Don't do Updating Context.
+   */
+  getChildContext() {
+    const {dispatch} = this.props;
+    return {dispatch};
+  }
+
+  render() {
+    return (
+      <div>
+        <h2 className="m-y-4 theme-primary">Module-1 Com-1 包含以下组件</h2>
+        <Module1Com2 module1={this.props.module1}/>
+      </div>
+    );
+  }
+}
+

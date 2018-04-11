@@ -1,6 +1,7 @@
+import {combineReducers} from 'redux-immutable';
 import {Map} from 'immutable';
 
-function home(state = Map(), action) {
+function homeHello(state = Map(), action) {
   const {type, content} = action;
   if (type === 'home-hello') {
     return state.set('content', content);
@@ -10,4 +11,15 @@ function home(state = Map(), action) {
   return state;
 }
 
-export default home;
+function homeRoute(state = Map(), action) {
+  const {type, content} = action;
+  if (type === 'home-route') {
+    return state.set('content', content);
+  }
+  return state;
+}
+
+export default combineReducers({
+  homeHello,
+  homeRoute,
+});

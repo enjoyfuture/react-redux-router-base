@@ -145,6 +145,7 @@ const webpackConfig = {
             ],
             plugins: [
               'syntax-dynamic-import', // 支持'import()'
+              'transform-decorators-legacy', // 编译装饰器语法
               'transform-class-properties', // 解析类属性，静态和实例的属性
               'transform-object-rest-spread', // 支持对象 rest
             ],

@@ -6,19 +6,21 @@ import PersonItem from '../PersonItem';
 import {getPersonList} from '../../action';
 
 import style from './style.scss';
+import {connect} from 'react-redux';
 const cx = classNames.bind(style);
 
-class PersonList extends Component {
+// 采用装饰器处理
+@connect(state => ({
+  person: state.get('person'),
+}))
+export default class PersonList extends Component {
   static propTypes = {
     person: PropTypes.object,
-  };
-  static contextTypes = {
     dispatch: PropTypes.func,
   };
 
   componentDidMount() {
-    const {person} = this.props;
-    const {dispatch} = this.context;
+    const {person, dispatch} = this.props;
     // 如果第一次需加载列表
     const paging = person.get('paging');
     if (!paging) {
@@ -29,7 +31,7 @@ class PersonList extends Component {
   //加载更多
   loadMore = () => {
     const {person} = this.props;
-    const {dispatch} = this.context;
+    const {dispatch} = this.props;
     const isFetching = person.get('isFetching');
     const paging = person.get('paging');
     const lastPage = paging.get('lastPage');
@@ -39,7 +41,7 @@ class PersonList extends Component {
   };
 
   refresh = (e) => {
-    const {dispatch} = this.context;
+    const {dispatch} = this.props;
     dispatch(getPersonList(true));
   };
 
@@ -58,7 +60,7 @@ class PersonList extends Component {
     if (items.size === 0) {
       return (
         <div className={cx('no-items')}>
-          <div className={cx('no-items-icon')}></div>
+          <div className={cx('no-items-icon')}/>
           <p>暂无记录</p>
         </div>
       );
@@ -112,5 +114,3 @@ class PersonList extends Component {
     );
   }
 }
-
-export default PersonList;

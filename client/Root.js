@@ -32,7 +32,7 @@ if (process.env.NODE_ENV === 'development') {
   DevTools = createDevTools(
     <DockMonitor toggleVisibilityKey="ctrl-h"
                  changePositionKey="ctrl-w"
-                 defaultIsVisible
+                 defaultIsVisible={false}
                  defaultPosition="right">
       <LogMonitor theme="tomorrow" preserveScrollTop={false}/>
     </DockMonitor>,
@@ -85,6 +85,14 @@ const Root = ({routes, reducers, basename}) => {
   const Routes = routes;
 
   if (process.env.NODE_ENV === 'development') {
+    // 对于开发环境，由于 css 是异步加入的，页面体验不是很好，可以加入定时器来处理
+    const layout = document.getElementById('layout');
+    layout.style.setProperty('display', 'none');
+
+    setTimeout(() => {
+      layout.style.removeProperty('display');
+    }, 1000);
+
     router = (
       <BrowserRouter basename={basename}>
         <Provider store={store}>

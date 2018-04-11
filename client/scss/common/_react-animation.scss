@@ -79,7 +79,7 @@
 
   .animate-right-exit.animate-right-exit-active {
     transform: translate(-100%, 0);
-    transition: translate 300ms ease-in;
+    transition: transform 300ms ease-in;
   }
 
   //渐入效果

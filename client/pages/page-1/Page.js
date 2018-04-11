@@ -1,61 +1,32 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {NavLink, withRouter} from 'react-router-dom';
+import React from 'react';
+import {Route, NavLink} from 'react-router-dom';
+import Loadable from 'react-loadable';
+import LoadingComponent from '../../components/LoadingComponent';
 
-class Page extends Component {
-  static propTypes = {
-    children: PropTypes.node,
-    location: PropTypes.object,
-    dispatch: PropTypes.func,
-    caches: PropTypes.object,
-    module1: PropTypes.object,
-    module2: PropTypes.object,
-  };
-  static childContextTypes = {
-    dispatch: PropTypes.func,
-  };
+const Page = () => {
 
-  /**
-   * 注意：在子组件中使用 context 的值，不要修改，只能使用或调用
-   * Updating Context
-   * Don't do Updating Context.
-   */
-  getChildContext() {
-    const {dispatch} = this.props;
-    return {dispatch};
-  }
+  return (
+    <div className="container m-t-1">
+      <nav className="tab-bar tab-bar-primary">
+        <NavLink className="tab" activeClassName="active" to="/module1">Module1</NavLink>
+        <NavLink className="tab" activeClassName="active" to="/module2">Module2</NavLink>
+        <NavLink className="tab" activeClassName="active" to="/upload-file">Upload File</NavLink>
+      </nav>
 
-  render() {
-    const {
-      children, location, caches, module1, module2,
-    } = this.props;
+      <Route path="/module1" component={Loadable({
+        loader: () => import('./module-1/components/com-1'),
+        loading: LoadingComponent,
+      })}/>
+      <Route path="/module2" component={Loadable({
+        loader: () => import('./module-2/components/com-1'),
+        loading: LoadingComponent,
+      })}/>
+      <Route path="/upload-file" component={Loadable({
+        loader: () => import('./upload-file/components/UploadFile'),
+        loading: LoadingComponent,
+      })}/>
+    </div>
+  );
+};
 
-    const {pathname} = location;
-    const props = pathname.indexOf('/module1') !== -1
-      ? {location, caches, module1}
-      : {location, caches, module2};
-
-    return (
-      <div className="container m-t-1">
-        <nav className="tab-bar tab-bar-primary">
-          <NavLink className="tab" activeClassName="active" to="/module1">Module1</NavLink>
-          <NavLink className="tab" activeClassName="active" to="/module2">Module2</NavLink>
-          <NavLink className="tab" activeClassName="active" to="/upload-file">Upload File</NavLink>
-        </nav>
-
-        {children && React.cloneElement(children, props)}
-      </div>
-    );
-  }
-}
-
-function mapStateToProps(state, ownProps) {
-  return {
-    caches: state.get('caches'),
-    module1: state.get('module1'),
-    module2: state.get('module2'),
-  };
-}
-
-export default withRouter(connect(mapStateToProps)(Page));
+export default Page;

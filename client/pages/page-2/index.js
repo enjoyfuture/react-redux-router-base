@@ -1,22 +1,19 @@
 import React from 'react';
 import {render} from 'react-dom';
-import {combineReducers} from 'redux-immutable';
-
+import {Route} from 'react-router-dom';
 import Root from '../../Root';
-import toast from '../../common/reducers/toast';
-import caches from '../../common/reducers/caches';
-import person from './person/reducer';
-import film from './film/reducer';
-
-import routes from './routes';
+import reducers from './reducers';
 import {urlContext} from '../../utils/config';
+import App from '../../common/App';
+import Page from './Page';
 
-const reducers = combineReducers({
-  toast,
-  caches,
-  person,
-  film
-});
+const routes = () => {
+  return (
+    <App>
+      <Route path="/" component={Page}/>
+    </App>
+  );
+};
 
 render(
   <Root routes={routes} reducers={reducers} basename={`${urlContext}/page2`}/>,

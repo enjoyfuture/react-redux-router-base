@@ -9,8 +9,7 @@ import App from '../../common/App';
 import AboutPage from './AboutPage';
 import {urlContext} from '../../utils/config';
 
-
-const routes = (store) => {
+const routes = () => {
   return (
     <App>
       <Route path="/" component={AboutPage}/>

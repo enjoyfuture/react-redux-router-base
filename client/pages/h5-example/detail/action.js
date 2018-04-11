@@ -20,7 +20,7 @@ function fetchDetailFailure(error) {
 export function getDetail(projectId) {
   return (dispatch, getState) => {
     callApi({
-      url: 'order/-detail',
+      url: 'order/detail',
       body: {
         projectId
       }

@@ -8,7 +8,7 @@ import style from './style.scss';
 
 const cx = classNames.bind(style);
 
-class PersonForm extends Component {
+export default class PersonForm extends Component {
   static contextTypes = {
     router: PropTypes.object.isRequired,
     dispatch: PropTypes.func,
@@ -43,7 +43,7 @@ class PersonForm extends Component {
           lastName,
         };
         dispatch(addPerson(person));
-        router.goBack();
+        router.history.goBack();
       },
       (error) => {
 
@@ -87,5 +87,3 @@ class PersonForm extends Component {
     );
   }
 }
-
-export default PersonForm;
