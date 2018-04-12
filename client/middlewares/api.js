@@ -28,12 +28,11 @@ export default store => next => action => {
   function actionWith(data) {
     // 注意这里，返回最终的 action 供 reducer 中使用，即 reducer 中拿到的 action 是从这里取到的
     const finalAction = {...action, ...data};
-    console.info(finalAction);
     delete finalAction[CALL_API];
     return finalAction;
   }
 
-  const {request, success, failure} = types;
+  const {request, success} = types;
   if (!success) {
     throw new Error('请至少传入 success 参数');
   }
@@ -58,7 +57,7 @@ export default store => next => action => {
     (error) => {
       const message = errorHandler(error);
       return next(actionWith({
-        type: failure,
+        type: 'failure-toast',
         error: message,
         loading
       }));

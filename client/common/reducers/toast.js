@@ -10,6 +10,8 @@ export default function toast(state = Map(), action) {
     return state.set('open', false);
   } else if (type === 'open-toast') {
     return state.set('content', content).set('open', true).set('time', time);
+  } else if (type === 'failure-toast' && error) {
+    return state.set('content', error).set('open', true).set('time', 3000);
   }
   return state;
 }
