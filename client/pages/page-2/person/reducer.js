@@ -1,4 +1,4 @@
-import {fromJS} from 'immutable';
+import {Map, fromJS} from 'immutable';
 
 /**
  *
@@ -14,16 +14,9 @@ import {fromJS} from 'immutable';
   }
  }
  */
-function person(state = fromJS({
-  isFetching: false,
-}), action) {
+function person(state = Map(), action) {
   const {type} = action;
   switch (type) {
-    case 'person-list-request':
-      return state.set('isFetching', true);
-    case 'person-list-failure': {
-      return state.set('isFetching', false);
-    }
     case 'person-list-success': {
       const {data, clear} = action;
       const paging = state.get('paging');

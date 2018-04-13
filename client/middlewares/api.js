@@ -19,10 +19,10 @@ export default store => next => action => {
    * types 为定义的 request success failure 三种状态
    * options 为 fetch options 选项
    * body 为请求参数
-   * clean 为 true 时，表示先清空数据，比如列表刷新时
+   * clear 为 true 时，表示先清空数据，比如列表刷新时
    * loading 为 true 时，自动在全局加载 loading 效果
    */
-  const {url, types, options, body, clean, loading} = callAPI;
+  const {url, types, options, body, clear, loading} = callAPI;
 
   // 分别执行发送请求，成功和失败请求
   function actionWith(data) {
@@ -50,14 +50,15 @@ export default store => next => action => {
       return next(actionWith({
         data,
         type: success,
-        clean,
+        clear,
         loading
       }));
     },
     (error) => {
       const message = errorHandler(error);
+      // 这里请求失败统一用 type failure
       return next(actionWith({
-        type: 'failure-toast',
+        type: 'fetch-failure',
         error: message,
         loading
       }));

@@ -7,7 +7,7 @@ import {urlContext} from '../../utils/config';
 import App from '../../common/App';
 import Page from './Page';
 
-const routes = () => {
+const container = () => {
   return (
     <App>
       <Route path="/" component={Page}/>
@@ -16,6 +16,6 @@ const routes = () => {
 };
 
 render(
-  <Root routes={routes} reducers={reducers} basename={`${urlContext}/page2`}/>,
+  <Root container={container} reducers={reducers} basename={`${urlContext}/page2`}/>,
   document.getElementById('layout')
 );

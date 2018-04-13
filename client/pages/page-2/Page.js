@@ -10,7 +10,7 @@ const Page = () => {
         <NavLink className="tab" activeClassName="active" to="/person">Person</NavLink>
         <NavLink className="tab" activeClassName="active" to="/film">Film</NavLink>
       </nav>
-      <div className="m-t-4">
+      <div className="m-t-2">
         <Route path="/person" component={Loadable({
           loader: () => import('./person/components/Person'),
           loading: LoadingComponent,

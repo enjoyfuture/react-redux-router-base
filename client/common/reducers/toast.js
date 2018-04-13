@@ -10,7 +10,7 @@ export default function toast(state = Map(), action) {
     return state.set('open', false);
   } else if (type === 'open-toast') {
     return state.set('content', content).set('open', true).set('time', time);
-  } else if (type === 'failure-toast' && error) {
+  } else if ((type === 'fetch-failure' && error) || error) { // 统一处理请求失败的情况，弹出 toast 提示
     return state.set('content', error).set('open', true).set('time', 3000);
   }
   return state;

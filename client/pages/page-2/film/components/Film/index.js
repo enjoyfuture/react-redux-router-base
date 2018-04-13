@@ -30,7 +30,7 @@ export class Film extends Component {
     this.animations = ['opacity', 'fade-in', 'burst-in', 'animate-right'];
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.switchTab('all')();
   }
 
@@ -84,7 +84,8 @@ export class Film extends Component {
      * https://github.com/css-modules/css-modules/issues/84
      */
     return (
-      <div className="p-x-4">
+      <div className="p-x-2">
+        <p className="m-b-4">调用全局 loading 效果</p>
         <div className="btn-group">
           <a className={classNames('btn btn-raised', activeTab === 'all' ? 'btn-primary' : '')}
              onClick={this.switchTab('all')} href="#">全部</a>

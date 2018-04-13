@@ -7,21 +7,24 @@ import {getPersonList} from '../../action';
 
 import style from './style.scss';
 import {connect} from 'react-redux';
+
 const cx = classNames.bind(style);
 
 // 采用装饰器处理
 @connect(state => ({
   person: state.get('person'),
+  loading: state.get('loading'),
 }))
 export default class PersonList extends Component {
   static propTypes = {
     person: PropTypes.object,
+    loading: PropTypes.object,
     dispatch: PropTypes.func,
   };
 
-  componentDidMount() {
+  componentWillMount() {
     const {person, dispatch} = this.props;
-    // 如果第一次需加载列表
+    // 如果第一次加载列表
     const paging = person.get('paging');
     if (!paging) {
       dispatch(getPersonList(true));
@@ -30,9 +33,9 @@ export default class PersonList extends Component {
 
   // 加载更多
   loadMore = () => {
-    const {person} = this.props;
+    const {person, loading} = this.props;
     const {dispatch} = this.props;
-    const isFetching = person.get('isFetching');
+    const isFetching = loading.get('isFetching');
     const paging = person.get('paging');
     const lastPage = paging.get('lastPage');
     if (!isFetching && !lastPage) {
@@ -46,13 +49,19 @@ export default class PersonList extends Component {
   };
 
   renderList() {
-    const {person} = this.props;
+    const {person, loading} = this.props;
     const paging = person.get('paging');
 
-    if (!paging) {
+    // FIXME 这里使用全局 loading，如果同时有多个请求，loading 的控制会有问题
+    // 要么单独控制，要么全局处理一下 loading，缓存起来
+    if (loading.get('isFetching')) {
       return (
         <div className={cx('page-loading')}>载入中，请稍后 ...</div>
       );
+    }
+
+    if (!paging) {
+      return null;
     }
 
     const items = paging.get('items');

@@ -31,6 +31,7 @@ export default class Person extends Component {
 
     return (
       <div className="p-x-4">
+        <p className="m-b-4">在组建中定制 loading 效果</p>
         <Switch>
           <Route exact path={`${match.url}`} component={Loadable({
             loader: () => import('../PersonList'),

@@ -9,7 +9,8 @@ export function getFilmList(type) {
           request: `film-${type}-request`,
           success: `film-${type}-success`,
         },
-        url: `page-2/film/${type}`
+        url: `page-2/film/${type}`,
+        loading: true,
       }
     });
   };

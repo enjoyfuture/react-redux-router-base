@@ -1,48 +1,4 @@
-import callApi from '../../../utils/fetch';
-import errorHandler from '../../../utils/error-handler';
-
-// 获取 person 分页列表
-// 请求，该行为可不加，也可以改成全局的 action，待改进
-function fetchPersonRequest() {
-  return {
-    type: 'person-list-request'
-  };
-}
-
-// 成功
-function fetchPersonSuccess(data, clear) {
-  return {
-    type: 'person-list-success',
-    data,
-    clear
-  };
-}
-
-// 失败
-function fetchPersonFailure(error) {
-  return {
-    type: 'person-list-failure',
-    error
-  };
-}
-
-function fetchPersonList(pageNum = 1, clear) {
-  return (dispatch, getState) => {
-    callApi({
-      url: `page-2/person?pageNum=${pageNum}`,
-    }).then((json) => {
-      const {data} = json;
-      if (!json) {
-        return dispatch(fetchPersonFailure('请求失败'));
-      }
-
-      return dispatch(fetchPersonSuccess(data, clear));
-    }, (error) => {
-      const message = errorHandler(error);
-      return dispatch(fetchPersonFailure(message));
-    });
-  };
-}
+import {CALL_API} from '../../../middlewares/api';
 
 export function getPersonList(clear) {
   return (dispatch, getState) => {
@@ -57,8 +13,20 @@ export function getPersonList(clear) {
     if (isFetching || lastPage) {
       return null;
     }
-    dispatch(fetchPersonRequest());
-    return dispatch(fetchPersonList(pageNum, clear));
+
+    return dispatch({
+      [CALL_API]: {
+        types: {
+          request: 'person-list-request',
+          success: 'person-list-success',
+        },
+        url: `page-2/person?pageNum=${pageNum}`,
+        clear,
+        options: {
+          method: 'get',
+        },
+      }
+    });
   };
 }
 

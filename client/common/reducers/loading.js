@@ -15,16 +15,17 @@ const failureR = /-failure$/;
  */
 export default function loading(state = Map(), action) {
   const {type, error, loading} = action;
-  // if (requestR.test(type)) {
-  //   // if (loading) {
-  //   //   return state.set('isFetching', true).set('loading', true);
-  //   // }
-  //   return state.set('isFetching', true).delete('loading');
-  // } else if (successR.test(type) || failureR.test(type)) {
-  //   // if (loading) {
-  //   //   return state.set('isFetching', false).set('loading', true);
-  //   // }
-  //   return state.set('isFetching', false).delete('loading');
-  // }
-  return state.set('isFetching', false);
+  if (requestR.test(type)) {
+    if (loading) {
+      return state.set('isFetching', true).set('loading', true);
+    }
+    return state.set('isFetching', true).delete('loading');
+  } else if (successR.test(type) || failureR.test(type) || error) {
+    if (loading) {
+      return state.set('isFetching', false).set('loading', true);
+    }
+    return state.set('isFetching', false).delete('loading');
+  }
+
+  return state;
 }

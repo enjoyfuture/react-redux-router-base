@@ -74,14 +74,14 @@ export function configureStore(reducers, initialState) {
 }
 
 
-const Root = ({routes, reducers, basename}) => {
+const Root = ({container, reducers, basename}) => {
 
   // 初始化 store
   const store = configureStore(reducers, Immutable.fromJS(window.__initialState__ || {}));
 
   let router = null;
 
-  const Routes = routes;
+  const Container = container;
 
   if (process.env.NODE_ENV === 'development') {
     // 对于开发环境，由于 css 是异步加入的，页面体验不是很好，可以加入定时器来处理
@@ -96,7 +96,7 @@ const Root = ({routes, reducers, basename}) => {
       <BrowserRouter basename={basename}>
         <Provider store={store}>
           <div>
-            <Routes/>
+            <Container/>
             <DevTools/>
           </div>
         </Provider>
@@ -106,7 +106,7 @@ const Root = ({routes, reducers, basename}) => {
     router = (
       <BrowserRouter basename={basename}>
         <Provider store={store}>
-          <Routes/>
+          <Container/>
         </Provider>
       </BrowserRouter>
     );

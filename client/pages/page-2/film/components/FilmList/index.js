@@ -12,10 +12,8 @@ const FilmList = ({film, activeTab}) => {
   const items = filmList.get('items');
 
   if (!items) {
-    return (
-      <div className="page-loading">载入中，请稍后 ...</div>
-    );
-  } else if (items.size === 0) {
+    return null;
+  } else if (items && items.size === 0) {
     return (
       <div className={cx('no-items')}>
         <div className={cx('no-items-icon')}></div>
