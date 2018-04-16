@@ -16,6 +16,14 @@
   * https://serverless-stack.com/chapters/code-splitting-in-create-react-app.html
 * 去掉 sass-lint ，改为 stylelint 来检测样式
 * 升级 react-router 到 4.x
+* 引入 import 按需加载代码实现
+* 引入 redux api 中间件，只需一个方法搞定原先需要三个方法实现的 ajax 请求
+* 加入全局 loading 和 toast 提示效果，业务中不需要再单独处理
+* 支持 es7 装饰器写法
+* 引入 react-immutable-pure-decorator，性能优化杀手
+* 升级后重写例子代码
+
+注意：升级到 webpack 4 后，由于插件 extract-text-webpack-plugin 不给力，目前 build 的时候有问题，待完善
 
 ## version 0.9.1 (2018-03-08)
 

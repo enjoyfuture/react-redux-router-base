@@ -11,8 +11,8 @@ const Header = () => {
       <div className="navbar-scroll">
         <ul className="navbar-nav">
           <li>
-            <a href={`${urlContext}/home`}
-               className={classNames('ripple ripple-primary nav-link', pathname.indexOf(`${urlContext}/home`) !== -1 ? 'active' : '')}>
+            <a href={`${urlContext}/`}
+               className={classNames('ripple ripple-primary nav-link', pathname === `${urlContext}/` ? 'active' : '')}>
               Home
             </a>
           </li>

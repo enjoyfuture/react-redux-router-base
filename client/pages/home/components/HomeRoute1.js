@@ -22,14 +22,12 @@ export default class HomeRoute1 extends Component {
     const {home} = this.props;
     const {
       location: {
-        pathname
-      }
+        pathname,
+      },
     } = this.props;
 
     return (
-      <div className="m-t-6">
-        <h5 className="theme-secondary">{home.getIn(['homeRoute', 'content'])}，路由 pathname： {pathname}</h5>
-      </div>
+      <h5 className="theme-secondary">{home.getIn(['homeRoute', 'content'])}，路由 pathname： {pathname}</h5>
     );
   }
 }

@@ -5,11 +5,12 @@ import {Route} from 'react-router-dom';
 
 import Root from '../../Root';
 import toast from '../../common/reducers/toast';
+import loading from '../../common/reducers/loading';
 import App from '../../common/App';
 import AboutPage from './AboutPage';
 import {urlContext} from '../../utils/config';
 
-const routes = () => {
+const container = () => {
   return (
     <App>
       <Route path="/" component={AboutPage}/>
@@ -19,9 +20,10 @@ const routes = () => {
 
 const reducers = combineReducers({
   toast,
+  loading,
 });
 
 render(
-  <Root routes={routes} reducers={reducers} basename={`${urlContext}/about`}/>,
+  <Root container={container} reducers={reducers} basename={`${urlContext}/about`}/>,
   document.getElementById('layout'),
 );

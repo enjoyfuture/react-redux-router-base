@@ -11,7 +11,7 @@ const {urlContext, nodeEnv} = require('../config');
 // services
 const isDev = nodeEnv === 'development';
 
-//加载webpack打包后的静态文件映射表
+// 加载webpack打包后的静态文件映射表
 const fileManifest = isDev ? null : require('../../public/dist/manifest.json');
 
 // 静态文件上下文路径
@@ -50,17 +50,20 @@ const wrapScriptHtml = function (data) {
  */
 const wrapStyleImports = function (data, isDev, manifest) {
   const buildLink = function (href) {
-    return `<link href="${href}" rel="stylesheet">`;
+    if (href) {
+      return `<link href="${href}" rel="stylesheet">`;
+    }
+    return '';
   };
   if (!isDev) {
     let links = buildLink(manifest[`${staticResourceContext}${data.name}.css`]);
     // 公共的
     if (manifest[`${staticResourceContext}vendor.css`]) {
-      links += buildLink(manifest[`${staticResourceContext}vendor.css`])
+      links += buildLink(manifest[`${staticResourceContext}vendor.css`]);
     }
     // 引入第三方 css
     if (manifest[`${staticResourceContext}style.${data.name}.css`]) {
-      links += buildLink(manifest[`${staticResourceContext}style.${data.name}.css`])
+      links += buildLink(manifest[`${staticResourceContext}style.${data.name}.css`]);
     }
     data.links = links;
   }
@@ -74,7 +77,10 @@ const wrapStyleImports = function (data, isDev, manifest) {
  */
 const wrapScriptImports = function (data, isDev, manifest) {
   const buildScript = function (src) {
-    return `<script src="${src}"></script>`;
+    if (src) {
+      return `<script src="${src}"></script>`;
+    }
+    return '';
   };
   if (isDev) {
     data.scripts = `${buildScript(`${urlContext}/dll/vendor.dll.js`)}
@@ -165,14 +171,6 @@ function addRoute(app, options) {
     renderTemplateSync(req, res, {
       title: 'h5-example',
       name: 'h5-example',
-    });
-  });
-
-  // h5-example
-  app.get(`${urlContext}/demo**`, (req, res, next) => {
-    renderTemplateSync(req, res, {
-      title: 'demo',
-      name: 'demo',
     });
   });
 

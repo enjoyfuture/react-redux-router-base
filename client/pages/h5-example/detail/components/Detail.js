@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import classNamesBind from 'classnames/bind';
+import {connect} from 'react-redux';
 import {getDetail} from '../action';
 import {
-  thousands, toPercentNum, formatDate,
+thousands, toPercentNum, formatDate,
 } from '../../../../utils/perfect';
 
 import style from './index.scss';
-import {connect} from 'react-redux';
 
 const perfect = classNamesBind.bind(style);
 
@@ -57,13 +57,15 @@ export default class Detail extends Component {
   handlerDetail = (url) => {
     return () => {
       if (this.clickEnable) {
-        this.context.router.push(url);
+        // this.context.router.history.push(url);
       }
     };
   };
 
   render() {
     const {detail, match: {params: {projectId}}} = this.props;
+
+    console.info('路由参数的用法:', projectId);
 
     // if (!detail || !detail.get('data')) {
     //   return (

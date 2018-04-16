@@ -11,7 +11,7 @@ export class UploadFile extends Component {
     super(props);
     this.state = {
       fileName: '',
-      fileType: ''
+      fileType: '',
     };
     this.uploadFile = null; // 选择的上传文件
   }
@@ -41,6 +41,7 @@ export class UploadFile extends Component {
 
     return (
       <div className="container m-t-4">
+        <p>文件上传待完善</p>
         <form ref="uploadForm" action="" encType="multipart/form-data" method="post" target="uploadForm"
               onSubmit={this.handleValidForm}>
 

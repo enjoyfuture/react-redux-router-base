@@ -5,6 +5,7 @@ import {Route, NavLink, Switch} from 'react-router-dom';
 import {TransitionGroup, CSSTransition} from 'react-transition-group';
 import Loadable from 'react-loadable';
 import LoadingComponent from '../../components/LoadingComponent';
+import pureRender from '../../components/react-immutable-pure-decorator';
 import {hello, clearHello} from './action';
 import classNames from 'classnames';
 import {openToast} from '../../common/action/toast';
@@ -14,6 +15,7 @@ import style from './home.scss';
 @connect(state => ({
   home: state.get('home'),
 }))
+@pureRender
 export default class Home extends Component {
   static propTypes = {
     match: PropTypes.object,
@@ -23,6 +25,10 @@ export default class Home extends Component {
     dispatch: PropTypes.func,
   };
 
+  static contextTypes = {
+    router: PropTypes.object,
+  };
+
   helloHandle = (clear) => {
     return (e) => {
       e.stopPropagation();
@@ -30,7 +36,7 @@ export default class Home extends Component {
       if (clear) {
         dispatch(clearHello());
       } else {
-        dispatch(hello('开启 React Router Redux Immutable 之旅吧！'));
+        dispatch(hello('开启 React Redux Router Immutable 之旅吧！'));
       }
     };
   };
@@ -43,6 +49,8 @@ export default class Home extends Component {
   handleToRoute = (route) => {
     return () => {
       this.props.history.push(route);
+      // 或者这样
+      // this.context.router.history.push(route);
     };
   };
 
@@ -53,7 +61,7 @@ export default class Home extends Component {
     return (
       <div className={classNames(style.home, 'text-center')}>
         <h1 className="m-t-6">
-          React Redux Router Immutable Webpack Less etc.
+          React Redux Router Immutable Sass etc.
         </h1>
         <hr className="m-y-4"/>
         <div>
@@ -85,28 +93,32 @@ export default class Home extends Component {
             </div>
             <div className="col-8">
               <p>通过点击调用 this.props.history.push 或</p>
-              <p>this.props.history.replace 来处理路由跳转</p>
+              <p>this.context.router.history.push 来处理路由跳转</p>
               <div className="btn-group m-3">
                 <button className={classNames('btn btn-raised', {'btn-primary': pathname === `${match.url}route1`})} onClick={this.handleToRoute(`${match.url}route1`)}>子路由1</button>
                 <button className={classNames('btn btn-raised', {'btn-primary': pathname === `${match.url}route2`})} onClick={this.handleToRoute(`${match.url}route2`)}>子路由2</button>
               </div>
             </div>
           </div>
-          <TransitionGroup>
-            <CSSTransition key={key} classNames="animate-right" timeout={{exit: 300, enter: 300}}>
-              <Switch location={location}>
-                {/* 这里使用异步加载 */}
-                <Route path={`${match.url}route1`} component={Loadable({
-                  loader: () => import('./components/HomeRoute1'),
-                  loading: LoadingComponent,
-                })}/>
-                <Route path={`${match.url}route2`} component={Loadable({
-                  loader: () => import('./components/HomeRoute2'),
-                  loading: LoadingComponent,
-                })}/>
-              </Switch>
-            </CSSTransition>
-          </TransitionGroup>
+
+          <div className="position-relative d-flex flex-column justify-content-center m-t-6">
+            <p>此处动画效果待优化</p>
+            <TransitionGroup>
+              <CSSTransition key={key} classNames="animate-right" timeout={{exit: 0, enter: 300}}>
+                <Switch location={location}>
+                  {/* 这里使用异步加载 */}
+                  <Route path={`${match.url}route1`} component={Loadable({
+                    loader: () => import('./components/HomeRoute1'),
+                    loading: LoadingComponent,
+                  })}/>
+                  <Route path={`${match.url}route2`} component={Loadable({
+                    loader: () => import('./components/HomeRoute2'),
+                    loading: LoadingComponent,
+                  })}/>
+                </Switch>
+              </CSSTransition>
+            </TransitionGroup>
+          </div>
         </div>
       </div>
     );

@@ -31,7 +31,7 @@ export default class Com1 extends Component {
   render() {
     return (
       <div>
-        <h2 className="m-y-4 theme-primary">Module-1 Com-1 包含以下组件</h2>
+        <h4 className="m-y-4 theme-primary">以下为子组件 Module1Com2</h4>
         <Module1Com2 module1={this.props.module1}/>
       </div>
     );

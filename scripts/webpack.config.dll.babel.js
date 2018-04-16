@@ -8,7 +8,7 @@ export default {
   entry: {
     vendor: ['classnames', 'eruda', 'history', 'immutable',
       'isomorphic-fetch', 'prop-types', 'react', 'react-dom',
-      'react-redux', 'react-router', 'react-router-dom', 'react-router-redux', 'react-transition-group',
+      'react-redux', 'react-router-dom', 'react-transition-group',
       'redux', 'redux-immutable', 'redux-thunk', 'redux-devtools',
       'redux-devtools-dock-monitor', 'redux-devtools-log-monitor', 'redux-logger'],
   },

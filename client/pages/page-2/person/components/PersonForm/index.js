@@ -51,6 +51,11 @@ export default class PersonForm extends Component {
     );
   };
 
+  goBack = () => {
+    const {router} = this.context;
+    router.history.goBack();
+  };
+
   handleChange = (field) => {
     return (event) => {
       const val = event.target.value;
@@ -82,6 +87,7 @@ export default class PersonForm extends Component {
 
         <div className="btn-group m-t-2">
           <button className="btn btn-raised btn-primary" onClick={this.savePerson}>Save</button>
+          <button className="btn btn-raised btn-secondary" onClick={this.goBack}>Go Back</button>
         </div>
       </div>
     );

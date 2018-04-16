@@ -8,11 +8,10 @@ import cssnano from 'cssnano'; // 优化 css，对于长格式优化成短格式
 import incstr from 'incstr';
 
 // 根目录上下文
-import { urlContext } from '../client/utils/config';
+import {urlContext} from '../client/utils/config';
 
 const appRoot = path.resolve(__dirname, '../');
 const appPath = path.resolve(appRoot, 'public');
-const nodeModules = path.resolve(__dirname, '../node_modules');
 
 // PC 端 browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 49', 'Firefox >= 55', 'Safari >= 9.1']
 // 手机端 browsers: ['Android >= 4.4', 'iOS >=9']
@@ -56,7 +55,7 @@ const generateScopedName = (localName, resourcePath) => {
 // scss config
 function scssConfig(modules) {
   // 在 css-loader 中加入 sourceMap: true，可能会引起编译报错，比如 content: $font; 会编译报错
-  return extractScss.extract({
+  return ExtractTextPlugin.extract({
     fallback: 'style-loader',
     use: [{
       loader: 'css-loader',
@@ -66,7 +65,6 @@ function scssConfig(modules) {
         minimize: true,
         localIdentName: '[local][contenthash:base64:5]',
         getLocalIdent: (context, localIdentName, localName) => {
-          // FIXME 这样每次打包编译时，混淆的 css 名导致无法缓存，待解决实现
           return generateScopedName(localName, context.resourcePath);
         },
       } : {
@@ -83,7 +81,7 @@ function scssConfig(modules) {
         sourceMap: true,
         plugins: [
           cssnano({
-            autoprefixer: false
+            autoprefixer: false,
           }),
           flexbugs(),
           autoprefixer({
@@ -105,12 +103,12 @@ function scssConfig(modules) {
 
 // multiple extract instances
 const extractScss = new ExtractTextPlugin({
-  filename: 'css/[name].[contenthash:8].css',
+  filename: 'css/[name].[chunkhash:8].css',
   allChunks: true,
   ignoreOrder: true,
 });
 const extractCSS = new ExtractTextPlugin({
-  filename: 'css/style.[name].[contenthash:8].css',
+  filename: 'css/style.[name].[chunkhash:8].css',
   allChunks: true,
 });
 
@@ -168,7 +166,7 @@ const webpackConfig = {
               'react', ['env', {
                 modules: false, // 设为 false，交由 Webpack 来处理模块化
                 targets: {
-                  browsers
+                  browsers,
                 },
                 // 设为 true 会根据需要自动导入用到的 es6 新方法，而不是一次性的引入 babel-polyfill
                 // 比如使用 Promise 会导入 import "babel-polyfill/core-js/modules/es6.promise";
@@ -177,6 +175,7 @@ const webpackConfig = {
             ],
             plugins: [
               'syntax-dynamic-import', // 支持'import()'
+              'transform-decorators-legacy', // 编译装饰器语法
               'transform-class-properties', // 解析类属性，静态和实例的属性
               'transform-object-rest-spread', // 支持对象 rest
               [
@@ -184,11 +183,11 @@ const webpackConfig = {
                 {
                   mode: 'remove', // 默认值为 remove ，即删除 PropTypes
                   removeImport: true, // the import statements are removed as well. import PropTypes from 'prop-types'
-                  ignoreFilenames: ['node_modules']
-                }
-              ]
-            ]
-          }
+                  ignoreFilenames: ['node_modules'],
+                },
+              ],
+            ],
+          },
         },
       },
       // https://github.com/webpack/url-loader
@@ -210,7 +209,7 @@ const webpackConfig = {
       // css 一般都是从第三方库中引入，故不需要 CSS 模块化处理
       {
         test: /\.css/,
-        use: extractCSS.extract({
+        use: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [{
             loader: 'css-loader',
@@ -228,7 +227,7 @@ const webpackConfig = {
               sourceMap: true,
               plugins: [
                 cssnano({
-                  autoprefixer: false
+                  autoprefixer: false,
                 }),
                 flexbugs(),
                 autoprefixer({
@@ -262,17 +261,17 @@ const webpackConfig = {
     sideEffects: false,
     minimize: true,
     concatenateModules: true, // Scope Hoisting-作用域提升
-    splitChunks: {
-      cacheGroups: {
-        vendor: {
-          // test: /node_modules/, // 指定文件夹
-          name: 'vendor',
-          chunks: 'all'
-        }
-      }
-    },
+    // splitChunks: {
+    //   cacheGroups: {
+    //     vendor: {
+    //       // test: /node_modules/, // 指定文件夹
+    //       name: 'vendor',
+    //       chunks: 'all',
+    //     },
+    //   },
+    // },
     runtimeChunk: {
-      name: 'manifest'
+      name: 'manifest',
     },
     namedChunks: true,
   },
@@ -286,7 +285,7 @@ const webpackConfig = {
       },
     }),
     extractScss,
-    extractCSS,
+    // extractCSS,
     new webpack.HashedModuleIdsPlugin(),
     new ManifestPlugin({
       basePath: `${urlContext}/dist/`,
@@ -295,7 +294,7 @@ const webpackConfig = {
       banner: [
         '/*!',
         ' react-redux-router-base',
-        ` Copyright © 2018-${new Date().getFullYear()} JD Finance.`,
+        ` Copyright © 2016-${new Date().getFullYear()} JD Finance.`,
         '*/',
       ].join('\n'),
       raw: true,

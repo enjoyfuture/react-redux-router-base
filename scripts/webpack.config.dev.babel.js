@@ -122,7 +122,7 @@ const webpackConfig = {
       },
       {
         test: /\.js$/,
-        //include: /client|node_modules\/redux/,
+        // include: /client|node_modules\/redux/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
