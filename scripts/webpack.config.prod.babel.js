@@ -2,6 +2,7 @@ import path from 'path';
 import webpack from 'webpack';
 import ExtractTextPlugin from 'extract-text-webpack-plugin';
 import ManifestPlugin from 'webpack-manifest-plugin';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import autoprefixer from 'autoprefixer';
 import flexbugs from 'postcss-flexbugs-fixes'; // 修复 flexbox 已知的 bug
 import cssnano from 'cssnano'; // 优化 css，对于长格式优化成短格式等
@@ -12,6 +13,9 @@ import {urlContext} from '../client/utils/config';
 
 const appRoot = path.resolve(__dirname, '../');
 const appPath = path.resolve(appRoot, 'public');
+const isAnalyze =
+  process.argv.includes('--analyze') || process.argv.includes('--analyse');
+
 
 // PC 端 browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 49', 'Firefox >= 55', 'Safari >= 9.1']
 // 手机端 browsers: ['Android >= 4.4', 'iOS >=9']
@@ -55,7 +59,7 @@ const generateScopedName = (localName, resourcePath) => {
 // scss config
 function scssConfig(modules) {
   // 在 css-loader 中加入 sourceMap: true，可能会引起编译报错，比如 content: $font; 会编译报错
-  return ExtractTextPlugin.extract({
+  return extractScss.extract({
     fallback: 'style-loader',
     use: [{
       loader: 'css-loader',
@@ -72,10 +76,6 @@ function scssConfig(modules) {
         minimize: true,
       },
     }, {
-      // Webpack loader that resolves relative paths in url() statements
-      // based on the original source file
-      loader: 'resolve-url-loader',
-    }, {
       loader: 'postcss-loader',
       options: {
         sourceMap: true,
@@ -89,6 +89,13 @@ function scssConfig(modules) {
             browsers,
           }),
         ],
+      },
+    }, {
+      // Webpack loader that resolves relative paths in url() statements
+      // based on the original source file
+      loader: 'resolve-url-loader',
+      options: {
+        debug: true,
       },
     }, {
       loader: 'sass-loader-joy-vendor', options: {
@@ -115,7 +122,23 @@ const extractCSS = new ExtractTextPlugin({
 // 基于 webpack 的持久化缓存方案 可以参考 https://github.com/pigcan/blog/issues/9
 const webpackConfig = {
   mode: 'production',
+  cache: false, // 开启缓存,增量编译
+  bail: true, // 如果发生错误，则不继续尝试
   devtool: 'source-map', // 生成 source-map文件 原始源码
+  // Specify what bundle information gets displayed
+  // https://webpack.js.org/configuration/stats/
+  stats: {
+    cached: false,
+    cachedAssets: false,
+    chunks: false,
+    chunkModules: false,
+    colors: true,
+    hash: false,
+    modules: false,
+    reasons: false,
+    timings: true,
+    version: false,
+  },
   target: 'web', // webpack 能够为多种环境构建编译, 默认是 'web'，可省略 https://doc.webpack-china.org/configuration/target/
   resolve: {
     // 自动扩展文件后缀名
@@ -146,11 +169,18 @@ const webpackConfig = {
   output: {
     path: path.join(appPath, 'dist'),
     filename: '[name].[chunkhash:8].js',
+    chunkFilename: '[name].[chunkhash:8].chunk.js',
     publicPath: `${urlContext}/dist/`,
+    // Point sourcemap entries to original disk location (format as URL on Windows)
+    devtoolModuleFilenameTemplate: info =>
+      path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
     sourceMapFilename: 'map/[file].map',
   },
 
   module: {
+    // Make missing exports an error instead of warning
+    // 缺少 exports 时报错，而不是警告
+    strictExportPresence: true,
     rules: [
       {
         test: /\.js$/,
@@ -158,16 +188,17 @@ const webpackConfig = {
         use: {
           loader: 'babel-loader',
           options: {
+            cacheDirectory: false,
             babelrc: false,
-            cacheDirectory: true,
             // babel-preset-env 的配置可参考 https://zhuanlan.zhihu.com/p/29506685
             // 他会自动使用插件和 polyfill
             presets: [
               'react', ['env', {
-                modules: false, // 设为 false，交由 Webpack 来处理模块化
+                // 设为 true 会根据需要自动导入用到的 es6 新方法，而不是一次性的引入 babel-polyfill
                 targets: {
                   browsers,
                 },
+                modules: false, // 设为 false，交由 Webpack 来处理模块化
                 // 设为 true 会根据需要自动导入用到的 es6 新方法，而不是一次性的引入 babel-polyfill
                 // 比如使用 Promise 会导入 import "babel-polyfill/core-js/modules/es6.promise";
                 useBuiltIns: true,
@@ -178,6 +209,10 @@ const webpackConfig = {
               'transform-decorators-legacy', // 编译装饰器语法
               'transform-class-properties', // 解析类属性，静态和实例的属性
               'transform-object-rest-spread', // 支持对象 rest
+              // https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-constant-elements
+              'transform-react-constant-elements',
+              // https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-inline-elements
+              'transform-react-inline-elements',
               [
                 'transform-react-remove-prop-types',
                 {
@@ -190,37 +225,23 @@ const webpackConfig = {
           },
         },
       },
-      // https://github.com/webpack/url-loader
-      {
-        test: /\.(png|jpe?g|gif)/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'url-loader',
-          options: {
-            name: '[hash:8].[ext]',
-            limit: 10000, // 10kb
-          },
-        },
-      },
-      {
-        test: /\.(mp4|ogg|eot|woff|ttf|svg)$/,
-        use: 'file-loader',
-      },
       // css 一般都是从第三方库中引入，故不需要 CSS 模块化处理
       {
         test: /\.css/,
-        use: ExtractTextPlugin.extract({
+        use: extractCSS.extract({
           fallback: 'style-loader',
           use: [{
             loader: 'css-loader',
             options: {
               sourceMap: true,
-              minimize: true,
+              // CSS Nano options http://cssnano.co/
+              minimize: {
+                discardComments: { removeAll: true },
+              },
+              // CSS Modules https://github.com/css-modules/css-modules
+              modules: true,
+              localIdentName: '[hash:base64:5]',
             },
-          }, {
-            // Webpack loader that resolves relative paths in url() statements
-            // based on the original source file
-            loader: 'resolve-url-loader',
           }, {
             loader: 'postcss-loader',
             options: {
@@ -236,6 +257,10 @@ const webpackConfig = {
                 }),
               ],
             },
+          }, {
+            // Webpack loader that resolves relative paths in url() statements
+            // based on the original source file
+            loader: 'resolve-url-loader',
           }],
           // publicPath: '/public/dist/' 这里如设置会覆盖 output 中的 publicPath
         }),
@@ -251,6 +276,53 @@ const webpackConfig = {
         exclude: path.resolve(appRoot, './client/scss/perfect.scss'),
         use: scssConfig(true),
       },
+      // Rules for images
+      {
+        test: /\.(bmp|gif|jpg|jpeg|png|svg)$/,
+        oneOf: [
+          // Inline lightweight images into CSS
+          {
+            issuer: /\.(css|less|scss)$/, // issuer 表示在这些文件中处理
+            oneOf: [
+              // Inline lightweight SVGs as UTF-8 encoded DataUrl string
+              {
+                test: /\.svg$/,
+                loader: 'svg-url-loader',
+                exclude: path.resolve(appRoot, './client/scss/common/_iconfont.scss'), // 除去字体文件
+                options: {
+                  name: '[hash:8].[ext]',
+                  limit: 4096, // 4kb
+                },
+              },
+
+              // Inline lightweight images as Base64 encoded DataUrl string
+              // https://github.com/webpack/url-loader
+              {
+                loader: 'url-loader',
+                options: {
+                  name: '[hash:8].[ext]',
+                  limit: 4096, // 4kb
+                },
+              },
+            ],
+          },
+
+          // Or return public URL to image resource
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[hash:8].[ext]',
+            },
+          },
+        ],
+      },
+      {
+        test: /\.(mp4|ogg|eot|woff|ttf)$/,
+        loader: 'file-loader',
+        options: {
+          name: '[hash:8].[ext]',
+        },
+      },
     ],
   },
 
@@ -263,10 +335,10 @@ const webpackConfig = {
     concatenateModules: true, // Scope Hoisting-作用域提升
     // splitChunks: {
     //   cacheGroups: {
-    //     vendor: {
-    //       // test: /node_modules/, // 指定文件夹
-    //       name: 'vendor',
-    //       chunks: 'all',
+    //     commons: {
+    //       chunks: 'initial',
+    //       test: /[\\/]node_modules[\\/]/, // 指定文件夹
+    //       name: 'vendors',
     //     },
     //   },
     // },
@@ -300,6 +372,13 @@ const webpackConfig = {
       raw: true,
       entryOnly: true,
     }),
+    ...(isAnalyze
+      ? [
+        // Webpack Bundle Analyzer
+        // https://github.com/th0r/webpack-bundle-analyzer
+        new BundleAnalyzerPlugin(),
+      ]
+      : []),
   ],
 };
 

@@ -11,6 +11,7 @@ const Page = () => {
         <NavLink className="tab" activeClassName="active" to="/module1">Module1</NavLink>
         <NavLink className="tab" activeClassName="active" to="/module2">Module2</NavLink>
         <NavLink className="tab" activeClassName="active" to="/upload-file">Upload File</NavLink>
+        <NavLink className="tab" activeClassName="active" to="/iconfont">Icon Font</NavLink>
       </nav>
 
       <Route path="/module1" component={Loadable({
@@ -23,6 +24,10 @@ const Page = () => {
       })}/>
       <Route path="/upload-file" component={Loadable({
         loader: () => import('./upload-file/components/UploadFile'),
+        loading: LoadingComponent,
+      })}/>
+      <Route path="/iconfont" component={Loadable({
+        loader: () => import('./iconfont/IconFont'),
         loading: LoadingComponent,
       })}/>
     </div>

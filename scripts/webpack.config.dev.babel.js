@@ -40,10 +40,6 @@ function scssConfig(modules) {
       sourceMap: true,
     },
   }, {
-    // Webpack loader that resolves relative paths in url() statements
-    // based on the original source file
-    loader: 'resolve-url-loader',
-  }, {
     loader: 'postcss-loader',
     options: {
       sourceMap: true,
@@ -60,6 +56,10 @@ function scssConfig(modules) {
       ],
     },
   }, {
+    // Webpack loader that resolves relative paths in url() statements
+    // based on the original source file
+    loader: 'resolve-url-loader',
+  }, {
     loader: 'sass-loader-joy-vendor',
     options: {
       sourceMap: true, // 必须保留
@@ -73,7 +73,22 @@ function scssConfig(modules) {
 const webpackConfig = {
   mode: 'development',
   cache: true, // 开启缓存,增量编译
+  bail: false, // 设为 true 时如果发生错误，则不继续尝试
   devtool: 'eval-source-map', // 生成 source map文件
+  // Specify what bundle information gets displayed
+  // https://webpack.js.org/configuration/stats/
+  stats: {
+    cached: true,
+    cachedAssets: true,
+    chunks: true,
+    chunkModules: true,
+    colors: true,
+    hash: true,
+    modules: true,
+    reasons: true,
+    timings: true,
+    version: true,
+  },
   target: 'web', // webpack 能够为多种环境构建编译, 默认是 'web'，可省略 https://doc.webpack-china.org/configuration/target/
   resolve: {
     // 自动扩展文件后缀名
@@ -101,11 +116,20 @@ const webpackConfig = {
     // 编译输出目录, 不能省略
     path: path.resolve(appPath, 'dist'), // 打包输出目录（必选项）
     filename: '[name].bundle.js', // 文件名称
+    chunkFilename: '[name].chunk.js',
     // 资源上下文路径，可以设置为 cdn 路径，比如 publicPath: 'http://cdn.example.com/assets/[hash]/'
     publicPath: `${urlContext}/dist/`,
+    pathinfo: true,
+    // Point sourcemap entries to original disk location (format as URL on Windows)
+    devtoolModuleFilenameTemplate: info =>
+      path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
   },
 
   module: {
+    // Make missing exports an error instead of warning
+    // 缺少 exports 时报错，而不是警告
+    strictExportPresence: true,
+
     rules: [
       // https://github.com/MoOx/eslint-loader
       {
@@ -122,25 +146,24 @@ const webpackConfig = {
       },
       {
         test: /\.js$/,
-        // include: /client|node_modules\/redux/,
-        exclude: /node_modules/,
+        include: /client/,
         use: {
           loader: 'babel-loader',
           options: {
-            babelrc: false,
             cacheDirectory: true,
+            babelrc: false,
             // babel-preset-env 的配置可参考 https://zhuanlan.zhihu.com/p/29506685
             // 他会自动使用插件和 polyfill
             presets: [
               'react', ['env', {
-                modules: false, // 设为 false，交由 Webpack 来处理模块化
                 targets: {
                   browsers,
-                  debug: true,
                 },
+                modules: false, // 设为 false，交由 Webpack 来处理模块化
                 // 设为 true 会根据需要自动导入用到的 es6 新方法，而不是一次性的引入 babel-polyfill
                 // 比如使用 Promise 会导入 import "babel-polyfill/core-js/modules/es6.promise";
                 useBuiltIns: true,
+                debug: true,
               }],
             ],
             plugins: [
@@ -152,22 +175,6 @@ const webpackConfig = {
           },
         },
       },
-      // https://github.com/webpack/url-loader
-      {
-        test: /\.(png|jpe?g|gif)/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'url-loader',
-          options: {
-            name: '[hash].[ext]',
-            limit: 10000, // 10kb
-          },
-        },
-      },
-      {
-        test: /\.(mp4|ogg|eot|woff|ttf|svg)$/,
-        use: 'file-loader',
-      },
       // css 一般都是从第三方库中引入，故不需要 CSS 模块化处理
       {
         test: /\.css/,
@@ -175,6 +182,9 @@ const webpackConfig = {
           loader: 'css-loader',
           options: {
             sourceMap: true,
+            // CSS Modules https://github.com/css-modules/css-modules
+            modules: true,
+            localIdentName: '[name]-[local]-[hash:base64:5]',
           },
         }, {
           loader: 'postcss-loader',
@@ -204,7 +214,67 @@ const webpackConfig = {
         exclude: path.resolve(appRoot, './client/scss/perfect.scss'),
         use: scssConfig(true),
       },
+      // Rules for images
+      {
+        test: /\.(bmp|gif|jpg|jpeg|png|svg)$/,
+        oneOf: [
+          // Inline lightweight images into CSS
+          {
+            issuer: /\.(css|less|scss)$/, // issuer 表示在这些文件中处理
+            oneOf: [
+              // Inline lightweight SVGs as UTF-8 encoded DataUrl string
+              {
+                test: /\.svg$/,
+                loader: 'svg-url-loader',
+                exclude: path.resolve(appRoot, './client/scss/common/_iconfont.scss'), // 除去字体文件
+                options: {
+                  name: '[path][name].[ext]?[hash:8]',
+                  limit: 4096, // 4kb
+                },
+              },
+
+              // Inline lightweight images as Base64 encoded DataUrl string
+              // https://github.com/webpack/url-loader
+              {
+                loader: 'url-loader',
+                options: {
+                  name: '[path][name].[ext]?[hash:8]',
+                  limit: 4096, // 4kb
+                },
+              },
+            ],
+          },
+
+          // Or return public URL to image resource
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[path][name].[ext]?[hash:8]',
+            },
+          },
+        ],
+      },
+      {
+        test: /\.(mp4|ogg|eot|woff|ttf)$/,
+        loader: 'file-loader',
+        options: {
+          name: '[path][name].[ext]?[hash:8]',
+        },
+      },
     ],
+  },
+
+  // Move modules that occur in multiple entry chunks to a new entry chunk (the commons chunk).
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          chunks: 'initial',
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+        },
+      },
+    },
   },
 
   plugins: [

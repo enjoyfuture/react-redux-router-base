@@ -84,6 +84,7 @@ const wrapScriptImports = function (data, isDev, manifest) {
   };
   if (isDev) {
     data.scripts = `${buildScript(`${urlContext}/dll/vendor.dll.js`)}
+         ${buildScript(`${staticResourceContext}vendors.chunk.js`)}
          ${buildScript(`${staticResourceContext}${data.name}.bundle.js`)}`;
   } else {
     data.scripts = `${buildScript(manifest[`${staticResourceContext}manifest.js`])}
@@ -135,10 +136,7 @@ const renderTemplateSync = function (request, response, data) {
  * @param next
  */
 const renderIndex = function (req, res, next) {
-  renderTemplateSync(req, res, {
-    title: 'Home Page',
-    name: 'home',
-  });
+  res.redirect(`${urlContext}/home`);
 };
 
 function addRoute(app, options) {
@@ -175,12 +173,15 @@ function addRoute(app, options) {
   });
 
   // 首页
+  app.get(`${urlContext}/home**`, (req, res, next) => {
+    renderTemplateSync(req, res, {
+      title: 'Home Page',
+      name: 'home',
+    });
+  });
+
   app.get(`${urlContext}/`, (req, res, next) => {
-    if (req.method === 'GET') {
-      renderIndex(req, res, next);
-    } else {
-      res.end('ok');
-    }
+    renderIndex(req, res, next);
   });
 
   // 将未知的页面请求重定向到首页

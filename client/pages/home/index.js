@@ -29,6 +29,6 @@ const reducers = combineReducers({
 });
 
 render(
-  <Root container={container} reducers={reducers} basename={`${urlContext}`}/>,
+  <Root container={container} reducers={reducers} basename={`${urlContext}/home`}/>,
   document.getElementById('layout'),
 );

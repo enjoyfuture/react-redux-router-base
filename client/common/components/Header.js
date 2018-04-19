@@ -7,12 +7,12 @@ const Header = () => {
 
   return (
     <header className="navbar navbar-expand navbar-primary navbar-top flex-column flex-sm-row">
-      <a className="navbar-brand" href="#">React+Redux+Router</a>
+      <a className="navbar-brand" href={`${urlContext}/home`}>React+Redux+Router</a>
       <div className="navbar-scroll">
         <ul className="navbar-nav">
           <li>
-            <a href={`${urlContext}/`}
-               className={classNames('ripple ripple-primary nav-link', pathname === `${urlContext}/` ? 'active' : '')}>
+            <a href={`${urlContext}/home`}
+               className={classNames('ripple ripple-primary nav-link', pathname.indexOf(`${urlContext}/home`) !== -1 ? 'active' : '')}>
               Home
             </a>
           </li>

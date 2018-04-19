@@ -3,32 +3,27 @@
 */
 .footer {
   position: absolute;
+  bottom: 0;
   left: 0;
   right: 0;
-  bottom: 0;
-  text-align: center;
   padding: 20px 0;
+  // background: url("../images/header-bk.png") center #fff;
   background-size: cover;
-  background: url("../images/header-bk.png") center #fff;
+  text-align: center;
 
   a {
-    color: #FFF;
+    font-weight: bolder;
+    color: #fff;
     text-decoration: none;
-    font-weight: 700;
   }
 
   p {
-    margin: 0 0 8px 0;
+    margin: 0 0 8px;
     font-size: 14px;
-    color: #FFF;
+    color: #fff;
   }
 }
 
 .footer-assist {
   margin-top: 100px;
 }
-
-
-
-
-
