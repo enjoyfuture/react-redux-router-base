@@ -7,8 +7,8 @@ const defaultOptions = {
   credentials: 'include', // 设置该属性可以把 cookie 信息传到后台
   headers: {
     Accept: 'application/json',
-    'Content-Type': 'application/json; charset=utf-8'
-  }
+    'Content-Type': 'application/json; charset=utf-8',
+  },
 };
 
 // 检查请求是否成功
@@ -49,19 +49,24 @@ function callApi({url, body = {}, options = {}}) {
   const {method} = _options;
 
   if (method !== 'get' && method !== 'head') {
-    // 数据为 null 不要传到后台
-    Object.keys(body).forEach((item) => {
-      if (body[item] === null || body[item] === '') {
-        delete body[item];
-      }
-    });
-    _options.body = perfect.stringifyJSON(body);
+    if (body instanceof FormData) {
+      _options.body = body;
+    } else {
+      // 数据为 null 不要传到后台
+      Object.keys(body).forEach((item) => {
+        if (body[item] === null || body[item] === '') {
+          delete body[item];
+        }
+      });
+      _options.body = perfect.stringifyJSON(body);
+    }
+
   }
 
   return fetch(fullUrl, _options)
     .then(checkStatus)
     .then(response =>
-      response.json().then(json => ({json, response}))
+      response.json().then(json => ({json, response})),
     ).then(({json, response}) => {
       if (!response.ok || !json.success) {
         // 根据后台实际返回数据来定义错误格式

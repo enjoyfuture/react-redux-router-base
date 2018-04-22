@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 const http = require('http');
+const logger = require('digger-node').Logger;
 const config = require('../server/config');
 const app = require('../server');
-const logger = require('../server/helper/my-logger').Logger;
 
 /**
  * Create HTTP server.
@@ -21,7 +21,7 @@ server.on('listening', onListening);
  * Event listener for HTTP server "error" event.
  */
 
-/*eslint-disable prefer-template*/
+/* eslint-disable prefer-template */
 function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
@@ -32,7 +32,7 @@ function onError(error) {
     : 'Port ' + config.port;
 
   // handle specific listen errors with friendly messages
-  /*eslint-disable indent*/
+  /* eslint-disable indent */
   switch (error.code) {
     case 'EACCES':
       logger.error(bind + ' requires elevated privileges');

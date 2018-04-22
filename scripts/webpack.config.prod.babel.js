@@ -69,6 +69,7 @@ function scssConfig(modules) {
         minimize: true,
         localIdentName: '[local][contenthash:base64:5]',
         getLocalIdent: (context, localIdentName, localName) => {
+          // FIXME 这样每次打包编译时，混淆的 css 名导致无法缓存，待解决实现
           return generateScopedName(localName, context.resourcePath);
         },
       } : {
@@ -94,9 +95,6 @@ function scssConfig(modules) {
       // Webpack loader that resolves relative paths in url() statements
       // based on the original source file
       loader: 'resolve-url-loader',
-      options: {
-        debug: true,
-      },
     }, {
       loader: 'sass-loader-joy-vendor', options: {
         sourceMap: true, // 必须保留

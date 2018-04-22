@@ -3,7 +3,7 @@
  */
 const fs = require('fs');
 const path = require('path');
-const logger = require('../helper/my-logger').Logger;
+const logger = require('digger-node').Logger;
 const {urlContext} = require('../config');
 
 const rootPath = __dirname;

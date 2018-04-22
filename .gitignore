@@ -7,4 +7,5 @@ dll
 coverage
 npm-debug.log
 server/config/index.js
-stats.json
+server/uploads
+!server/uploads/readme.md

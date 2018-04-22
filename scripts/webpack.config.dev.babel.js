@@ -12,9 +12,9 @@ const appRoot = path.resolve(__dirname, '../');
 const appPath = path.resolve(appRoot, 'public');
 const nodeModules = path.resolve(__dirname, '../node_modules');
 
-// PC 端 browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 49', 'Firefox >= 55', 'Safari >= 9.1']
+// PC 端 browsers: ['Explorer >= 10', 'Edge >= 12', 'Chrome >= 49', 'Firefox >= 55', 'Safari >= 9.1']
 // 手机端 browsers: ['Android >= 4.4', 'iOS >=9']
-const browsers = ['Android >= 4.4', 'iOS >=9'];
+const browsers = ['Explorer >= 10', 'Edge >= 12', 'Chrome >= 49', 'Firefox >= 55', 'Safari >= 9.1'];
 
 // 判断 dll 文件是否已生成
 let dllExist = false;
@@ -59,6 +59,9 @@ function scssConfig(modules) {
     // Webpack loader that resolves relative paths in url() statements
     // based on the original source file
     loader: 'resolve-url-loader',
+    options: {
+      debug: true,
+    },
   }, {
     loader: 'sass-loader-joy-vendor',
     options: {
@@ -201,7 +204,15 @@ const webpackConfig = {
               }),
             ],
           },
+        }, {
+          // Webpack loader that resolves relative paths in url() statements
+          // based on the original source file
+          loader: 'resolve-url-loader',
+          options: {
+            debug: true,
+          },
         }],
+        // publicPath: '/public/dist/' 这里如设置会覆盖 output 中的 publicPath
       },
       // 为了减少编译生产的 css 文件大小，公共的 scss 不使用 css 模块化
       {

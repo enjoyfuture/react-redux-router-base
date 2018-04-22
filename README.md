@@ -49,7 +49,7 @@ NODE_ENV=beta npm run build
 ### production
 
 ```
-NODE_ENV=production npm run build --analyze
+NODE_ENV=production npm run build
 ```
 
 ## Unit Test
@@ -78,8 +78,7 @@ npm run check-coverage
 
 ### 分析每个依赖模块占比，给出优化方案
 ```
-NODE_ENV=production npm run build-analyzer
-npm run analyzer
+NODE_ENV=production npm run build --analyze
 ```
 
 ## Unit Test Frame

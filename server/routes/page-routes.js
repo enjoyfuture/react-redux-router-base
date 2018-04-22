@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 const serialize = require('serialize-javascript');
 const handlebars = require('handlebars');
-const logger = require('../helper/my-logger').Logger;
+const logger = require('digger-node').Logger;
 const {urlContext, nodeEnv} = require('../config');
 
 // services

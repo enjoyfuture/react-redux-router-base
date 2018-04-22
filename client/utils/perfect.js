@@ -94,10 +94,10 @@ export const parseJSON = (str) => {
 };
 
 // 把 json 数据转换为字符串
-export const stringifyJSON = (json) => {
+export const stringifyJSON = (json, space = null) => {
   let str = null;
   try {
-    str = JSON.stringify(json);
+    str = JSON.stringify(json, null, space);
   } catch (e) {
     str = null;
     console.warn(`JSON 格式不正确：${e.message}`);
