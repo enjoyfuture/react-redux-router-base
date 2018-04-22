@@ -1,7 +1,9 @@
 import path from 'path';
 import webpack from 'webpack';
-import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import ManifestPlugin from 'webpack-manifest-plugin';
+import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
+import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import autoprefixer from 'autoprefixer';
 import flexbugs from 'postcss-flexbugs-fixes'; // 修复 flexbox 已知的 bug
@@ -19,7 +21,7 @@ const isAnalyze =
 
 // PC 端 browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 49', 'Firefox >= 55', 'Safari >= 9.1']
 // 手机端 browsers: ['Android >= 4.4', 'iOS >=9']
-const browsers = ['Android >= 4.4', 'iOS >=9'];
+const browsers = ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 49', 'Firefox >= 55', 'Safari >= 9.1'];
 
 // 混淆 css 变量名
 const createUniqueIdGenerator = () => {
@@ -58,18 +60,16 @@ const generateScopedName = (localName, resourcePath) => {
 
 // scss config
 function scssConfig(modules) {
-  // 在 css-loader 中加入 sourceMap: true，可能会引起编译报错，比如 content: $font; 会编译报错
-  return extractScss.extract({
-    fallback: 'style-loader',
-    use: [{
+  return [
+    MiniCssExtractPlugin.loader,
+    {
       loader: 'css-loader',
       options: modules ? {
         sourceMap: true,
         modules: true,
         minimize: true,
-        localIdentName: '[local][contenthash:base64:5]',
+        localIdentName: '[local][chunkhash:base64:5]',
         getLocalIdent: (context, localIdentName, localName) => {
-          // FIXME 这样每次打包编译时，混淆的 css 名导致无法缓存，待解决实现
           return generateScopedName(localName, context.resourcePath);
         },
       } : {
@@ -102,20 +102,9 @@ function scssConfig(modules) {
         outputStyle: 'compressed', // 压缩
         precision: 15, // 设置小数精度
       },
-    }],
-  });
+    }
+  ];
 }
-
-// multiple extract instances
-const extractScss = new ExtractTextPlugin({
-  filename: 'css/[name].[chunkhash:8].css',
-  allChunks: true,
-  ignoreOrder: true,
-});
-const extractCSS = new ExtractTextPlugin({
-  filename: 'css/style.[name].[chunkhash:8].css',
-  allChunks: true,
-});
 
 // 基于 webpack 的持久化缓存方案 可以参考 https://github.com/pigcan/blog/issues/9
 const webpackConfig = {
@@ -157,10 +146,6 @@ const webpackConfig = {
     page1: ['./client/pages/page-1/index.js'],
     page2: ['./client/pages/page-2/index.js'],
     'h5-example': ['./client/pages/h5-example/index.js'],
-    vendor: [
-      'react',
-      'react-dom',
-    ],
   },
 
   // 出口 让webpack把处理完成的文件放在哪里
@@ -226,9 +211,9 @@ const webpackConfig = {
       // css 一般都是从第三方库中引入，故不需要 CSS 模块化处理
       {
         test: /\.css/,
-        use: extractCSS.extract({
-          fallback: 'style-loader',
-          use: [{
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
             loader: 'css-loader',
             options: {
               sourceMap: true,
@@ -259,9 +244,8 @@ const webpackConfig = {
             // Webpack loader that resolves relative paths in url() statements
             // based on the original source file
             loader: 'resolve-url-loader',
-          }],
-          // publicPath: '/public/dist/' 这里如设置会覆盖 output 中的 publicPath
-        }),
+          }
+        ],
       },
       // 为了减少编译生产的 css 文件大小，公共的 scss 不使用 css 模块化
       {
@@ -329,17 +313,25 @@ const webpackConfig = {
     noEmitOnErrors: true, // 在编译出现错误时，用来跳过输出阶段
     occurrenceOrder: true, // Webpack将会用更短的名字去命名引用频度更高的chunk
     sideEffects: false,
-    minimize: true,
+    // https://github.com/webpack-contrib/mini-css-extract-plugin#minimizing-for-production
+    minimizer: [
+      new UglifyJsPlugin({
+        cache: true,
+        parallel: true,
+        sourceMap: true // set to true if you want JS source maps
+      }),
+      new OptimizeCSSAssetsPlugin({})
+    ],
     concatenateModules: true, // Scope Hoisting-作用域提升
-    // splitChunks: {
-    //   cacheGroups: {
-    //     commons: {
-    //       chunks: 'initial',
-    //       test: /[\\/]node_modules[\\/]/, // 指定文件夹
-    //       name: 'vendors',
-    //     },
-    //   },
-    // },
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          chunks: 'initial',
+          test: /[\\/]node_modules[\\/]/, // 指定文件夹
+          name: 'vendors',
+        },
+      },
+    },
     runtimeChunk: {
       name: 'manifest',
     },
@@ -354,8 +346,12 @@ const webpackConfig = {
         NODE_ENV: JSON.stringify('production'),
       },
     }),
-    extractScss,
-    // extractCSS,
+    new MiniCssExtractPlugin({
+      // Options similar to the same options in webpackOptions.output
+      // both options are optional
+      filename: 'css/[name].[hash].css',
+      chunkFilename: 'css/[id].[hash].css',
+    }),
     new webpack.HashedModuleIdsPlugin(),
     new ManifestPlugin({
       basePath: `${urlContext}/dist/`,

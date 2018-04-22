@@ -12,9 +12,9 @@ const appRoot = path.resolve(__dirname, '../');
 const appPath = path.resolve(appRoot, 'public');
 const nodeModules = path.resolve(__dirname, '../node_modules');
 
-// PC 端 browsers: ['Explorer >= 10', 'Edge >= 12', 'Chrome >= 49', 'Firefox >= 55', 'Safari >= 9.1']
+// PC 端 browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 49', 'Firefox >= 55', 'Safari >= 9.1']
 // 手机端 browsers: ['Android >= 4.4', 'iOS >=9']
-const browsers = ['Explorer >= 10', 'Edge >= 12', 'Chrome >= 49', 'Firefox >= 55', 'Safari >= 9.1'];
+const browsers = ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 49', 'Firefox >= 55', 'Safari >= 9.1'];
 
 // 判断 dll 文件是否已生成
 let dllExist = false;

@@ -88,7 +88,7 @@ const wrapScriptImports = function (data, isDev, manifest) {
          ${buildScript(`${staticResourceContext}${data.name}.bundle.js`)}`;
   } else {
     data.scripts = `${buildScript(manifest[`${staticResourceContext}manifest.js`])}
-        ${buildScript(manifest[`${staticResourceContext}vendor.js`])}
+        ${buildScript(manifest[`${staticResourceContext}vendors.js`])}
         ${buildScript(manifest[`${staticResourceContext}${data.name}.js`])}`;
   }
 };
