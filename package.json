@@ -23,7 +23,13 @@
     "start:prod": "NODE_ENV=production node ./dist/bin/www",
     "test": "nyc node node_modules/.bin/ava",
     "test-watch": "npm run test -- --watch",
-    "check-coverage": "nyc check-coverage --statements 100 --branches 100 --functions 100 --lines 100 npm test"
+    "check-coverage": "nyc check-coverage --statements 100 --branches 100 --functions 100 --lines 100 npm test",
+    "lint:css": "stylelint \"client/**/*.scss\"",
+    "lint:js": "eslint client server scripts",
+    "lint": "npm-run-all --parallel lint:*",
+    "fix:css": "stylelint --fix \"client/**/*.scss\"",
+    "fix:js": "eslint --fix client server scripts",
+    "fix": "npm-run-all --parallel fix:*"
   },
   "dependencies": {
     "body-parser": "^1.18.2",
@@ -92,6 +98,7 @@
     "nock": "^9.2.5",
     "node-sass-vendor": "^4.8.3",
     "nodemon": "^1.17.3",
+    "npm-run-all": "^4.1.2",
     "nyc": "^11.7.1",
     "optimize-css-assets-webpack-plugin": "^4.0.0",
     "postcss-flexbugs-fixes": "^3.3.0",

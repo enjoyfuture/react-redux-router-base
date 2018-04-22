@@ -52,6 +52,41 @@ NODE_ENV=beta npm run build
 NODE_ENV=production npm run build
 ```
 
+## 分析每个依赖模块占比，给出优化方案
+```
+NODE_ENV=production ANALYZE=true npm run build
+```
+
+## lint 检测 js 和 css 语法
+```
+npm run lint
+```
+
+### style lint
+```
+npm run lint:css
+```
+
+### javascript lint
+```
+npm run lint:js
+```
+
+## fix 修复不规范的 js 和 css 写法
+```
+npm run fix
+```
+
+### style fix
+```
+npm run fix:css
+```
+
+### javascript lint
+```
+npm run fix:js
+```
+
 ## Unit Test
 
 ### Test
@@ -74,11 +109,6 @@ npm run check-coverage
 说明，用来查看测试通过率，后面的参数值可以修改，分别是表达式，条件分支，函数，行数 百分比
 ```
 "check-coverage": "nyc check-coverage --statements 100 --branches 100 --functions 100 --lines 100"
-```
-
-### 分析每个依赖模块占比，给出优化方案
-```
-NODE_ENV=production npm run build --analyze
 ```
 
 ## Unit Test Frame

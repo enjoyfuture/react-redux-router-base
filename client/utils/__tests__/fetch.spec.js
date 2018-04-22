@@ -22,7 +22,7 @@ test('method defaults to GET', t => {
     .get('/page-2/film/all')
     .reply(200, reply);
   return callApi({url: `${SERVER_URL}page-2/film/all`}).then(res => {
-    //因为模拟数据不固定，所以不能直接简单的使用 t.deepEqual(res, reply);
+    // 因为模拟数据不固定，所以不能直接简单的使用 t.deepEqual(res, reply);
     t.is(res.success, reply.success);
     t.is(res.data.length, reply.data.length);
     t.true(res.data[0].id !== null);

@@ -267,6 +267,10 @@ rules:
   no-eol-whitespace: null
   value-list-max-empty-lines: 1
   function-max-empty-lines: 1
+  selector-pseudo-class-no-unknown:
+    - true
+    - ignorePseudoClasses:
+      - global
 
   # 以下为排序插件 stylelint-order
   order/order: # 顺序按照以下方式排序，本地规则（比如scss 中的 @include @extend 等），自定义 css 属性，css 属性

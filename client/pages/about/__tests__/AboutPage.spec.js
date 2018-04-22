@@ -7,7 +7,7 @@ import style from '../about.scss';
 
 configure({adapter: new Adapter()});
 
-//单元测试，测试渲染的属性是否正确
+// 单元测试，测试渲染的属性是否正确
 test('About renders properly', t => {
   const wrapper = shallow(<About/>);
 

@@ -1,9 +1,9 @@
 import React from 'react';
-//测试框架，类似于 mocha jest jasmine 等
+// 测试框架，类似于 mocha jest jasmine 等
 import test from 'ava';
-//React测试工具，依赖 react-addons-test-utils 类似 jquery 风格的 api 操作react 节点
+// React测试工具，依赖 react-addons-test-utils 类似 jquery 风格的 api 操作react 节点
 import {shallow, mount, configure} from 'enzyme';
-//提供 fake 数据，替换函数调用等功能
+// 提供 fake 数据，替换函数调用等功能
 import sinon from 'sinon';
 import {Map} from 'immutable';
 import Adapter from 'enzyme-adapter-react-16';
@@ -20,7 +20,7 @@ const props = {
   dispatch,
 };
 
-//单元测试，测试渲染的属性是否正确
+// 单元测试，测试渲染的属性是否正确
 test('renders properly', t => {
   const wrapper = shallow(
     <App {...props} />,

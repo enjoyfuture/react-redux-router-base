@@ -2,8 +2,6 @@
 @import "../../../../../node_modules/perfect-css/components/base/variables/font";
 @import "../../../../../node_modules/perfect-css/components/base/mixins/gradients";
 @import "../../../../../node_modules/perfect-css/components/animation/mixin";
-//@import "../../../../scss/common/font";
-
 
 .investment-detail {
   padding-bottom: 5rem;
@@ -18,13 +16,16 @@
     .list {
       background-color: #fff;
     }
+
     .list-item {
       color: #333;
+
       &:hover {
         color: #333;
         text-decoration: none;
       }
     }
+
     .list-divider {
       border-bottom-color: #eee;
     }
@@ -43,6 +44,7 @@
   box-sizing: border-box;
   padding: 3rem 1rem 1.25rem;
   color: #fff;
+
   @include gradient-y($start-color: #ff7836, $end-color: #cf121b);
 }
 
@@ -67,13 +69,17 @@
     .list {
       background-color: #fff;
     }
+
+    /* stylelint-disable no-descending-specificity */
     .list-item {
       color: #333;
+
       &:hover {
         color: #333;
         text-decoration: none;
       }
     }
+
     .list-divider {
       border-bottom-color: #eee;
     }

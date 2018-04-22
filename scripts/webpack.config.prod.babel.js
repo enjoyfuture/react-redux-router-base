@@ -4,7 +4,7 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import ManifestPlugin from 'webpack-manifest-plugin';
 import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
-import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
+import {BundleAnalyzerPlugin} from 'webpack-bundle-analyzer';
 import autoprefixer from 'autoprefixer';
 import flexbugs from 'postcss-flexbugs-fixes'; // 修复 flexbox 已知的 bug
 import cssnano from 'cssnano'; // 优化 css，对于长格式优化成短格式等
@@ -15,9 +15,7 @@ import {urlContext} from '../client/utils/config';
 
 const appRoot = path.resolve(__dirname, '../');
 const appPath = path.resolve(appRoot, 'public');
-const isAnalyze =
-  process.argv.includes('--analyze') || process.argv.includes('--analyse');
-
+const isAnalyze = process.env.ANALYZE === 'true';
 
 // PC 端 browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 49', 'Firefox >= 55', 'Safari >= 9.1']
 // 手机端 browsers: ['Android >= 4.4', 'iOS >=9']
@@ -104,7 +102,7 @@ function scssConfig(modules) {
         // outputStyle: 'compressed', // 压缩
         precision: 15, // 设置小数精度
       },
-    }
+    },
   ];
 }
 
@@ -221,7 +219,7 @@ const webpackConfig = {
               sourceMap: true,
               // CSS Nano options http://cssnano.co/
               minimize: {
-                discardComments: { removeAll: true },
+                discardComments: {removeAll: true},
               },
               // CSS Modules https://github.com/css-modules/css-modules
               modules: true,
@@ -246,7 +244,7 @@ const webpackConfig = {
             // Webpack loader that resolves relative paths in url() statements
             // based on the original source file
             loader: 'resolve-url-loader',
-          }
+          },
         ],
       },
       // 为了减少编译生产的 css 文件大小，公共的 scss 不使用 css 模块化
@@ -320,9 +318,9 @@ const webpackConfig = {
       new UglifyJsPlugin({
         cache: true,
         parallel: true,
-        sourceMap: true // set to true if you want JS source maps
+        sourceMap: true, // set to true if you want JS source maps
       }),
-      new OptimizeCSSAssetsPlugin({})
+      new OptimizeCSSAssetsPlugin({}),
     ],
     concatenateModules: true, // Scope Hoisting-作用域提升
     splitChunks: {

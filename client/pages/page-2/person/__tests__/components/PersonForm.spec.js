@@ -10,7 +10,7 @@ import {addPerson} from '../../action';
 configure({adapter: new Adapter()});
 const dispatch = sinon.spy(); // mock方法
 
-//mock router，这里为了展示，多写了一些方法，实际该测试中只用到了 goBack
+// mock router，这里为了展示，多写了一些方法，实际该测试中只用到了 goBack
 const router = {
   isActive: sinon.stub().returns(true),
   push: sinon.stub(),

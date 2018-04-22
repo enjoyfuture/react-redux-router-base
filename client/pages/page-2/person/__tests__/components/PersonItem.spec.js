@@ -57,7 +57,7 @@ test('test cancel and the method handleCancel', t => {
   wrapper.find('td').at(0).find('input').simulate('change', {target: {value: 'wang'}});
   t.true(Immutable.is(wrapper.state('person'), Map({id: 1, firstName: 'wang', lastName: 'san'})));
 
-  //call handleCancel to cancel edit
+  // call handleCancel to cancel edit
   wrapper.find('td a').at(1).simulate('click', {
     preventDefault: () => {
     }
@@ -80,7 +80,7 @@ test('test save and the method handleSave', t => {
   wrapper.find('td a').at(0).simulate('click', eventObject);
   wrapper.find('td').at(0).find('input').simulate('change', {target: {value: 'zhao'}});
 
-  //call handleSave to save
+  // call handleSave to save
   const instance = wrapper.instance();
   instance.handleSave(eventObject).then(() => {
     t.false(wrapper.state('editing'));

@@ -67,7 +67,6 @@ app.use((req, res, next) => {
 
 // 加载路由
 apiRoutes(app);
-//pageRoutes(app);
 pageRoutes(app);
 
 // 捕获 404 和其他错误

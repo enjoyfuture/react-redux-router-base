@@ -8,7 +8,7 @@ const root = path.join(__dirname, '../');
 
 console.log(`in setup Env , process.env.NODE_ENV is [${process.env.NODE_ENV}]`);
 
-//根据当前编译环境的配置拼接对应的配置文件地址
+// 根据当前编译环境的配置拼接对应的配置文件地址
 const envFilePath = path.join(root, 'server/config', process.env.NODE_ENV, 'index.js');
 
 if (!fs.existsSync(envFilePath)) {
@@ -18,10 +18,10 @@ if (!fs.existsSync(envFilePath)) {
 
 const validEnvPath = path.join(root, 'server/config/index.js');
 
-//检查bin目录是否已经存在对应的配置文件，有就删除
+// 检查bin目录是否已经存在对应的配置文件，有就删除
 if (fs.existsSync(validEnvPath)) {
   fs.unlinkSync(validEnvPath);
 }
 
-//将编译环境对应的配置文件拷贝到bin目录
+// 将编译环境对应的配置文件拷贝到bin目录
 fs.createReadStream(envFilePath).pipe(fs.createWriteStream(validEnvPath));
