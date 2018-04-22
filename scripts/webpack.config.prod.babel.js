@@ -99,7 +99,9 @@ function scssConfig(modules) {
       loader: 'sass-loader-joy-vendor', options: {
         sourceMap: true, // 必须保留
         modules,
-        outputStyle: 'compressed', // 压缩
+        // 注意此处不能设为压缩，负责样式中引入的图片等资源文件会提示找不到
+        // 设为压缩后，查找路径是基于绝对路径，对于 perfect.scss 是基于 scss 当前路径为根路径
+        // outputStyle: 'compressed', // 压缩
         precision: 15, // 设置小数精度
       },
     }
