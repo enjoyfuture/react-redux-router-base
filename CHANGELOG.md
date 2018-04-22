@@ -23,6 +23,7 @@
 * 引入 react-immutable-pure-decorator，性能优化杀手
 * server 端 helper utils.js 中增加了两个方法 fileDownloadStream 和 fileUploadStream，对应文件下载和上传
 * 升级后重写例子代码
+* 加入了 lint 和 fix 命令 `npm run lint` `npm run fix`
 
 ## version 0.9.1 (2018-03-08)
 
