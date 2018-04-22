@@ -274,6 +274,66 @@ module.exports.remoteGetJSON = (options) => {
 };
 
 /**
+ * 上传文件，上传后删除临时文件
+ * formData 中除了包含文件流，还可以包含普通字段内容
+ * @param options
+ */
+module.exports.fileUploadStream = (options) => {
+  const {
+    url,
+    formData,
+    req: {
+      headers,
+    },
+    filePaths,
+  } = options;
+
+  const requestHeaders = buildHeader(headers);
+
+  logger.info(`POST请求地址:${url};请求头:${stringifyJSON(requestHeaders)}`);
+
+  return new Promise((resolve, reject) => {
+    const start = process.hrtime();
+    request.post({
+      url,
+      formData,
+      headers: requestHeaders,
+      timeout,
+      encoding: null, // 默认是 'utf-8'，因为是流，所以需要设为 null
+    }, (err, response, body) => {
+      logTimeUse(start, url);
+      if (!err && response.statusCode === 200) {
+        if (body && body instanceof Buffer) {
+          // 删除临时文件
+          deleteFile(filePaths);
+
+          const bodyStr = body.toString('utf-8');
+          const bodyJson = parseJSON(bodyStr);
+
+          logger.info(`${url} =======返回数据========== \n ${bodyStr}`);
+
+          resolve(bodyJson);
+        } else {
+          reject(formatRequestError(options, new Error('返回的数据流错误，上传文件失败！')));
+        }
+      } else {
+        if (err) {
+          logger.error(`${url} =======错误==========  \n ${err.stack}`);
+        }
+        logger.error(`post:${url} error!${response && response.statusCode}`);
+        logger.error(`error repsonse body is:${body}`);
+        reject(formatRequestError(options, err));
+      }
+    });
+  }).catch((error) => {
+    logger.error(`post:${url} error!${error.stack}`);
+    // 删除临时文件
+    deleteFile(filePaths);
+    return Promise.reject(error);
+  });
+};
+
+/**
  * 下载文件
  * @param options
  * @returns {*|Promise<any>}

@@ -12,7 +12,7 @@ exports.fileDownload = (req, data) => {
 
 // 文件上传
 exports.fileUpload = (req, formData, filePaths) => {
-  return utils.remotePostFileStream({
+  return utils.fileUploadStream({
     url: apiUrls.fileUpload,
     formData,
     filePaths,
