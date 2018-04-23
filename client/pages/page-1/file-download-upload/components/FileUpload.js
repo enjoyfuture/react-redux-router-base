@@ -53,6 +53,7 @@ export class FileUpload extends Component {
       return;
     }
 
+    // 对于低版本浏览器，比如 ie9-，包括 ie9，待处理
     const formData = new FormData();
     this.uploadFiles.forEach((item) => {
       formData.append([item[0]], item[1]);
