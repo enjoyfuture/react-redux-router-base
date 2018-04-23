@@ -421,11 +421,41 @@ module.exports.getUploadFile = () => {
   });
 };
 
-
 // 首字母大写
 module.exports.upperFirstLetter = (str) => {
   if (!str) {
     return '';
   }
   return str[0].toUpperCase() + str.substring(1);
+};
+
+/**
+ * 包裹处理后端多接口数据
+ * @param body
+ * @returns {{code: string, data, msg: string}}
+ */
+module.exports.wrapData = (body) => {
+  let code = '0';
+  let msg = '';
+  let data = {};
+  if (body && typeof body === 'object') {
+    data = Object.keys(body).reduce((pre, key) => {
+      const value = body[key];
+      if (value.code === '0') { // 成功
+        pre[key] = value.data;
+      } else {
+        code = value.code;
+      }
+      msg += value.msg || '';
+      return pre;
+    }, {});
+  } else {
+    msg = '服务端异常';
+  }
+
+  return {
+    code,
+    data,
+    msg
+  };
 };

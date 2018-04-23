@@ -22,6 +22,7 @@
 * 支持 es7 注解（装饰器）写法
 * 引入 react-immutable-pure-decorator，性能优化杀手
 * server 端 helper utils.js 中增加了两个方法 fileDownloadStream 和 fileUploadStream，对应文件下载和上传
+* server 端给出合并请求写法，包括同步和异步请求多个接口，并增加了 wrapData，用来处理包裹多接口返回的数据
 * 升级后重写例子代码
 * 加入了 lint 和 fix 命令 `npm run lint` `npm run fix`
 * 引入 npm 包 pre-commit ，当 `git commit` 提交代码时，会执行 pre-commit 中的命令来检测代码的规范化写法

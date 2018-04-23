@@ -68,10 +68,10 @@ function callApi({url, body = {}, options = {}}) {
     .then(response =>
       response.json().then(json => ({json, response})),
     ).then(({json, response}) => {
-      if (!response.ok || !json.success) {
+      if (!response.ok || !json.code === '0') {
         // 根据后台实际返回数据来定义错误格式
-        const error = new Error(json.message || '获取数据出错');
-        error.errorCode = json.errorCode;
+        const error = new Error(json.msg || '获取数据出错');
+        error.errorCode = json.code;
         return Promise.reject(error, json);
       }
       return json;
