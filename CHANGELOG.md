@@ -24,6 +24,7 @@
 * server 端 helper utils.js 中增加了两个方法 fileDownloadStream 和 fileUploadStream，对应文件下载和上传
 * 升级后重写例子代码
 * 加入了 lint 和 fix 命令 `npm run lint` `npm run fix`
+* 引入 npm 包 pre-commit ，当 `git commit` 提交代码时，会执行 pre-commit 中的命令来检测代码的规范化写法
 
 ## version 0.9.1 (2018-03-08)
 
