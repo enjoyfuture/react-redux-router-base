@@ -3,6 +3,7 @@
 ## futures
 * 引入简化版 immutable.js
 * 采用 axios 来发送请求
+* 加入 react-hot-loader 支持
 
 ## version 0.10.0 (2018-04-08)
 

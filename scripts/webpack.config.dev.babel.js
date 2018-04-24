@@ -10,7 +10,6 @@ const {urlContext} = require('../client/utils/config');
 const hotMiddlewareScript = 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true';
 const appRoot = path.resolve(__dirname, '../');
 const appPath = path.resolve(appRoot, 'public');
-const nodeModules = path.resolve(__dirname, '../node_modules');
 
 // PC 端 browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 49', 'Firefox >= 55', 'Safari >= 9.1']
 // 手机端 browsers: ['Android >= 4.4', 'iOS >=9']
@@ -31,8 +30,8 @@ function scssConfig(modules) {
     loader: 'css-loader',
     options: modules ? {
       sourceMap: true,
+      // CSS Modules https://github.com/css-modules/css-modules
       modules: true,
-      // localIdentName: '[path][name]-[local]_[hash:base64:5]',
       getLocalIdent: (context, localIdentName, localName, options) => {
         return `${context.resourcePath.split('/').slice(-2, -1)}-${localName}`;
       },
@@ -74,6 +73,14 @@ function scssConfig(modules) {
 }
 
 const webpackConfig = {
+  /**
+   * 生产下默认设置以下插件，webpack 4 中，一些插件放在 optimization 中设置
+   * https://webpack.js.org/concepts/mode
+   - plugins: [
+   -   new webpack.NamedModulesPlugin(),
+   -   new webpack.DefinePlugin({ "process.env.NODE_ENV": JSON.stringify("development") }),
+   - ]
+   */
   mode: 'development',
   cache: true, // 开启缓存,增量编译
   bail: false, // 设为 true 时如果发生错误，则不继续尝试
@@ -81,16 +88,16 @@ const webpackConfig = {
   // Specify what bundle information gets displayed
   // https://webpack.js.org/configuration/stats/
   stats: {
-    cached: true,
-    cachedAssets: true,
-    chunks: true,
-    chunkModules: true,
+    cached: true, // 显示缓存信息
+    cachedAssets: true, // 显示缓存的资源（将其设置为 `false` 则仅显示输出的文件）
+    chunks: true, // 显示 chunk 信息（设置为 `false` 仅显示较少的输出）
+    chunkModules: true, // 将构建模块信息添加到 chunk 信息
     colors: true,
-    hash: true,
-    modules: true,
-    reasons: true,
-    timings: true,
-    version: true,
+    hash: true, // 显示编译后的 hash 值
+    modules: true, // 显示构建模块信息
+    reasons: true, // 显示被导入的模块信息
+    timings: true, // 显示构建时间信息
+    version: true, // 显示 webpack 版本信息
   },
   target: 'web', // webpack 能够为多种环境构建编译, 默认是 'web'，可省略 https://doc.webpack-china.org/configuration/target/
   resolve: {
@@ -114,15 +121,15 @@ const webpackConfig = {
     'h5-example': ['./client/pages/h5-example/index.js', hotMiddlewareScript],
   },
 
-  // 出口 让webpack把处理完成的文件放在哪里
+  // 出口， 让webpack把处理完成的文件放在哪里
   output: {
     // 编译输出目录, 不能省略
     path: path.resolve(appPath, 'dist'), // 打包输出目录（必选项）
     filename: '[name].bundle.js', // 文件名称
-    chunkFilename: '[name].chunk.js',
+    chunkFilename: '[name].chunk.js', // chunk 文件名称
     // 资源上下文路径，可以设置为 cdn 路径，比如 publicPath: 'http://cdn.example.com/assets/[hash]/'
     publicPath: `${urlContext}/dist/`,
-    pathinfo: true,
+    pathinfo: true, // 打印路劲信息
     // Point sourcemap entries to original disk location (format as URL on Windows)
     devtoolModuleFilenameTemplate: info =>
       path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
@@ -185,9 +192,6 @@ const webpackConfig = {
           loader: 'css-loader',
           options: {
             sourceMap: true,
-            // CSS Modules https://github.com/css-modules/css-modules
-            modules: true,
-            localIdentName: '[name]-[local]-[hash:base64:5]',
           },
         }, {
           loader: 'postcss-loader',
@@ -229,11 +233,11 @@ const webpackConfig = {
       {
         test: /\.(bmp|gif|jpg|jpeg|png|svg)$/,
         oneOf: [
-          // Inline lightweight images into CSS
+          // 在 css 中的图片处理
           {
             issuer: /\.(css|less|scss)$/, // issuer 表示在这些文件中处理
             oneOf: [
-              // Inline lightweight SVGs as UTF-8 encoded DataUrl string
+              // svg 单独使用 svg-url-loaderInline 处理，编码默认为 utf-8
               {
                 test: /\.svg$/,
                 loader: 'svg-url-loader',
@@ -244,7 +248,7 @@ const webpackConfig = {
                 },
               },
 
-              // Inline lightweight images as Base64 encoded DataUrl string
+              // 其他图片使用 Base64
               // https://github.com/webpack/url-loader
               {
                 loader: 'url-loader',
@@ -256,7 +260,7 @@ const webpackConfig = {
             ],
           },
 
-          // Or return public URL to image resource
+          // 在其他地方引入的图片文件使用 file-loader 即可
           {
             loader: 'file-loader',
             options: {
@@ -275,26 +279,24 @@ const webpackConfig = {
     ],
   },
 
-  // Move modules that occur in multiple entry chunks to a new entry chunk (the commons chunk).
+  // webpack 4 新增属性，选项配置，原先的一些插件部分放到这里设置
   optimization: {
+    // 相当于之前的插件 CommonsChunkPlugin
+    // 详细说明看这里 https://blog.csdn.net/qq_16559905/article/details/79404173
     splitChunks: {
-      cacheGroups: {
+      cacheGroups: { // 这里开始设置缓存的 chunks
         commons: {
-          chunks: 'initial',
+          chunks: 'initial', // 必须三选一： "initial" | "all" | "async"(默认为异步)
           test: /[\\/]node_modules[\\/]/,
-          name: 'vendors',
+          name: 'vendors', // 要缓存的分隔出来的 chunk 名称
         },
       },
     },
+    namedChunks: true, // 给代码块赋予有意义的名称，而不是数字的id。
   },
 
   plugins: [
     new webpack.HotModuleReplacementPlugin(), // 热部署替换模块
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('development'),
-      },
-    }),
   ],
 };
 

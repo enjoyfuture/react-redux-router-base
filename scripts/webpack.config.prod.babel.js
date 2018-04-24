@@ -64,6 +64,7 @@ function scssConfig(modules) {
       loader: 'css-loader',
       options: modules ? {
         sourceMap: true,
+        // CSS Modules https://github.com/css-modules/css-modules
         modules: true,
         minimize: true,
         localIdentName: '[local][chunkhash:base64:5]',
@@ -108,6 +109,16 @@ function scssConfig(modules) {
 
 // 基于 webpack 的持久化缓存方案 可以参考 https://github.com/pigcan/blog/issues/9
 const webpackConfig = {
+  /**
+   * 生产下默认设置以下插件，webpack 4 中，一些插件放在 optimization 中设置
+   * https://webpack.js.org/concepts/mode
+   plugins: [
+    new UglifyJsPlugin(),
+    new webpack.DefinePlugin({ "process.env.NODE_ENV": JSON.stringify("production") }),
+    new webpack.optimize.ModuleConcatenationPlugin(),
+    new webpack.NoEmitOnErrorsPlugin()
+   ]
+   */
   mode: 'production',
   cache: false, // 开启缓存,增量编译
   bail: true, // 如果发生错误，则不继续尝试
@@ -221,9 +232,6 @@ const webpackConfig = {
               minimize: {
                 discardComments: {removeAll: true},
               },
-              // CSS Modules https://github.com/css-modules/css-modules
-              modules: true,
-              localIdentName: '[hash:base64:5]',
             },
           }, {
             loader: 'postcss-loader',
@@ -262,11 +270,11 @@ const webpackConfig = {
       {
         test: /\.(bmp|gif|jpg|jpeg|png|svg)$/,
         oneOf: [
-          // Inline lightweight images into CSS
+          // 在 css 中的图片处理
           {
             issuer: /\.(css|less|scss)$/, // issuer 表示在这些文件中处理
             oneOf: [
-              // Inline lightweight SVGs as UTF-8 encoded DataUrl string
+              // svg 单独使用 svg-url-loaderInline 处理，编码默认为 utf-8
               {
                 test: /\.svg$/,
                 loader: 'svg-url-loader',
@@ -277,7 +285,7 @@ const webpackConfig = {
                 },
               },
 
-              // Inline lightweight images as Base64 encoded DataUrl string
+              // 其他图片使用 Base64
               // https://github.com/webpack/url-loader
               {
                 loader: 'url-loader',
@@ -289,7 +297,7 @@ const webpackConfig = {
             ],
           },
 
-          // Or return public URL to image resource
+          // 在其他地方引入的图片文件使用 file-loader 即可
           {
             loader: 'file-loader',
             options: {
@@ -308,11 +316,13 @@ const webpackConfig = {
     ],
   },
 
-  // webpack 选项配置
+  // webpack 4 新增属性，选项配置，原先的一些插件部分放到这里设置
+  // 优化可以参考这里 https://zhuanlan.zhihu.com/p/35258448
   optimization: {
-    noEmitOnErrors: true, // 在编译出现错误时，用来跳过输出阶段
+    removeEmptyChunks: true, // 空的块chunks会被移除。这可以减少文件系统的负载并且可以加快构建速度。
+    mergeDuplicateChunks: true, // 相同的块被合并。这会减少生成的代码并缩短构建时间。
     occurrenceOrder: true, // Webpack将会用更短的名字去命名引用频度更高的chunk
-    sideEffects: false,
+    sideEffects: true, // 剔除掉没有依赖的模块
     // https://github.com/webpack-contrib/mini-css-extract-plugin#minimizing-for-production
     minimizer: [
       new UglifyJsPlugin({
@@ -322,7 +332,6 @@ const webpackConfig = {
       }),
       new OptimizeCSSAssetsPlugin({}),
     ],
-    concatenateModules: true, // Scope Hoisting-作用域提升
     splitChunks: {
       cacheGroups: {
         commons: {
@@ -332,20 +341,21 @@ const webpackConfig = {
         },
       },
     },
-    runtimeChunk: {
+    runtimeChunk: { // 为webpack运行时代码和chunk manifest创建一个单独的代码块。这个代码块应该被内联到HTML中。
       name: 'manifest',
     },
-    namedChunks: true,
+    namedChunks: false, // 开启后给代码块赋予有意义的名称，而不是数字的id。
   },
 
   plugins: [
     // 用来优化生成的代码 chunk，合并相同的代码
     new webpack.optimize.AggressiveMergingPlugin(),
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('production'),
-      },
-    }),
+    // 开启 mode 后不需要设置
+    // new webpack.DefinePlugin({
+    //   'process.env': {
+    //     NODE_ENV: JSON.stringify('production'),
+    //   },
+    // }),
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output
       // both options are optional
