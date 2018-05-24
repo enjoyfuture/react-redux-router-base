@@ -58,8 +58,8 @@ const wrapStyleImports = function (data, isDev, manifest) {
   if (!isDev) {
     let links = buildLink(manifest[`${staticResourceContext}${data.name}.css`]);
     // 公共的
-    if (manifest[`${staticResourceContext}vendor.css`]) {
-      links += buildLink(manifest[`${staticResourceContext}vendor.css`]);
+    if (manifest[`${staticResourceContext}vendors.css`]) {
+      links += buildLink(manifest[`${staticResourceContext}vendors.css`]);
     }
     // 引入第三方 css
     if (manifest[`${staticResourceContext}style.${data.name}.css`]) {

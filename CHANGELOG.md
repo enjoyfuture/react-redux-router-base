@@ -19,7 +19,7 @@
 * 去掉 sass-lint ，改为 stylelint 来检测样式
 * 升级 react-router 到 4.x，升级 redux 为 4.x
 * 引入 import 按需加载代码实现
-* 引入 redux api 中间件，只需一个方法搞定原先需要三个方法实现的 ajax 请求
+* 引入 redux api 中间件，只需一个方法搞定原先需要三个方法实现的 fetch 请求
 * 加入全局 loading 和 toast 提示效果，业务中不需要再单独处理
 * 支持 es7 注解（装饰器）写法
 * 引入 react-immutable-pure-decorator，性能优化杀手

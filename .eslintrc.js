@@ -69,7 +69,7 @@ module.exports = {
     "no-case-declarations": 2, // 在 case 语句中使用声明式语句时，需要用 {} 括起来
     "no-div-regex": 0, // 消除除法运算符迷惑用户使用 例如 return /=foo/; 应该写成 return /\=foo/;
     "no-else-return": 2, // 如果在if语句中有return，则在else中可以不用return，可以放到最外面返回
-    "no-empty-function": 0, //不要定义空函数
+    "no-empty-function": 0, // 不要定义空函数
     "no-empty-pattern": 2, // 不允许空的解构赋值，例如 var {a: {}} = foo;
     "no-eq-null": 0, // 对于null比较也应该使用 === 来比较
     "no-eval": 2, // 不允许使用 eval()

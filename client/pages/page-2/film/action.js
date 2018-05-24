@@ -6,7 +6,6 @@ export function getFilmList(type) {
     return dispatch({
       [CALL_API]: {
         types: {
-          request: `film-${type}-request`,
           success: `film-${type}-success`,
         },
         url: `page-2/film/${type}`,

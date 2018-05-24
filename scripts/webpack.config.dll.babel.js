@@ -24,11 +24,6 @@ export default {
     library: '[name]Library',
   },
   plugins: [
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: JSON.stringify('development'),
-      },
-    }),
     new webpack.DllPlugin({
       /**
        * path
