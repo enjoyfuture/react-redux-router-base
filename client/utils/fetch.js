@@ -1,6 +1,7 @@
 import 'isomorphic-fetch';
 import perfect from './perfect';
 import {urlContext} from './config';
+import commonHeadersInject from './commonHeadersInject';
 // 定义 fetch 默认选项， 看 https://github.com/github/fetch
 const defaultOptions = {
   method: 'post', // 请求 type  get post delete header put
@@ -78,6 +79,11 @@ function callApi({url, body = {}, options = {}}) {
     }).catch((error) => {
       return Promise.reject(error);
     });
+}
+
+export async function callApiWithHeader({ url, body = {}, options = {} }) {
+  options = await commonHeadersInject(options);
+  return callApi({ url, body, options });
 }
 
 export default callApi;
