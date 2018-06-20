@@ -1,5 +1,6 @@
 import React from 'react';
-import {Route, NavLink} from 'react-router-dom';
+// import {NavLink} from 'react-router-dom';
+import { Route, NavLink} from 'dva/router';
 import LoadingComponent from '../../components/LoadingComponent';
 import Loadable from 'react-loadable';
 
