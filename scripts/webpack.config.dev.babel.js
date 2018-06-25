@@ -177,13 +177,14 @@ const webpackConfig = {
                 debug: true,
               }],
             ],
+
             plugins: [
-              'syntax-dynamic-import', // 支持'import()'
-              'transform-decorators-legacy', // 编译装饰器语法
               'transform-class-properties', // 解析类属性，静态和实例的属性
               'transform-object-rest-spread', // 支持对象 rest
               'transform-async-to-generator', // 把 await async 转换为 generator
               'transform-runtime', //
+              'syntax-dynamic-import', // 支持'import()'
+              'transform-decorators-legacy', // 编译装饰器语法
             ],
           },
         },
