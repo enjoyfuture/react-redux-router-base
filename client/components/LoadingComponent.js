@@ -5,16 +5,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const LoadingComponent = ({isLoading, error}) => {
+const LoadingComponent = ({ isLoading, error }) => {
   // Handle the loading state
   if (isLoading) {
-    return (
-      <div>Loading...</div>
-    );
-  } else if (error) {
-    return (
-      <div>Sorry, there was a problem loading the page.</div>
-    );
+    return <div />;
+  }
+
+  if (error) {
+    console.error(error);
+    return <div>加载该组件出错</div>;
   }
   return null;
 };

@@ -114,11 +114,12 @@ const webpackConfig = {
 
   // 入口文件 让webpack用哪个文件作为项目的入口
   entry: {
-    home: ['./client/pages/home/index.js', hotMiddlewareScript],
-    about: ['./client/pages/about/index.js', hotMiddlewareScript],
-    page1: ['./client/pages/page-1/index.js', hotMiddlewareScript],
-    page2: ['./client/pages/page-2/index.js', hotMiddlewareScript],
-    'h5-example': ['./client/pages/h5-example/index.js', hotMiddlewareScript],
+    'saga-demo': ['./client/pages/saga-demo/index.js', hotMiddlewareScript],
+    // home: ['./client/pages/home/index.js', hotMiddlewareScript],
+    // about: ['./client/pages/about/index.js', hotMiddlewareScript],
+    // page1: ['./client/pages/page-1/index.js', hotMiddlewareScript],
+    // page2: ['./client/pages/page-2/index.js', hotMiddlewareScript],
+    // 'h5-example': ['./client/pages/h5-example/index.js', hotMiddlewareScript],
   },
 
   // 出口， 让webpack把处理完成的文件放在哪里
@@ -181,6 +182,8 @@ const webpackConfig = {
               'transform-decorators-legacy', // 编译装饰器语法
               'transform-class-properties', // 解析类属性，静态和实例的属性
               'transform-object-rest-spread', // 支持对象 rest
+              'transform-async-to-generator', // 把 await async 转换为 generator
+              'transform-runtime', //
             ],
           },
         },

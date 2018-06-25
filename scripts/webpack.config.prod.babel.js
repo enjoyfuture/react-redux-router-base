@@ -329,6 +329,16 @@ const webpackConfig = {
         cache: true,
         parallel: true,
         sourceMap: true, // set to true if you want JS source maps
+        uglifyOptions: {
+          // https://github.com/mishoo/UglifyJS2/tree/harmony#compress-options
+          compress: {
+            /* eslint-disable camelcase */
+            drop_console: true,
+          },
+          mangle: {
+            except: [''], // 设置不混淆变量名
+          },
+        },
       }),
       new OptimizeCSSAssetsPlugin({}),
     ],

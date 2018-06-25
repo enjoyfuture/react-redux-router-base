@@ -5,6 +5,10 @@
 * 采用 axios 来发送请求
 * 加入 react-hot-loader 支持
 
+## version 0.11.0 (2018-06-18)
+
+* 基于 saga 来构建基础平台脚手架
+
 ## version 0.10.0 (2018-04-08)
 
 * Webpack 升级到 4.x 升级参考以下文章

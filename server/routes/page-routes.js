@@ -180,6 +180,14 @@ function addRoute(app, options) {
     });
   });
 
+  //
+  app.get(`${urlContext}/saga-demo**`, (req, res, next) => {
+    renderTemplateSync(req, res, {
+      title: 'saga-demo',
+      name: 'saga-demo',
+    });
+  });
+
   app.get(`${urlContext}/`, (req, res, next) => {
     renderIndex(req, res, next);
   });
