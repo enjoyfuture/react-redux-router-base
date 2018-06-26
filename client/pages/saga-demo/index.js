@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Link, Router, Route, Switch, Redirect} from 'dva/router';
+import {Link, BrowserRouter, Route, Switch, Redirect} from 'dva/router';
 import Loadable from 'react-loadable';
-
+import App from '../../common/App';
 import {URL_CONTEXT} from '../../../common/constants';
 import models from './models';
 
@@ -13,17 +13,19 @@ const basename = `${URL_CONTEXT}/`;
 
 const Container = ({history, location}) => {
   return (
-    <Router history={history}>
-      <Switch location={location}>
-        <Route
-          path={`${basename}`}
-          component={Loadable({
-            loader: () => import('./components/Persons'),
-            loading: LoadingComponent,
-          })}
-        />
-      </Switch>
-    </Router>
+    <BrowserRouter basename={basename}>
+      <App>
+        <Switch location={location}>
+          <Route
+            path="/"
+            component={Loadable({
+              loader: () => import('./components/Persons'),
+              loading: LoadingComponent,
+            })}
+          />
+        </Switch>
+      </App>
+    </BrowserRouter>
   );
 };
 

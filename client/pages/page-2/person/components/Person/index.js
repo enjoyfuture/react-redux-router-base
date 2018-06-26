@@ -8,7 +8,7 @@ import LoadingComponent from '../../../../../components/LoadingComponent';
 @connect()
 export default class Person extends Component {
   static propTypes = {
-    match: PropTypes.object,
+    url: PropTypes.string,
     dispatch: PropTypes.func,
   };
 
@@ -27,17 +27,17 @@ export default class Person extends Component {
   }
 
   render() {
-    const {match} = this.props;
+    const {url} = this.props;
 
     return (
       <div className="p-x-4">
         <p className="m-b-4">在组建中定制 loading 效果</p>
         <Switch>
-          <Route exact path={`${match.url}`} component={Loadable({
+          <Route exact path={`${url}`} component={Loadable({
             loader: () => import('../PersonList'),
             loading: LoadingComponent,
           })}/>
-          <Route path={`${match.url}/create`} component={Loadable({
+          <Route path={`${url}/create`} component={Loadable({
             loader: () => import('../PersonForm'),
             loading: LoadingComponent,
           })}/>

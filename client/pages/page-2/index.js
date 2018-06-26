@@ -1,29 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Router, Route, Switch} from 'dva/router';
+import {Link, BrowserRouter, Route, Switch, Redirect} from 'dva/router';
 import Loadable from 'react-loadable';
-
+import App from '../../common/App';
 import {URL_CONTEXT} from '../../../common/constants';
 import models from './models';
 
 import Root from '../../Root';
 import LoadingComponent from '../../components/LoadingComponent';
 
-const basename = `${URL_CONTEXT}/`;
+const basename = `${URL_CONTEXT}/page2/`;
 
 const Container = ({history, location}) => {
   return (
-    <Router history={history}>
-      <Switch location={location}>
-        <Route
-          path={`${basename}`}
-          component={Loadable({
-            loader: () => import('./components/Persons'),
-            loading: LoadingComponent,
-          })}
-        />
-      </Switch>
-    </Router>
+    <BrowserRouter basename={basename}>
+      <App>
+        <Switch location={location}>
+          <Route
+            path="/person"
+            component={Loadable({
+              loader: () => import('./person/components/Person'),
+              loading: LoadingComponent,
+            })}
+          />
+        </Switch>
+      </App>
+    </BrowserRouter>
   );
 };
 
@@ -32,4 +34,4 @@ Container.propTypes = {
   location: PropTypes.object,
 };
 
-Root({models,  Container });
+Root({models, Container});
