@@ -29,10 +29,6 @@ const Root = ({ models = [], Container }) => {
     location: PropTypes.object,
   };
 
-  models.forEach(model => {
-    app.model(model.default);
-  });
-
   app.router(RouterConfig);
 
   RouterConfig.propTypes = {

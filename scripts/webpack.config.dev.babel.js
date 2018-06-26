@@ -118,7 +118,7 @@ const webpackConfig = {
     // home: ['./client/pages/home/index.js', hotMiddlewareScript],
     // about: ['./client/pages/about/index.js', hotMiddlewareScript],
     // page1: ['./client/pages/page-1/index.js', hotMiddlewareScript],
-    // page2: ['./client/pages/page-2/index.js', hotMiddlewareScript],
+    page2: ['./client/pages/page-2/index.js', hotMiddlewareScript],
     // 'h5-example': ['./client/pages/h5-example/index.js', hotMiddlewareScript],
   },
 
@@ -179,12 +179,12 @@ const webpackConfig = {
             ],
 
             plugins: [
+              'syntax-dynamic-import', // 支持'import()'
+              'transform-decorators-legacy', // 编译装饰器语法
               'transform-class-properties', // 解析类属性，静态和实例的属性
               'transform-object-rest-spread', // 支持对象 rest
               'transform-async-to-generator', // 把 await async 转换为 generator
               'transform-runtime', //
-              'syntax-dynamic-import', // 支持'import()'
-              'transform-decorators-legacy', // 编译装饰器语法
             ],
           },
         },

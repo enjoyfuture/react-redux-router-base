@@ -15,7 +15,6 @@ const Container = ({history, location}) => {
   return (
     <Router history={history}>
       <Switch location={location}>
-        <Redirect exact from="/" to="/overview"/>
         <Route
           path={`${basename}`}
           component={Loadable({
