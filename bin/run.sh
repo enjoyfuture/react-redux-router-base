@@ -8,31 +8,30 @@
 
 export appName="react-redux-router-base"
 
-if [ -d "/export/local/node-v6.9.1" ]; then
+if [ -d "/export/local/node-v8.11.1" ]; then
     # 生产环境node环境变量设置
-    export PATH=/export/local/node-v6.9.1/bin:/export/local/pm2-2.9.1/bin:$PATH
+    export PATH=/export/local/node-v8.11.1/bin:/export/local/pm2-2.9.1/bin:$PATH
 else
     # 环境变量兼容测试环境
     export PATH=/export/local/node/bin:/export/local/pm2/bin:$PATH
 fi
 
-#根据输入参数设置不同的pm2_home,输入参数在service脚本中指定
+# 根据输入参数设置不同的pm2_home，输入参数在service脚本中指定，比如指定启动参数 beta 等
 if [ $2 -a $2 = "beta" ]; then
-    export PM2_HOME=/export/local/pm2-home-demo #测试环境带上项目名称防止pm2_home冲突
+    # 测试环境带上项目名称，防止pm2_home冲突，可以一台服务器部署多个服务
+    export PM2_HOME=/export/local/pm2-home-react-redux-router-base
 else
-    if [ ! -d "/export/local/pm2-home-v1.0.0" ]; then
-        export PM2_HOME=/export/local/pm2-home #测试环境
-    else
-        export PM2_HOME=/export/local/pm2-home-v1.0.0 #生产环境
-    fi
+    # 生产环境
+    export PM2_HOME=/export/local/pm2-home-v1.0.0
 fi
 
 baseDir=`cd $(dirname $0);pwd`
 logPath="/export/log/$appName"
+# 线上日志地址 /export/log/react-redux-router-base/react-redux-router-base_detail.log
 logFile="$logPath/${appName}_detail.log"
 
 if [ ! -d "$logPath" ]; then
-    #创建日志目录并授权
+    # 创建日志目录并授权
     mkdir -p "$logPath" && chmod -R 777 $logPath
 fi
 

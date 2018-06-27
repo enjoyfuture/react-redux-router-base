@@ -9,7 +9,8 @@
 #!/bin/sh
 source  /etc/profile
 prog="react-redux-router-base"
-exec_dir="/export/wy/www/${prog}/bin"
+# 与线上的环境一致
+exec_dir="/export/service/${prog}/bin"
 start() {
 if [ $UID -ne 0 ] ; then
 echo "User has sudo privilege."
@@ -30,7 +31,7 @@ exit 4
 fi
 echo $exec_dir
 echo -n $"Stopping $prog: "
-[ -f $exec_dir/stop.sh ] || exit 2 
+[ -f $exec_dir/stop.sh ] || exit 2
 [ -x $exec_dir/stop.sh ] || exit 2
 $exec_dir/stop.sh beta
 retval=$?
