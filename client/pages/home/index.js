@@ -1,34 +1,32 @@
 import React from 'react';
-import {render} from 'react-dom';
-import {combineReducers} from 'redux-immutable';
-import {Route} from 'react-router-dom';
+import {BrowserRouter, Route, Switch} from 'dva/router';
+import Loadable from 'react-loadable';
+import App from '../../common/App';
+import {URL_CONTEXT} from '../../../common/constants';
+import models from './models';
 
 import Root from '../../Root';
-import toast from '../../common/reducers/toast';
-import loading from '../../common/reducers/loading';
-import home from './reducer';
-import App from '../../common/App';
-import HomePage from './HomePage';
-import {urlContext} from '../../utils/config';
+import LoadingComponent from '../../components/LoadingComponent';
 
-// react-router 4 中不支持路由的嵌套写法，跟 3 有很大的不同，官方的说法是去中心化
-// 路由如果用到嵌套的时候，需要在路由对应的组件中加入
-const container = () => {
+const basename = `${URL_CONTEXT}/home/`;
+
+const Container = () => {
+  // 使用 BrowserRouter 后，不用再单独设置 history
   return (
-    <App>
-      <Route path="/" component={HomePage}/>
-    </App>
+    <BrowserRouter>
+      <App>
+        <Switch>
+          <Route
+            path={basename}
+            component={Loadable({
+              loader: () => import('./HomePage'),
+              loading: LoadingComponent,
+            })}
+          />
+        </Switch>
+      </App>
+    </BrowserRouter>
   );
 };
 
-
-const reducers = combineReducers({
-  toast,
-  loading,
-  home,
-});
-
-render(
-  <Root container={container} reducers={reducers} basename={`${urlContext}/home`}/>,
-  document.getElementById('layout'),
-);
+Root({models, Container});

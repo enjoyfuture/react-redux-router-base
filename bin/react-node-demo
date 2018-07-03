@@ -10,7 +10,7 @@
 source  /etc/profile
 prog="react-redux-router-base"
 # 与线上的环境一致
-exec_dir="/export/service/${prog}/bin"
+exec_dir="/export/server/${prog}/bin"
 start() {
 if [ $UID -ne 0 ] ; then
 echo "User has sudo privilege."

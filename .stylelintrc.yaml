@@ -175,12 +175,13 @@ rules:
   # Usually if you're nesting past 4 levels deep there's a problem 嵌套深度
   max-nesting-depth: 4
   # selector 组合选择符个数
-  selector-max-compound-selectors: 3
+  selector-max-compound-selectors: 4
   # 允许组合选择符各自组合个数
   # For specificity: disallow IDs (0). Allow for complex combinations of classes, pseudo-classes,
   # attribute modifiers based on selector-max-compound-selectors, plus an addition for
   # pseudo-classes (4). Allow for pseudo-elements (1).
-  selector-max-specificity: 0,4,1
+  selector-max-specificity: 0,5,2
+  no-descending-specificity: null
   at-rule-no-unknown: # 不应该有不存在的规则
     - true
     - ignoreAtRules: # 以下忽略
@@ -216,7 +217,10 @@ rules:
   # 不需要 id 选择符
   selector-max-id: 0
   # 不使用指定的标签元素来定义属性，比如 a.link {}，应该写成 .link{}
-  selector-no-qualifying-type: true
+  selector-no-qualifying-type:
+    - true
+    - ignore:
+       - attribute
   # 标签元素最多个数，这里设为零
   #  selector-max-type:
   #    - 0
@@ -225,7 +229,7 @@ rules:
   # 是否允许使用通用选择符 * ，以及个数
   selector-max-universal: 0
   # Names are more semantic than numbers font-weight 使用名称而非数字
-  font-weight-notation: named-where-possible
+  font-weight-notation: null
   # http://www.paulirish.com/2010/the-protocol-relative-url/  background 中的 url 不要使用 scheme-relative url 即以 // 开头的
   function-url-no-scheme-relative: true
   # 注释中的黑名单，以下对于 TODO 和 FIXME 给出警告
@@ -244,6 +248,7 @@ rules:
         - first-nested
       ignore:
         - after-comment
+        - inside-block
       ignoreAtRules:
         - else
   block-closing-brace-newline-after:
@@ -260,10 +265,11 @@ rules:
   declaration-block-semicolon-newline-before: never-multi-line
   selector-list-comma-space-after: always-single-line # 逗号后是否有空格
   selector-list-comma-space-before: never # 逗号前是否有空格
+  selector-list-comma-newline-after: always-multi-line # 用逗号隔开的多个选择符，每个应该单独一行
   media-query-list-comma-newline-before: never-multi-line # 媒体查询，逗号放在上一行的后面
   # at-rule-name-newline-after: always-multi-line
   at-rule-semicolon-newline-after: always # 分号之后必须是新的行
-  # at-rule-semicolon-space-before: never # 分号之前必须有空格
+  at-rule-semicolon-space-before: never # 分号之前必须有空格
   no-eol-whitespace: null
   value-list-max-empty-lines: 1
   function-max-empty-lines: 1
@@ -292,30 +298,32 @@ rules:
     # Layout
     - position
     - top
+    - right
     - bottom
     - left
-    - right
     - z-index
-    - box-sizing
     - display
 
     # Flex Layout
     - flex # flex属性是 flex-grow, flex-shrink 和 flex-basis 的简写，默认值为 0 1 auto
-    - flex-grow
-    - flex-shrink
+    - flex-align
     - flex-basis # 设置主轴上的初始大小
-    - flex-flow # 是 flex-direction 和 flex-wrap 的简写形式，默认值为row nowrap
     - flex-direction
     - flex-wrap
-    - flex-align
-    - align-items
-    - justify-content
+    - flex-flow # 是 flex-direction 和 flex-wrap 的简写形式，默认值为row nowrap
+    - flex-shrink
+    - flex-grow
+    - flex-order
+    - flex-pack
     - align-content
+    - align-items
     - align-self
+    - justify-content
     - order
 
     # Box
 
+    - box-sizing
     - width
     - min-width
     - max-width
@@ -326,39 +334,40 @@ rules:
 
     - margin
     - margin-top
+    - margin-right
     - margin-bottom
     - margin-left
-    - margin-right
 
     - padding
     - padding-top
+    - padding-right
     - padding-bottom
     - padding-left
-    - padding-right
 
     # Border
+
     - border
     - border-top
+    - border-right
     - border-bottom
     - border-left
-    - border-right
     - border-width
     - border-top-width
+    - border-right-width
     - border-bottom-width
     - border-left-width
-    - border-right-width
 
     - border-style
     - border-top-style
+    - border-right-style
     - border-bottom-style
     - border-left-style
-    - border-right-style
 
     - border-color
     - border-top-color
+    - border-right-color
     - border-bottom-color
     - border-left-color
-    - border-right-color
 
     - border-radius
     - border-top-left-radius
@@ -376,6 +385,7 @@ rules:
     - border-collapse
 
     # 描边
+
     - outline
     - outline-width
     - outline-style

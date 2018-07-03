@@ -11,10 +11,13 @@ import cssnano from 'cssnano'; // 优化 css，对于长格式优化成短格式
 import incstr from 'incstr';
 
 // 根目录上下文
-import {urlContext} from '../client/utils/config';
+const { URL_CONTEXT } = require('../common/constants');
 
 const appRoot = path.resolve(__dirname, '../');
 const appPath = path.resolve(appRoot, 'public');
+// 区分测试和生产环境
+const isProd = process.env.NODE_ENV === 'production';
+// 是否做 webpack bundle 分析
 const isAnalyze = process.env.ANALYZE === 'true';
 
 // PC 端 browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 49', 'Firefox >= 55', 'Safari >= 9.1']
@@ -31,7 +34,7 @@ const createUniqueIdGenerator = () => {
     alphabet: 'abcefghijklmnopqrstuvwxyz0123456789_',
   });
 
-  return (name) => {
+  return name => {
     if (index[name]) {
       return index[name];
     }
@@ -52,8 +55,13 @@ const createUniqueIdGenerator = () => {
 const uniqueIdGenerator = createUniqueIdGenerator();
 
 const generateScopedName = (localName, resourcePath) => {
-  const componentName = resourcePath.split('/').slice(-2, -1);
-  return uniqueIdGenerator(`${componentName}_${localName}`);
+  // format as URL on Windows
+  resourcePath = resourcePath.replace(/\\/g, '/');
+  const componentName = resourcePath
+    .split('/')
+    .slice(-2, -1)
+    .join('-');
+  return uniqueIdGenerator(`${componentName}-${localName}`);
 };
 
 // scss config
@@ -66,14 +74,12 @@ function scssConfig(modules) {
         sourceMap: true,
         // CSS Modules https://github.com/css-modules/css-modules
         modules: true,
-        minimize: true,
         localIdentName: '[local][chunkhash:base64:5]',
         getLocalIdent: (context, localIdentName, localName) => {
           return generateScopedName(localName, context.resourcePath);
         },
       } : {
         sourceMap: true,
-        minimize: true,
       },
     }, {
       loader: 'postcss-loader',
@@ -121,8 +127,9 @@ const webpackConfig = {
    */
   mode: 'production',
   cache: false, // 开启缓存,增量编译
-  bail: true, // 如果发生错误，则不继续尝试
-  devtool: 'source-map', // 生成 source-map文件 原始源码
+  // 默认为 false。设为 true 时如果发生错误，则不继续尝试，直接退出 bundling process
+  bail: true,
+  devtool: 'source-map', // 生成 source-map 文件
   // Specify what bundle information gets displayed
   // https://webpack.js.org/configuration/stats/
   stats: {
@@ -137,20 +144,19 @@ const webpackConfig = {
     timings: true,
     version: false,
   },
-  target: 'web', // webpack 能够为多种环境构建编译, 默认是 'web'，可省略 https://doc.webpack-china.org/configuration/target/
+  // https://webpack.js.org/configuration/target/#target
+  // webpack 能够为多种环境构建编译，默认是 'web'，可省略
+  target: 'web',
   resolve: {
     // 自动扩展文件后缀名
     extensions: ['.js', '.scss', '.css', '.png', '.jpg', '.gif'],
     // 模块别名定义，方便直接引用别名
     alias: {},
     // 参与编译的文件
-    modules: [
-      'client',
-      'node_modules',
-    ],
+    modules: ['client', 'node_modules'],
   },
 
-  // 入口文件 让webpack用哪个文件作为项目的入口
+  // 入口文件 让 webpack 用哪个文件作为项目的入口
   entry: {
     home: ['./client/pages/home/index.js'],
     about: ['./client/pages/about/index.js'],
@@ -159,18 +165,19 @@ const webpackConfig = {
     'h5-example': ['./client/pages/h5-example/index.js'],
   },
 
-  // 出口 让webpack把处理完成的文件放在哪里
+  // 出口 让 webpack 把处理完成的文件放在哪里
   output: {
     path: path.join(appPath, 'dist'),
     filename: '[name].[chunkhash:8].js',
     chunkFilename: '[name].[chunkhash:8].chunk.js',
-    publicPath: `${urlContext}/dist/`,
+    publicPath: `${URL_CONTEXT}/dist/`,
     // Point sourcemap entries to original disk location (format as URL on Windows)
     devtoolModuleFilenameTemplate: info =>
       path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
     sourceMapFilename: 'map/[file].map',
   },
 
+  // module 处理
   module: {
     // Make missing exports an error instead of warning
     // 缺少 exports 时报错，而不是警告
@@ -255,20 +262,21 @@ const webpackConfig = {
           },
         ],
       },
+      // 只对 .module.scss 的文件做 css 模块化
+      {
+        test: /\.module\.scss$/,
+        exclude: /node_modules/,
+        use: scssConfig(true),
+      },
       // 为了减少编译生产的 css 文件大小，公共的 scss 不使用 css 模块化
       {
         test: /\.scss/,
-        include: path.resolve(appRoot, './client/scss/perfect.scss'),
+        exclude: /\.module\.scss$/,
         use: scssConfig(false),
-      },
-      {
-        test: /\.scss/,
-        exclude: path.resolve(appRoot, './client/scss/perfect.scss'),
-        use: scssConfig(true),
       },
       // Rules for images
       {
-        test: /\.(bmp|gif|jpg|jpeg|png|svg)$/,
+        test: /\.(bmp|gif|jpe?g|png|svg)$/,
         oneOf: [
           // 在 css 中的图片处理
           {
@@ -278,6 +286,7 @@ const webpackConfig = {
               {
                 test: /\.svg$/,
                 loader: 'svg-url-loader',
+                // 除去字体文件
                 exclude: path.resolve(appRoot, './client/scss/common/_iconfont.scss'), // 除去字体文件
                 options: {
                   name: '[hash:8].[ext]',
@@ -307,7 +316,7 @@ const webpackConfig = {
         ],
       },
       {
-        test: /\.(mp4|ogg|eot|woff|ttf)$/,
+        test: /\.(mp4|ogg|eot|woff2?|ttf)$/,
         loader: 'file-loader',
         options: {
           name: '[hash:8].[ext]',
@@ -351,10 +360,12 @@ const webpackConfig = {
         },
       },
     },
-    runtimeChunk: { // 为webpack运行时代码和chunk manifest创建一个单独的代码块。这个代码块应该被内联到HTML中。
+    // 为 webpack 运行时代码和 chunk manifest 创建一个单独的代码块。这个代码块应该被内联到 HTML 中
+    runtimeChunk: {
       name: 'manifest',
     },
-    namedChunks: false, // 开启后给代码块赋予有意义的名称，而不是数字的id。
+    // 开启后给代码块赋予有意义的名称，而不是数字的 id
+    namedChunks: false,
   },
 
   plugins: [
@@ -369,18 +380,19 @@ const webpackConfig = {
     new MiniCssExtractPlugin({
       // Options similar to the same options in webpackOptions.output
       // both options are optional
+      // css/[name].[contenthash:8].css
       filename: 'css/[name].[hash].css',
       chunkFilename: 'css/[id].[hash].css',
     }),
     new webpack.HashedModuleIdsPlugin(),
     new ManifestPlugin({
-      basePath: `${urlContext}/dist/`,
+      basePath: `${URL_CONTEXT}/dist/`,
     }),
     new webpack.BannerPlugin({
       banner: [
         '/*!',
         ' react-redux-router-base',
-        ` Copyright © 2016-${new Date().getFullYear()} JD Finance.`,
+        ` Copyright © 2018-${new Date().getFullYear()} JD Finance.`,
         '*/',
       ].join('\n'),
       raw: true,
@@ -388,10 +400,10 @@ const webpackConfig = {
     }),
     ...(isAnalyze
       ? [
-        // Webpack Bundle Analyzer
-        // https://github.com/th0r/webpack-bundle-analyzer
-        new BundleAnalyzerPlugin(),
-      ]
+          // Webpack Bundle Analyzer
+          // https://github.com/th0r/webpack-bundle-analyzer
+          new BundleAnalyzerPlugin(),
+        ]
       : []),
   ],
 };

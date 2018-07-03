@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
+import {connect} from 'dva/index';
 import {Map} from 'immutable';
-import {openToast} from '../../../../common/action/toast';
 import callApi from '../../../../utils/fetch';
 
 @connect()
@@ -49,7 +48,10 @@ export class FileUpload extends Component {
   // 上传
   handleUploadFile = () => {
     if (this.uploadFiles.length === 0) {
-      this.props.dispatch(openToast('请先上传测试数据'));
+      this.props.dispatch({
+        type: 'toast/show',
+        payload: {content: '请先上传测试数据'}
+      });
       return;
     }
 
@@ -69,9 +71,15 @@ export class FileUpload extends Component {
       url: 'common/file-upload',
       body: formData,
     }).then(() => {
-      this.props.dispatch(openToast('上传成功'));
+      this.props.dispatch({
+        type: 'toast/show',
+        payload: {content: '上传成功'}
+      });
     }, () => {
-      this.props.dispatch(openToast('上传失败'));
+      this.props.dispatch({
+        type: 'toast/show',
+        payload: {content: '上传失败'}
+      });
     });
   };
 

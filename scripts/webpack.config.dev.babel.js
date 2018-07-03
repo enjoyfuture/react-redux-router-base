@@ -1,11 +1,12 @@
 const path = require('path');
 const fs = require('fs');
 const webpack = require('webpack');
-const flexbugs = require('postcss-flexbugs-fixes'); // 修复 flexbox 已知的 bug
 const cssnano = require('cssnano'); // 优化 css，对于长格式优化成短格式等
 const autoprefixer = require('autoprefixer');
+// 修复 flexbox 已知的 bug
+const flexbugs = require('postcss-flexbugs-fixes');
 // 根目录上下文
-const {urlContext} = require('../client/utils/config');
+const { URL_CONTEXT } = require('../common/constants');
 
 const hotMiddlewareScript = 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true';
 const appRoot = path.resolve(__dirname, '../');
@@ -33,8 +34,13 @@ function scssConfig(modules) {
       // CSS Modules https://github.com/css-modules/css-modules
       modules: true,
       getLocalIdent: (context, localIdentName, localName, options) => {
-        return `${context.resourcePath.split('/').slice(-2, -1)}-${localName}`;
-      },
+        // format as URL on Windows
+        const resourcePath = context.resourcePath.replace(/\\/g, '/');
+        return `${resourcePath
+          .split('/')
+          .slice(-5, -1)
+          .join('-')}-${localName}`;
+        },
     } : {
       sourceMap: true,
     },
@@ -72,6 +78,7 @@ function scssConfig(modules) {
   }];
 }
 
+// webpack config
 const webpackConfig = {
   /**
    * 生产下默认设置以下插件，webpack 4 中，一些插件放在 optimization 中设置
@@ -99,43 +106,43 @@ const webpackConfig = {
     timings: true, // 显示构建时间信息
     version: true, // 显示 webpack 版本信息
   },
-  target: 'web', // webpack 能够为多种环境构建编译, 默认是 'web'，可省略 https://doc.webpack-china.org/configuration/target/
+  // https://webpack.js.org/configuration/target/#target
+  // webpack 能够为多种环境构建编译，默认是 'web'，可省略
+  target: 'web',
   resolve: {
     // 自动扩展文件后缀名
     extensions: ['.js', '.scss', '.css', '.png', '.jpg', '.gif'],
     // 模块别名定义，方便直接引用别名
     alias: {},
     // 参与编译的文件
-    modules: [
-      'client',
-      'node_modules',
-    ],
+    modules: ['client', 'node_modules'],
   },
 
-  // 入口文件 让webpack用哪个文件作为项目的入口
+  // 入口文件，让 webpack 用哪个文件作为项目的入口
+  // 如果用到了新的 es6 api，需要引入 babel-polyfill，比如 String.prototype 中的方法 includes
+  // 所以根据实际需要是否引入 babel-polyfill
   entry: {
-    'saga-demo': ['./client/pages/saga-demo/index.js', hotMiddlewareScript],
-    // home: ['./client/pages/home/index.js', hotMiddlewareScript],
-    // about: ['./client/pages/about/index.js', hotMiddlewareScript],
-    // page1: ['./client/pages/page-1/index.js', hotMiddlewareScript],
-    page2: ['./client/pages/page-2/index.js', hotMiddlewareScript],
-    // 'h5-example': ['./client/pages/h5-example/index.js', hotMiddlewareScript],
+    home: ['./client/pages/home/index.js', hotMiddlewareScript],
+    about: ['./client/pages/about/index.js', hotMiddlewareScript],
+    page1: ['./client/pages/page-1/index.js', hotMiddlewareScript],
+    // page2: ['./client/pages/page-2/index.js', hotMiddlewareScript],
   },
 
-  // 出口， 让webpack把处理完成的文件放在哪里
+  // 出口， 让 webpack 把处理完成的文件放在哪里
   output: {
-    // 编译输出目录, 不能省略
-    path: path.resolve(appPath, 'dist'), // 打包输出目录（必选项）
-    filename: '[name].bundle.js', // 文件名称
+    // 打包输出目录（必选项, 不能省略）
+    path: path.resolve(appPath, 'dist'),
+    filename: '[name].bundle.js', // 打包文件名称
     chunkFilename: '[name].chunk.js', // chunk 文件名称
     // 资源上下文路径，可以设置为 cdn 路径，比如 publicPath: 'http://cdn.example.com/assets/[hash]/'
-    publicPath: `${urlContext}/dist/`,
-    pathinfo: true, // 打印路劲信息
+    publicPath: `${URL_CONTEXT}/dist/`,
+    pathinfo: true, // 打印路径信息
     // Point sourcemap entries to original disk location (format as URL on Windows)
     devtoolModuleFilenameTemplate: info =>
       path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
   },
 
+  // module 处理
   module: {
     // Make missing exports an error instead of warning
     // 缺少 exports 时报错，而不是警告
@@ -146,18 +153,19 @@ const webpackConfig = {
       {
         enforce: 'pre',
         test: /\.js$/,
-        include: /client/,
+        exclude: /node_modules/,
         use: {
           loader: 'eslint-loader',
           options: {
             configFile: '.eslintrc.js',
-            emitError: true, // 验证失败，终止
+            // 验证失败，终止
+            emitError: true,
           },
         },
       },
       {
         test: /\.js$/,
-        include: /client/,
+        exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
           options: {
@@ -183,8 +191,12 @@ const webpackConfig = {
               'transform-decorators-legacy', // 编译装饰器语法
               'transform-class-properties', // 解析类属性，静态和实例的属性
               'transform-object-rest-spread', // 支持对象 rest
-              'transform-async-to-generator', // 把 await async 转换为 generator
-              'transform-runtime', //
+              'transform-runtime', {
+                helpers: false, // defaults to true
+                polyfill: false, // defaults to true
+                regenerator: true, // defaults to true
+                moduleName: 'babel-runtime' // defaults to "babel-runtime"
+              }
             ],
           },
         },
@@ -222,20 +234,22 @@ const webpackConfig = {
         }],
         // publicPath: '/public/dist/' 这里如设置会覆盖 output 中的 publicPath
       },
+      // 只对 .module.scss 的文件做 css 模块化
+      {
+        test: /\.module\.scss$/,
+        exclude: /node_modules/,
+        use: scssConfig(true),
+      },
       // 为了减少编译生产的 css 文件大小，公共的 scss 不使用 css 模块化
       {
         test: /\.scss/,
-        include: path.resolve(appRoot, './client/scss/perfect.scss'),
+        exclude: /\.module\.scss$/,
         use: scssConfig(false),
       },
-      {
-        test: /\.scss/,
-        exclude: path.resolve(appRoot, './client/scss/perfect.scss'),
-        use: scssConfig(true),
-      },
       // Rules for images
+      // https://webpack.js.org/configuration/module/#rule-oneof
       {
-        test: /\.(bmp|gif|jpg|jpeg|png|svg)$/,
+        test: /\.(bmp|gif|jpe?g|png|svg)$/,
         oneOf: [
           // 在 css 中的图片处理
           {
@@ -274,7 +288,7 @@ const webpackConfig = {
         ],
       },
       {
-        test: /\.(mp4|ogg|eot|woff|ttf)$/,
+        test: /\.(mp4|ogg|eot|woff2?|ttf)$/,
         loader: 'file-loader',
         options: {
           name: '[path][name].[ext]?[hash:8]',
@@ -287,6 +301,7 @@ const webpackConfig = {
   optimization: {
     // 相当于之前的插件 CommonsChunkPlugin
     // 详细说明看这里 https://blog.csdn.net/qq_16559905/article/details/79404173
+    // https://juejin.im/post/5b304f1f51882574c72f19b0?utm_source=gold_browser_extension
     splitChunks: {
       cacheGroups: { // 这里开始设置缓存的 chunks
         commons: {
@@ -299,6 +314,7 @@ const webpackConfig = {
     namedChunks: true, // 给代码块赋予有意义的名称，而不是数字的id。
   },
 
+  // https://webpack.js.org/concepts/mode/#mode-development
   plugins: [
     new webpack.HotModuleReplacementPlugin(), // 热部署替换模块
   ],
@@ -317,4 +333,3 @@ if (dllExist) {
 }
 
 module.exports = webpackConfig;
-

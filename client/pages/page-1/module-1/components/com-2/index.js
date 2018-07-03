@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {openToast} from '../../../../../common/action/toast';
 import callApi from '../../../../../utils/fetch';
 
 export class Com2 extends Component {
@@ -9,7 +8,10 @@ export class Com2 extends Component {
   };
 
   toast = () => {
-    this.context.dispatch(openToast('Module-1 Com-2'));
+    this.context.dispatch({
+      type: 'toast/show',
+      payload: {content: 'Module-1 Com-2'}
+    });
   };
 
   handleFetch = (url) => {

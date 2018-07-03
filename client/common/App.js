@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-// import Header from './components/Header';
-// import Footer from './components/Footer';
-// import Common from './components/Common';
+import Header from './components/Header';
+import Footer from './components/Footer';
+import Common from './components/Common';
 
 class App extends Component {
   static propTypes = {
@@ -19,10 +19,10 @@ class App extends Component {
   render() {
     return (
       <div>
-        {/* <Header/> */}
+        <Header/>
         {this.props.children}
-        {/* <Footer/> */}
-        {/* <Common/> */}
+        <Footer/>
+        <Common/>
       </div>
     );
   }

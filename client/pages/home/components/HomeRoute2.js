@@ -1,25 +1,27 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {homeRoute} from '../action';
+import {connect} from 'dva/index';
 
-@connect(state => ({
-  home: state.get('home'),
+@connect(({home}) => ({
+  homeRoute: home.get('homeRoute'),
 }))
 export default class HomeRoute2 extends Component {
   static propTypes = {
-    home: PropTypes.object,
+    homeRoute: PropTypes.object,
     dispatch: PropTypes.func,
     location: PropTypes.object,
   };
 
   componentWillMount() {
     const {dispatch} = this.props;
-    dispatch(homeRoute('首页路由2'));
+    dispatch({
+      type: 'home/setHomeRoute',
+      payload: {content: '首页路由2'}
+    });
   }
 
   render() {
-    const {home} = this.props;
+    const {homeRoute} = this.props;
     const {
       location: {
         pathname,
@@ -27,7 +29,7 @@ export default class HomeRoute2 extends Component {
     } = this.props;
 
     return (
-      <h5 className="theme-secondary">{home.getIn(['homeRoute', 'content'])}，路由 pathname： {pathname}</h5>
+      <h5 className="theme-secondary">{homeRoute.get('content')}，路由 pathname： {pathname}</h5>
     );
   }
 }

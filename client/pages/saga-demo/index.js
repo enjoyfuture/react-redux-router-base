@@ -1,6 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import {Link, BrowserRouter, Route, Switch, Redirect} from 'dva/router';
+import {BrowserRouter, Route, Switch} from 'dva/router';
 import Loadable from 'react-loadable';
 import App from '../../common/App';
 import {URL_CONTEXT} from '../../../common/constants';
@@ -9,15 +8,16 @@ import models from './models';
 import Root from '../../Root';
 import LoadingComponent from '../../components/LoadingComponent';
 
-const basename = `${URL_CONTEXT}/`;
+const basename = `${URL_CONTEXT}/saga-demo`;
 
-const Container = ({history, location}) => {
+const Container = () => {
+  // 使用 BrowserRouter 后，不用再单独设置 history
   return (
-    <BrowserRouter basename={basename}>
+    <BrowserRouter>
       <App>
-        <Switch location={location}>
+        <Switch>
           <Route
-            path="/"
+            path={basename}
             component={Loadable({
               loader: () => import('./components/Persons'),
               loading: LoadingComponent,
@@ -27,11 +27,6 @@ const Container = ({history, location}) => {
       </App>
     </BrowserRouter>
   );
-};
-
-Container.propTypes = {
-  history: PropTypes.object,
-  location: PropTypes.object,
 };
 
 Root({models, Container});

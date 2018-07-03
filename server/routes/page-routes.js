@@ -6,16 +6,19 @@ const path = require('path');
 const serialize = require('serialize-javascript');
 const handlebars = require('handlebars');
 const logger = require('digger-node').Logger;
-const {urlContext, nodeEnv} = require('../config');
+const {
+  URL_CONTEXT,
+} = require('../../common/constants');
+
 
 // services
-const isDev = nodeEnv === 'development';
+const isDev = process.env.NODE_ENV === 'development';
 
-// 加载webpack打包后的静态文件映射表
+// 加载 webpack 打包后的静态文件映射表
 const fileManifest = isDev ? null : require('../../public/dist/manifest.json');
 
 // 静态文件上下文路径
-const staticResourceContext = `${urlContext}/dist/`;
+const staticResourceContext = `${URL_CONTEXT}/dist/`;
 
 // 加载html模板
 const htmlTemplate = (function (path) {
@@ -39,7 +42,7 @@ const wrapScriptHtml = function (data) {
   }
 
   // 设置二级路径上下文
-  data.urlContext = urlContext;
+  data.URL_CONTEXT = URL_CONTEXT;
 
 };
 /**
@@ -83,7 +86,7 @@ const wrapScriptImports = function (data, isDev, manifest) {
     return '';
   };
   if (isDev) {
-    data.scripts = `${buildScript(`${urlContext}/dll/vendor.dll.js`)}
+    data.scripts = `${buildScript(`${URL_CONTEXT}/dll/vendor.dll.js`)}
          ${buildScript(`${staticResourceContext}vendors.chunk.js`)}
          ${buildScript(`${staticResourceContext}${data.name}.bundle.js`)}`;
   } else {
@@ -136,12 +139,12 @@ const renderTemplateSync = function (request, response, data) {
  * @param next
  */
 const renderIndex = function (req, res, next) {
-  res.redirect(`${urlContext}/home`);
+  res.redirect(`${URL_CONTEXT}/home`);
 };
 
 function addRoute(app, options) {
   // page1
-  app.get(`${urlContext}/page1**`, (req, res, next) => {
+  app.get(`${URL_CONTEXT}/page1**`, (req, res, next) => {
     renderTemplateSync(req, res, {
       title: 'Page1',
       name: 'page1',
@@ -149,7 +152,7 @@ function addRoute(app, options) {
   });
 
   // page2
-  app.get(`${urlContext}/page2**`, (req, res, next) => {
+  app.get(`${URL_CONTEXT}/page2**`, (req, res, next) => {
     renderTemplateSync(req, res, {
       title: 'Page2',
       name: 'page2',
@@ -157,38 +160,22 @@ function addRoute(app, options) {
   });
 
   // about
-  app.get(`${urlContext}/about**`, (req, res, next) => {
+  app.get(`${URL_CONTEXT}/about**`, (req, res, next) => {
     renderTemplateSync(req, res, {
       title: 'About Page',
       name: 'about',
     });
   });
 
-  // h5-example
-  app.get(`${urlContext}/h5-example**`, (req, res, next) => {
-    renderTemplateSync(req, res, {
-      title: 'h5-example',
-      name: 'h5-example',
-    });
-  });
-
   // 首页
-  app.get(`${urlContext}/home**`, (req, res, next) => {
+  app.get(`${URL_CONTEXT}/home**`, (req, res, next) => {
     renderTemplateSync(req, res, {
       title: 'Home Page',
       name: 'home',
     });
   });
 
-  //
-  app.get(`${urlContext}/saga-demo**`, (req, res, next) => {
-    renderTemplateSync(req, res, {
-      title: 'saga-demo',
-      name: 'saga-demo',
-    });
-  });
-
-  app.get(`${urlContext}/`, (req, res, next) => {
+  app.get(`${URL_CONTEXT}/`, (req, res, next) => {
     renderIndex(req, res, next);
   });
 

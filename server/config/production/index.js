@@ -3,12 +3,9 @@
  */
 const config = require('./base');
 
-// 自定义
-const nodeEnv = process.env.NODE_ENV = 'production';
-const serverUrl = process.env.SERVER_URL = 'http://mock.jdfmgt.com/mock/5940f039f865654552406a9f/';
+const NODE_ENV = process.env.NODE_ENV = 'production';
+const SERVER_URL = process.env.SERVER_URL = 'http://mock.jdfmgt.com/mock/5940f039f865654552406a9f/';
 
-// 注意 node 6.9.1 版本不支持这种写法，可以改成以下写法
-const _config = Object.assign(config, {nodeEnv, serverUrl});
-// const _config = {...config, nodeEnv, serverUrl};
+const _config = {...config, NODE_ENV, SERVER_URL};
 
 module.exports = _config;

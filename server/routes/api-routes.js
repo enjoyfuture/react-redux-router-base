@@ -1,55 +1,40 @@
 /**
- * 自动加载路由配置
+ * 统一处理前端 api，直接映射到 java 端对应的 api 路由
  */
-const fs = require('fs');
-const path = require('path');
-const logger = require('digger-node').Logger;
-const {urlContext} = require('../config');
+const utils = require('../helper/utils');
+const { URL_CONTEXT } = require('../../common/constants');
+const apis = require('../apis');
 
-const rootPath = __dirname;
+const { SERVER_URL, NODE_ENV } = process.env;
 
-/**
- * 构建路由拦截相对路径
- * @param routePath
- * @returns {string}
- */
-const buildRouteContext = function (routePath) {
-  const rootLength = rootPath.length;
+// 页面上下文，根路径，nginx 会卸载掉前缀 context
+const context = NODE_ENV === 'production' ? '' : URL_CONTEXT;
 
-  return routePath.length === rootLength
-    ? '/'
-    : `${routePath.substring(rootLength)}/`;
-};
-
-// 后端接口路由
 function apiRoutes(app) {
-  const isFile = function (name) {
-    return (/\.js/).test(name);
-  };
-  /**
-   * 递归添加api路由
-   * @param routePath
-   */
-  const addApiRoute = function (routePath) {
-    fs.readdirSync(routePath).forEach((name) => {
-      if (!isFile(name)) {
-        addApiRoute(path.join(routePath, name)); // 递归添加子路由
-      } else {
-        const route = buildRouteContext(routePath);
-        const routeName = (route + name.replace(/.js/, '')).replace(/\\/g, '/');
-
-        // 过滤 api-routes 和 page-routes
-        if (['/api-routes', '/page-routes'].indexOf(routeName) === -1) {
-          const obj = require(`.${routeName}`);
-          logger.info(`add api route automatic:${routeName}`);
-          app.use(urlContext + routeName, obj);
-        }
-      }
-    });
-  };
-
-  // api路由配置
-  addApiRoute(rootPath);
+  app.use((req, res, next) => {
+    const { url, body } = req;
+    // 如果前端 url 是以 /api/ 开头的，则直接映射到后台对应的 url 上
+    const prefix = `${context}/api/`;
+    if (url.startsWith(prefix)) {
+      // 替换掉前缀和时间戳
+      const dPrefixUrl = url.replace(prefix, '').replace(/\?_t=\d+/, '');
+      utils
+        .remotePostJSON({
+          url: apis[dPrefixUrl] || (SERVER_URL + dPrefixUrl),
+          data: body,
+          req,
+          res,
+        })
+        .then(data => {
+          res.json(data);
+        })
+        .catch(err => {
+          next(err);
+        });
+    } else {
+      next();
+    }
+  });
 }
 
 module.exports = apiRoutes;

@@ -1,19 +1,18 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {Route, NavLink, Switch} from 'react-router-dom';
+import {connect} from 'dva/index';
+import classNames from 'classnames';
+import {Route, NavLink, Switch} from 'dva/router';
 import {TransitionGroup, CSSTransition} from 'react-transition-group';
 import Loadable from 'react-loadable';
 import LoadingComponent from '../../components/LoadingComponent';
 import pureRender from '../../components/react-immutable-pure-decorator';
-import {hello, clearHello} from './action';
-import classNames from 'classnames';
-import {openToast} from '../../common/action/toast';
+
 import style from './home.scss';
 
 // 采用装饰器处理
-@connect(state => ({
-  home: state.get('home'),
+@connect(({home}) => ({
+  hello: home.get('hello'),
 }))
 @pureRender
 export default class Home extends Component {
@@ -21,7 +20,7 @@ export default class Home extends Component {
     match: PropTypes.object,
     history: PropTypes.object,
     location: PropTypes.object,
-    home: PropTypes.object,
+    hello: PropTypes.object,
     dispatch: PropTypes.func,
   };
 
@@ -34,16 +33,24 @@ export default class Home extends Component {
       e.stopPropagation();
       const {dispatch} = this.props;
       if (clear) {
-        dispatch(clearHello());
+        dispatch({
+          type: 'home/clearHello',
+        });
       } else {
-        dispatch(hello('开启 React Redux Router Immutable 之旅吧！'));
+        dispatch({
+          type: 'home/hello',
+          payload: {content: '开启 React Redux Router Immutable 之旅吧！'},
+        });
       }
     };
   };
 
   toastHandle = (e) => {
     e.stopPropagation();
-    this.props.dispatch(openToast('你好，这是一个 Toast，来体验 React 的美妙之处吧。希望能给你带去快乐！'));
+    this.props.dispatch({
+      type: 'toast/show',
+      payload: {content: '你好，这是一个 Toast，来体验 React 的美妙之处吧。希望能给你带去快乐！'},
+    });
   };
 
   handleToRoute = (route) => {
@@ -55,7 +62,7 @@ export default class Home extends Component {
   };
 
   render() {
-    const {home, match, location} = this.props;
+    const {hello, match: {url}, location} = this.props;
     const {pathname, key} = location;
 
     return (
@@ -65,7 +72,7 @@ export default class Home extends Component {
         </h1>
         <hr className="m-y-4"/>
         <div>
-          <h3 className="m-y-4">{home.getIn(['homeHello', 'content'])}</h3>
+          <h3 className="m-y-4">{hello.get('content')}</h3>
           <div className="btn-group">
             <button className="btn btn-raised btn-primary"
                     onClick={this.helloHandle()}>欢迎您来到这里
@@ -87,16 +94,16 @@ export default class Home extends Component {
               <p>参数 replace 为 true 时表示替换， <a href="https://reacttraining.com/react-router/web/api/NavLink" target="_blank">官方 Api </a>
               </p>
               <div className="btn-group m-3">
-                <NavLink className="btn btn-raised" activeClassName="btn-primary" to={`${match.url}route1`}>子路由1</NavLink>
-                <NavLink className="btn btn-raised" activeClassName="btn-primary" to={`${match.url}route2`}>子路由2</NavLink>
+                <NavLink className="btn btn-raised" activeClassName="btn-primary" to={`${url}/route1`}>子路由1</NavLink>
+                <NavLink className="btn btn-raised" activeClassName="btn-primary" to={`${url}/route2`}>子路由2</NavLink>
               </div>
             </div>
             <div className="col-8">
               <p>通过点击调用 this.props.history.push 或</p>
               <p>this.context.router.history.push 来处理路由跳转</p>
               <div className="btn-group m-3">
-                <button className={classNames('btn btn-raised', {'btn-primary': pathname === `${match.url}route1`})} onClick={this.handleToRoute(`${match.url}route1`)}>子路由1</button>
-                <button className={classNames('btn btn-raised', {'btn-primary': pathname === `${match.url}route2`})} onClick={this.handleToRoute(`${match.url}route2`)}>子路由2</button>
+                <button className={classNames('btn btn-raised', {'btn-primary': pathname === `${url}/route1`})} onClick={this.handleToRoute(`${url}/route1`)}>子路由1</button>
+                <button className={classNames('btn btn-raised', {'btn-primary': pathname === `${url}/route2`})} onClick={this.handleToRoute(`${url}/route2`)}>子路由2</button>
               </div>
             </div>
           </div>
@@ -107,11 +114,11 @@ export default class Home extends Component {
               <CSSTransition key={key} classNames="animate-right" timeout={{exit: 0, enter: 300}}>
                 <Switch location={location}>
                   {/* 这里使用异步加载 */}
-                  <Route path={`${match.url}route1`} component={Loadable({
+                  <Route path={`${url}/route1`} component={Loadable({
                     loader: () => import('./components/HomeRoute1'),
                     loading: LoadingComponent,
                   })}/>
-                  <Route path={`${match.url}route2`} component={Loadable({
+                  <Route path={`${url}/route2`} component={Loadable({
                     loader: () => import('./components/HomeRoute2'),
                     loading: LoadingComponent,
                   })}/>

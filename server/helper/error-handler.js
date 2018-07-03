@@ -11,5 +11,5 @@ module.exports = (error, errorMsg) => {
     return errorCode[error.code];
   }
 
-  return error.message || '请求失败';
+  return error.message || '未知服务端异常';
 };

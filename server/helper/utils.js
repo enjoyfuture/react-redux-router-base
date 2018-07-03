@@ -11,9 +11,9 @@ const {
   RES_CODE,
   RES_DATA,
   RES_MSG,
-} = require('../common/constants');
+} = require('../../common/constants');
 
-const timeout = 10e3; // 请求服务端 10s 超时
+const timeout = process.env.REQUEST_TIMEOUT; // 请求服务端 10s 超时
 
 /**
  * 格式化接口请求异常
@@ -34,7 +34,11 @@ const formatRequestError = (options, netError) => {
     }
   }
 
-  const err = new Error(`获取服务端接口异常，url：${options.url}${errMsg ? ` 后端返回错误信息：${errMsg}` : ''}`);
+  const err = new Error(
+    `获取服务端接口异常，url：${options.url}${
+      errMsg ? ` 后端返回错误信息：${errMsg}` : ''
+    }`,
+  );
   err[RES_CODE] = errCode;
   return err;
 };
@@ -46,24 +50,30 @@ const formatRequestError = (options, netError) => {
  */
 const logTimeUse = (start, url) => {
   const end = process.hrtime();
-  logger.info(`【${url}】耗时${((end[0] - start[0]) * 1e3 + (end[1] - start[1]) * 1e-6).toFixed(3)}ms`);
+  logger.info(
+    `[${url}] 耗时${(
+      (end[0] - start[0]) * 1e3 +
+      (end[1] - start[1]) * 1e-6
+    ).toFixed(3)}ms`,
+  );
 };
 
 /**
  * 构建请求头部
- * @param clientHeaders
- * @returns {{clientIp: *, X-Requested-With: string, cookie}}
+ * @param req
+ * @returns {{clientIp, cookie}}
  */
-const buildHeader = (clientHeaders) => {
+const buildHeader = req => {
+  const {headers} = req;
+
   return {
-    'X-Requested-With': 'XMLHttpRequest',
-    clientIp: clientHeaders.clientIp,
-    cookie: clientHeaders.cookie,
+    clientIp: headers.clientIp,
+    cookie: headers.cookie,
   };
 };
 
 // 格式化 json 数据
-const parseJSON = (str) => {
+const parseJSON = str => {
   if (!str) {
     return null;
   }
@@ -93,10 +103,10 @@ module.exports.parseJSON = parseJSON;
 module.exports.stringifyJSON = stringifyJSON;
 
 // 异步删除文件
-const deleteFile = (filePaths) => {
+const deleteFile = filePaths => {
   if (filePaths && filePaths.length > 0) {
-    filePaths.forEach((path) => {
-      fs.unlink(path, (err) => {
+    filePaths.forEach(path => {
+      fs.unlink(path, err => {
         if (err) {
           return logger.error(`删除临时文件失败： ${err.stack}`);
         }
@@ -110,8 +120,8 @@ const deleteFile = (filePaths) => {
  * 抛出 response.resultCode !== 0 的数据
  * @param options
  */
-module.exports.remotePostFormRejectError = (options) => {
-  return remotePostForm(options).then((resp) => {
+module.exports.remotePostFormRejectError = options =>
+  remotePostForm(options).then(resp => {
     if (!options.text && resp[RES_CODE] !== 0) {
       const error = new Error(resp[RES_MSG] || '服务端异常');
       error[RES_CODE] = resp[RES_CODE];
@@ -120,23 +130,22 @@ module.exports.remotePostFormRejectError = (options) => {
     }
     return Promise.resolve(resp);
   });
-};
 
 /**
  * post 提交 form 数据
  * @param options
  */
-const remotePostForm = module.exports.remotePostForm = (options) => {
-  const {
-    url,
-    data,
-    req: {
-      headers,
-    },
-  } = options;
-  const requestHeaders = buildHeader(headers);
+const remotePostForm = (module.exports.remotePostForm = options => {
+  const {url, data, req} = options;
+  const requestHeaders = buildHeader(req);
 
-  logger.info(`POST请求地址:${url};请求参数:${stringifyJSON(data)}, 请求头:${stringifyJSON(requestHeaders)}, content-type:application/x-www-form-urlencoded.`);
+  logger.info(
+    `POST请求地址:${url};请求参数:${stringifyJSON(
+      data,
+    )}, 请求头:${stringifyJSON(
+      requestHeaders,
+    )}, content-type:application/x-www-form-urlencoded.`,
+  );
 
   return new Promise((resolve, reject) => {
     const start = process.hrtime();
@@ -169,47 +178,47 @@ const remotePostForm = module.exports.remotePostForm = (options) => {
     logger.error(`post:${url} error!${error.stack}`);
     return Promise.reject(error);
   });
-};
+});
 
 /**
  * post 提交 json 数据
  * @param options
  */
-module.exports.remotePostJSON = (options) => {
-  const {
-    url,
-    data,
-    req: {
-      headers,
-    },
-  } = options;
-  const requestHeaders = buildHeader(headers);
+module.exports.remotePostJSON = options => {
+  const {url, req, res} = options;
+  const data = req.body || {};
+  const requestHeaders = buildHeader(req);
+  requestHeaders['User-Agent'] = req.get('user-agent');
 
-  logger.info(`POST请求地址:${url};请求参数:${stringifyJSON(data)}, 请求头:${stringifyJSON(requestHeaders)}, content-type:application/json.`);
+  logger.info(
+    `POST请求地址:${url};请求参数:${stringifyJSON(
+      data,
+    )}, 请求头:${stringifyJSON(requestHeaders)}, content-type:application/json.`,
+  );
 
   return new Promise((resolve, reject) => {
     const start = process.hrtime();
 
     request.post({
-        url,
-        headers: requestHeaders,
-        json: data || {},
-        timeout,
-      }, (err, response, body) => {
-        logTimeUse(start, url);// 记录接口耗时
+      url,
+      headers: requestHeaders,
+      json: data || {},
+      timeout,
+    }, (err, response, body) => {
+      logTimeUse(start, url); // 记录接口耗时
 
-        if (!err && response.statusCode === 200) {
-          logger.info(`${url} =======返回数据========== \n ${stringifyJSON(body)}`);
-          resolve(body);
-        } else {
-          if (err) {
-            logger.error(`${url} =======错误==========  \n ${err.stack}`);
-          }
-          logger.error(`post:${url} error!${response && response.statusCode}`);
-          logger.error(`error repsonse body is:${body}`);
-          reject(formatRequestError(options, body));
+      if (!err && response.statusCode === 200) {
+        logger.info(`${url} =======返回数据========== \n ${stringifyJSON(body)}`);
+        resolve(body);
+      } else {
+        if (err) {
+          logger.error(`${url} =======错误==========  \n ${err.stack}`);
         }
-      },
+        logger.error(`post:${url} error!${response && response.statusCode}`);
+        logger.error(`error repsonse body is:${body}`);
+        reject(formatRequestError(options, body));
+      }
+    },
     );
   }).catch((error) => {
     logger.error(`post:${url} error!${error.stack}`);
@@ -230,14 +239,8 @@ module.exports.remoteGetJSON = (options) => {
     url = options.url;
   }
 
-  const {
-    data,
-    req: {
-      headers,
-    },
-  } = options;
-
-  const requestHeaders = buildHeader(headers);
+  const {data, req} = options;
+  const requestHeaders = buildHeader(req);
 
   logger.info(`GET请求地址:${url};请求参数:${stringifyJSON(data)}, 请求头:${stringifyJSON(requestHeaders)}, content-type:application/json`);
 
@@ -252,7 +255,7 @@ module.exports.remoteGetJSON = (options) => {
         timeout,
       },
       (err, response, body) => {
-        logTimeUse(start, options.url); // 记录接口耗时
+        logTimeUse(start, url); // 记录接口耗时
 
         if (!err && response.statusCode === 200) {
           logger.info(`${url} =======返回数据========== \n ${stringifyJSON(body)}`);
@@ -282,13 +285,11 @@ module.exports.fileUploadStream = (options) => {
   const {
     url,
     formData,
-    req: {
-      headers,
-    },
+    req,
     filePaths,
   } = options;
 
-  const requestHeaders = buildHeader(headers);
+  const requestHeaders = buildHeader(req);
 
   logger.info(`POST请求地址:${url};请求头:${stringifyJSON(requestHeaders)}`);
 
@@ -342,12 +343,10 @@ module.exports.fileDownloadStream = (options) => {
   const {
     url,
     data,
-    req: {
-      headers,
-    },
+    req,
   } = options;
 
-  const requestHeaders = buildHeader(headers);
+  const requestHeaders = buildHeader(req);
 
   logger.info(`POST请求地址:${url};请求头:${stringifyJSON(requestHeaders)}`);
 
@@ -375,7 +374,8 @@ module.exports.fileDownloadStream = (options) => {
         }
         logger.error(`post:${url} error!${response && response.statusCode}`);
         logger.error(`error repsonse body is:${body}`);
-        reject(formatRequestError(options, err));
+        reject(formatRequestError(options,
+          new Error('返回的数据流错误，下载文件失败！')));
       }
     });
   }).catch((error) => {
@@ -434,14 +434,15 @@ module.exports.upperFirstLetter = (str) => {
  * @param body
  * @returns {{code: string, data, msg: string}}
  */
-module.exports.wrapData = (body) => {
+module.exports.wrapData = body => {
   let code = '0';
   let msg = '';
   let data = {};
   if (body && typeof body === 'object') {
     data = Object.keys(body).reduce((pre, key) => {
       const value = body[key];
-      if (value.code === '0') { // 成功
+      // 成功
+      if (value.code === '0') {
         pre[key] = value.data;
       } else {
         code = value.code;
@@ -456,6 +457,6 @@ module.exports.wrapData = (body) => {
   return {
     code,
     data,
-    msg
+    msg,
   };
 };

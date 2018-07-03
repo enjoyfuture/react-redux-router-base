@@ -1,7 +1,8 @@
 import React from 'react';
-import {Route, NavLink} from 'react-router-dom';
+import {Route, NavLink} from 'dva/router';
 import Loadable from 'react-loadable';
 import LoadingComponent from '../../components/LoadingComponent';
+import PropTypes from 'prop-types';
 
 const Page = () => {
 

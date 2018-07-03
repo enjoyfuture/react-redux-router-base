@@ -6,10 +6,24 @@ const appRoot = path.join(__dirname, '../');
 export default {
   mode: 'development',
   entry: {
-    vendor: ['classnames', 'eruda', 'history', 'immutable',
-      'isomorphic-fetch', 'prop-types', 'react', 'react-dom',
-      'redux-devtools',
-      'redux-devtools-dock-monitor', 'redux-devtools-log-monitor', 'redux-logger'],
+    vendor: [
+      'classnames',
+      'dva',
+      'dva-loading',
+      'eruda',
+      'history',
+      'immutable',
+      'isomorphic-fetch',
+      'prop-types',
+      'react',
+      'react-dom',
+      'react-redux',
+      'react-router-dom',
+      'react-transition-group',
+      'redux',
+      'redux-logger',
+      'redux-saga',
+    ],
   },
 
   output: {
@@ -18,7 +32,7 @@ export default {
     /**
      * output.library
      * 将会定义为 window.${output.library}
-     * 在这次的例子中，将会定义为`window.vendorLibrary`
+     * 在这次的例子中，将会定义为 `window.vendorLibrary`
      */
     library: '[name]Library',
   },
@@ -27,7 +41,7 @@ export default {
       /**
        * path
        * 定义 manifest 文件生成的位置
-       * [name]的部分由entry的名字替换
+       * [name] 的部分由 entry 的名字替换
        */
       path: path.join(appRoot, 'public', 'dll', '[name]-manifest.json'),
       /**

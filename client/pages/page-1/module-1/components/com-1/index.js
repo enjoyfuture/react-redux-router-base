@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
+import {connect} from 'dva/index';
 import Module1Com2 from '../com-2';
 
-@connect((state) => {
+@connect(({module1}) => {
   return {
-    module1: state.get('module1'),
+    module1,
   };
 })
 export default class Com1 extends Component {

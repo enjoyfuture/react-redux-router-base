@@ -1,29 +1,31 @@
 import React from 'react';
-import {render} from 'react-dom';
-import {combineReducers} from 'redux-immutable';
-import {Route} from 'react-router-dom';
+import {BrowserRouter, Route, Switch} from 'dva/router';
+import Loadable from 'react-loadable';
+import App from '../../common/App';
+import {URL_CONTEXT} from '../../../common/constants';
 
 import Root from '../../Root';
-import toast from '../../common/reducers/toast';
-import loading from '../../common/reducers/loading';
-import App from '../../common/App';
-import AboutPage from './AboutPage';
-import {urlContext} from '../../utils/config';
+import LoadingComponent from '../../components/LoadingComponent';
 
-const container = () => {
+const basename = `${URL_CONTEXT}/about/`;
+
+const Container = () => {
+  // 使用 BrowserRouter 后，不用再单独设置 history
   return (
-    <App>
-      <Route path="/" component={AboutPage}/>
-    </App>
+    <BrowserRouter>
+      <App>
+        <Switch>
+          <Route
+            path={basename}
+            component={Loadable({
+              loader: () => import('./AboutPage'),
+              loading: LoadingComponent,
+            })}
+          />
+        </Switch>
+      </App>
+    </BrowserRouter>
   );
 };
 
-const reducers = combineReducers({
-  toast,
-  loading,
-});
-
-render(
-  <Root container={container} reducers={reducers} basename={`${urlContext}/about`}/>,
-  document.getElementById('layout'),
-);
+Root({Container});

@@ -5,9 +5,9 @@
 * 有的项目根路径为 '' ，比如 http://ft.jd.com
 * 有的项目根路径为 '/abs' ，比如 http://ft.jd.com/abs
 
-基础项目中 urlContext 设置为 ''，如果实际项目中 urlContext  不是 ''，需要修改项目中对应的变量值
+基础项目中 URL_CONTEXT 设置为 ''，如果实际项目中 URL_CONTEXT  不是 ''，需要修改项目中对应的变量值
 
-* /server/config/base.js   urlContext
+* /common/constants.js   URL_CONTEXT
 
 ## Server
 
@@ -30,6 +30,12 @@ npm start
 ```
 npm run start:beta # 测试环境
 npm run start:prod # 线上环境
+```
+
+## 生成上线分支
+
+```
+npm run deploy-branch
 ```
 
 ## Build
@@ -87,6 +93,12 @@ npm run fix:css
 npm run fix:js
 ```
 
+### View Css prefix
+
+```bash
+npm run css-prefix
+```
+
 ## Unit Test
 
 ### Test
@@ -132,11 +144,6 @@ npm run check-coverage
   * http://zhaozhiming.github.io/blog/2016/03/29/use-ava-and-enzyme-to-test-react-component-part2/
   * http://zhaozhiming.github.io/blog/2016/03/29/use-ava-and-enzyme-to-test-react-component-part3/
 
-## Development explain
-
-* shortcut key: control + h , open DevTool panel
-* shortcut key: control + w , change DevTool panel position
-
 ### 关于 sass 的说明
 由于私服不能连接外网下载安装 node-sass 过程中需要的文件，故 forked 了包含 node-sass 依赖的包,
 重新发布了带 vendor 的 node-sass 和依赖 node-sass 的包，新的依赖包名称对应关系如下
@@ -164,3 +171,4 @@ Please view [here](./CHANGELOG.md)
 
 * [css module for react](https://github.com/camsong/blog/issues/5)
 * [redux 官方例子](https://github.com/reactjs/redux/tree/master/examples)
+* [babel的polyfill和runtime的区别](https://segmentfault.com/q/1010000005596587?from=singlemessage&isappinstalled=1)

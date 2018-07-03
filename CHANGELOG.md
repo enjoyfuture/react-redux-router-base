@@ -8,6 +8,9 @@
 ## version 0.11.0 (2018-06-18)
 
 * 基于 saga 来构建基础平台脚手架
+* 增加了生成上线分支脚本 `npm run deploy-branch`
+* 增加了检测 css 前缀脚本 `npm run css-prefix`
+* 去掉了 pre-commit 改用 lint-staged 来检测 js 和 css 代码
 
 ## version 0.10.0 (2018-04-08)
 

@@ -61,7 +61,7 @@ module.exports = {
     "curly": [2, "multi-line"], // 在循环或判断语句中是否需要加花括号
     "default-case": 2, // 在 switch语句中，检测是否有默认分支
     "dot-location": [2, "property"], // 在换行时，用来检测对象的点是换行之前还是之后，这里设为放在下一行
-    "dot-notation": 0, // 对于对象属性应该用点表达式，不应该用[] var x = foo["bar"]; 是错误的，应该 var x = foo.bar;  但 var x = foo[bar]; 是正确的，因为bar是变量
+    "dot-notation": 2, // 对于对象属性应该用点表达式，不应该用[] var x = foo["bar"]; 是错误的，应该 var x = foo.bar;  但 var x = foo[bar]; 是正确的，因为bar是变量
     "eqeqeq": [2, "allow-null"], // 使用恒等来比较两个变量
     "guard-for-in": 2, // 在 for in 表达式中需要调用 hasOwnProperty 来判断是否为自有的属性
     "no-alert": 2, // 不允许用alert语句
@@ -69,7 +69,7 @@ module.exports = {
     "no-case-declarations": 2, // 在 case 语句中使用声明式语句时，需要用 {} 括起来
     "no-div-regex": 0, // 消除除法运算符迷惑用户使用 例如 return /=foo/; 应该写成 return /\=foo/;
     "no-else-return": 2, // 如果在if语句中有return，则在else中可以不用return，可以放到最外面返回
-    "no-empty-function": 0, // 不要定义空函数
+    "no-empty-function": 0, //不要定义空函数
     "no-empty-pattern": 2, // 不允许空的解构赋值，例如 var {a: {}} = foo;
     "no-eq-null": 0, // 对于null比较也应该使用 === 来比较
     "no-eval": 2, // 不允许使用 eval()
@@ -194,9 +194,8 @@ module.exports = {
     "id-blacklist": 2, // 指定一些黑名单变量，这些变量不能出现在代码中，比如 "id-blacklist": [2, "data", "err", "e", "cb", "callback"],
     "id-length": 0, // 定义变量名或属性名的最小最大长度
     "id-match": 2, // 规范变量名或属性名的命名规范
-    "indent": [0, 2, {
-      "SwitchCase": 1,
-      "VariableDeclarator": {"var": 1, "let": 1, "const": 1},
+    "indent": [2, 2, {
+      "SwitchCase": 1, "VariableDeclarator": {"var": 1, "let": 1, "const": 1},
       "FunctionDeclaration": {"parameters": "first"}
     }], // 缩进，我们采用2个空格来缩进
     "jsx-quotes": 0, // jsx属性值应该用双引号
@@ -409,7 +408,7 @@ module.exports = {
     "react": {
       "createClass": "createReactClass", // Regex for Component Factory to use, default to "createReactClass"
       "pragma": "React",  // Pragma to use, default to "React"
-      "version": "16.2.0" // React version, default to the latest React stable release
+      "version": "16.4.1" // React version, default to the latest React stable release
     },
     "sharedData": "sharedName"
   },

@@ -1,16 +1,14 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
-import {connect} from 'react-redux';
-import {openToast} from '../../../../../common/action/toast';
-import {helloModule2} from '../../action';
+import {connect} from 'dva/index';
 
 import style from './style.scss';
 const cx = classNames.bind(style);
 
-@connect((state) => {
+@connect(({module2}) => {
   return {
-    module2: state.get('module2'),
+    module2,
   };
 })
 export default class Com1 extends Component {
@@ -20,11 +18,17 @@ export default class Com1 extends Component {
   };
 
   toast = () => {
-    this.props.dispatch(openToast('Module-2 Com-1'));
+    this.props.dispatch({
+      type: 'toast/show',
+      payload: {content: 'Module-2 Com-1'}
+    });
   };
 
   handleHello = () => {
-    this.props.dispatch(helloModule2('您好，欢迎您来到这里'));
+    this.props.dispatch({
+      type: 'module2/helloModule2',
+      payload: {content: '您好，欢迎您来到这里'}
+    });
   };
 
   render() {
