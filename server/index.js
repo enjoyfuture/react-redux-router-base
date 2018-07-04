@@ -19,7 +19,7 @@ const {
   NO_PERMISSION_CODE,
 } = require('../common/constants');
 const asyncRespHeader = require('./middlewares/async-resp-header');
-const {getClientIP, getLocationOrigin} = require('./helper/utils');
+const { getClientIP, getLocationOrigin } = require('./helper/utils');
 const commonSafety = require('./middlewares/common-safety');
 
 const isDev = process.env.NODE_ENV === 'development';
@@ -36,17 +36,19 @@ if (isProd) {
   app.use(compress());
 }
 // 设置前端post提交最大内容
-app.use(bodyParser.json({limit: '20mb'}));
-// The extended option allows to choose between parsing the URL-encoded data with the querystring library (when false) or the qs library (when true).
-// https://www.npmjs.com/package/body-parser#extended
-app.use(bodyParser.urlencoded({limit: '20mb', extended: false}));
+app.use(bodyParser.json({ limit: '20mb' }));
+/*
+ * The extended option allows to choose between parsing the URL-encoded data with the querystring library (when false) or the qs library (when true).
+ * https://www.npmjs.com/package/body-parser#extended
+ */
+app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }));
 app.use(bodyParser.text());
 app.use(cookieParser());
 app.use(require('./middlewares/request-logger').create(logger));
 // 因为 Nginx 会卸载 context
 app.use(
   isProd ? '' : URL_CONTEXT,
-  express.static(path.join(__dirname, '../public')),
+  express.static(path.join(__dirname, '../public'))
 );
 // favicon
 app.use(favicon(path.join(__dirname, '..', 'public', 'favicon.ico')));
@@ -68,7 +70,8 @@ if (isDev) {
         // reasons: true // 打印相关被引入的模块
       },
       publicPath: webpackConfig.output.publicPath,
-    }));
+    })
+  );
 
   // 热部署，自动刷新，需要结合 webpack.config.dev.babel 中的定义
   app.use(
@@ -76,7 +79,8 @@ if (isDev) {
       log: logger.info,
       path: '/__webpack_hmr',
       heartbeat: 10 * 1000,
-    }));
+    })
+  );
 }
 
 // 设置 client ip
@@ -88,8 +92,10 @@ app.use((req, res, next) => {
 // 设置 api 异步请求响应头
 app.use(asyncRespHeader);
 
-// 加载路由
-// 统一处理前端 api，直接映射到 java 端对应的 api 上
+/*
+ * 加载路由
+ * 统一处理前端 api，直接映射到 java 端对应的 api 上
+ */
 apiRoutes(app);
 // 其他需特殊处理的接口，比如合并请求等
 apiExtRoutes(app);
@@ -119,7 +125,7 @@ app.use((err, req, res, next) => {
     if (err) {
       // node 端打印错误日志
       logger.error(err.stack);
-      const {code} = err;
+      const { code } = err;
 
       if (err.code === NO_PERMISSION_CODE) {
         // 如果没权限
@@ -132,7 +138,6 @@ app.use((err, req, res, next) => {
         [RES_MSG]: msg,
       });
     }
-
   } else {
     next(err);
   }

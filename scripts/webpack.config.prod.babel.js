@@ -4,7 +4,7 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import ManifestPlugin from 'webpack-manifest-plugin';
 import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
-import {BundleAnalyzerPlugin} from 'webpack-bundle-analyzer';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import autoprefixer from 'autoprefixer';
 import flexbugs from 'postcss-flexbugs-fixes'; // 修复 flexbox 已知的 bug
 import cssnano from 'cssnano'; // 优化 css，对于长格式优化成短格式等
@@ -20,17 +20,27 @@ const isProd = process.env.NODE_ENV === 'production';
 // 是否做 webpack bundle 分析
 const isAnalyze = process.env.ANALYZE === 'true';
 
-// PC 端 browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 49', 'Firefox >= 55', 'Safari >= 9.1']
-// 手机端 browsers: ['Android >= 4.4', 'iOS >=9']
-const browsers = ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 49', 'Firefox >= 55', 'Safari >= 9.1'];
+/*
+ * PC 端 browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 49', 'Firefox >= 55', 'Safari >= 9.1']
+ * 手机端 browsers: ['Android >= 4.4', 'iOS >=9']
+ */
+const browsers = [
+  'Explorer >= 9',
+  'Edge >= 12',
+  'Chrome >= 49',
+  'Firefox >= 55',
+  'Safari >= 9.1',
+];
 
 // 混淆 css 变量名
 const createUniqueIdGenerator = () => {
   const index = {};
 
   const generateNextId = incstr.idGenerator({
-    // Removed "d" letter to avoid accidental "ad" construct.
-    // @see https://medium.com/@mbrevda/just-make-sure-ad-isnt-being-used-as-a-class-name-prefix-or-you-might-suffer-the-wrath-of-the-558d65502793
+    /*
+     * Removed "d" letter to avoid accidental "ad" construct.
+     * @see https://medium.com/@mbrevda/just-make-sure-ad-isnt-being-used-as-a-class-name-prefix-or-you-might-suffer-the-wrath-of-the-558d65502793
+     */
     alphabet: 'abcefghijklmnopqrstuvwxyz0123456789_',
   });
 
@@ -70,18 +80,20 @@ function scssConfig(modules) {
     MiniCssExtractPlugin.loader,
     {
       loader: 'css-loader',
-      options: modules ? {
-        sourceMap: true,
-        // CSS Modules https://github.com/css-modules/css-modules
-        modules: true,
-        localIdentName: '[local][chunkhash:base64:5]',
-        getLocalIdent: (context, localIdentName, localName) => {
-          return generateScopedName(localName, context.resourcePath);
-        },
-      } : {
-        sourceMap: true,
-      },
-    }, {
+      options: modules
+        ? {
+            sourceMap: true,
+            // CSS Modules https://github.com/css-modules/css-modules
+            modules: true,
+            localIdentName: '[local][chunkhash:base64:5]',
+            getLocalIdent: (context, localIdentName, localName) =>
+              generateScopedName(localName, context.resourcePath),
+          }
+        : {
+            sourceMap: true,
+          },
+    },
+    {
       loader: 'postcss-loader',
       options: {
         sourceMap: true,
@@ -96,17 +108,24 @@ function scssConfig(modules) {
           }),
         ],
       },
-    }, {
-      // Webpack loader that resolves relative paths in url() statements
-      // based on the original source file
+    },
+    {
+      /*
+       * Webpack loader that resolves relative paths in url() statements
+       * based on the original source file
+       */
       loader: 'resolve-url-loader',
-    }, {
-      loader: 'sass-loader-joy-vendor', options: {
+    },
+    {
+      loader: 'sass-loader-joy-vendor',
+      options: {
         sourceMap: true, // 必须保留
         modules,
-        // 注意此处不能设为压缩，负责样式中引入的图片等资源文件会提示找不到
-        // 设为压缩后，查找路径是基于绝对路径，对于 perfect.scss 是基于 scss 当前路径为根路径
-        // outputStyle: 'compressed', // 压缩
+        /*
+         * 注意此处不能设为压缩，负责样式中引入的图片等资源文件会提示找不到
+         * 设为压缩后，查找路径是基于绝对路径，对于 perfect.scss 是基于 scss 当前路径为根路径
+         * outputStyle: 'compressed', // 压缩
+         */
         precision: 15, // 设置小数精度
       },
     },
@@ -118,20 +137,22 @@ const webpackConfig = {
   /**
    * 生产下默认设置以下插件，webpack 4 中，一些插件放在 optimization 中设置
    * https://webpack.js.org/concepts/mode
-   plugins: [
-    new UglifyJsPlugin(),
-    new webpack.DefinePlugin({ "process.env.NODE_ENV": JSON.stringify("production") }),
-    new webpack.optimize.ModuleConcatenationPlugin(),
-    new webpack.NoEmitOnErrorsPlugin()
-   ]
+   * plugins: [
+   * new UglifyJsPlugin(),
+   * new webpack.DefinePlugin({ "process.env.NODE_ENV": JSON.stringify("production") }),
+   * new webpack.optimize.ModuleConcatenationPlugin(),
+   * new webpack.NoEmitOnErrorsPlugin()
+   * ]
    */
   mode: 'production',
   cache: false, // 开启缓存,增量编译
   // 默认为 false。设为 true 时如果发生错误，则不继续尝试，直接退出 bundling process
   bail: true,
   devtool: 'source-map', // 生成 source-map 文件
-  // Specify what bundle information gets displayed
-  // https://webpack.js.org/configuration/stats/
+  /*
+   * Specify what bundle information gets displayed
+   * https://webpack.js.org/configuration/stats/
+   */
   stats: {
     cached: false,
     cachedAssets: false,
@@ -144,8 +165,10 @@ const webpackConfig = {
     timings: true,
     version: false,
   },
-  // https://webpack.js.org/configuration/target/#target
-  // webpack 能够为多种环境构建编译，默认是 'web'，可省略
+  /*
+   * https://webpack.js.org/configuration/target/#target
+   * webpack 能够为多种环境构建编译，默认是 'web'，可省略
+   */
   target: 'web',
   resolve: {
     // 自动扩展文件后缀名
@@ -179,8 +202,10 @@ const webpackConfig = {
 
   // module 处理
   module: {
-    // Make missing exports an error instead of warning
-    // 缺少 exports 时报错，而不是警告
+    /*
+     * Make missing exports an error instead of warning
+     * 缺少 exports 时报错，而不是警告
+     */
     strictExportPresence: true,
     rules: [
       {
@@ -191,19 +216,27 @@ const webpackConfig = {
           options: {
             cacheDirectory: false,
             babelrc: false,
-            // babel-preset-env 的配置可参考 https://zhuanlan.zhihu.com/p/29506685
-            // 他会自动使用插件和 polyfill
+            /*
+             * babel-preset-env 的配置可参考 https://zhuanlan.zhihu.com/p/29506685
+             * 他会自动使用插件和 polyfill
+             */
             presets: [
-              'react', ['env', {
-                // 设为 true 会根据需要自动导入用到的 es6 新方法，而不是一次性的引入 babel-polyfill
-                targets: {
-                  browsers,
+              'react',
+              [
+                'env',
+                {
+                  // 设为 true 会根据需要自动导入用到的 es6 新方法，而不是一次性的引入 babel-polyfill
+                  targets: {
+                    browsers,
+                  },
+                  modules: false, // 设为 false，交由 Webpack 来处理模块化
+                  /*
+                 * 设为 true 会根据需要自动导入用到的 es6 新方法，而不是一次性的引入 babel-polyfill
+                 * 比如使用 Promise 会导入 import "babel-polyfill/core-js/modules/es6.promise";
+                 */
+                  useBuiltIns: true,
                 },
-                modules: false, // 设为 false，交由 Webpack 来处理模块化
-                // 设为 true 会根据需要自动导入用到的 es6 新方法，而不是一次性的引入 babel-polyfill
-                // 比如使用 Promise 会导入 import "babel-polyfill/core-js/modules/es6.promise";
-                useBuiltIns: true,
-              }],
+              ],
             ],
             plugins: [
               'syntax-dynamic-import', // 支持'import()'
@@ -237,10 +270,11 @@ const webpackConfig = {
               sourceMap: true,
               // CSS Nano options http://cssnano.co/
               minimize: {
-                discardComments: {removeAll: true},
+                discardComments: { removeAll: true },
               },
             },
-          }, {
+          },
+          {
             loader: 'postcss-loader',
             options: {
               sourceMap: true,
@@ -255,9 +289,12 @@ const webpackConfig = {
                 }),
               ],
             },
-          }, {
-            // Webpack loader that resolves relative paths in url() statements
-            // based on the original source file
+          },
+          {
+            /*
+             * Webpack loader that resolves relative paths in url() statements
+             * based on the original source file
+             */
             loader: 'resolve-url-loader',
           },
         ],
@@ -287,15 +324,20 @@ const webpackConfig = {
                 test: /\.svg$/,
                 loader: 'svg-url-loader',
                 // 除去字体文件
-                exclude: path.resolve(appRoot, './client/scss/common/_iconfont.scss'), // 除去字体文件
+                exclude: path.resolve(
+                  appRoot,
+                  './client/scss/common/_iconfont.scss'
+                ), // 除去字体文件
                 options: {
                   name: '[hash:8].[ext]',
                   limit: 4096, // 4kb
                 },
               },
 
-              // 其他图片使用 Base64
-              // https://github.com/webpack/url-loader
+              /*
+               * 其他图片使用 Base64
+               * https://github.com/webpack/url-loader
+               */
               {
                 loader: 'url-loader',
                 options: {
@@ -325,8 +367,10 @@ const webpackConfig = {
     ],
   },
 
-  // webpack 4 新增属性，选项配置，原先的一些插件部分放到这里设置
-  // 优化可以参考这里 https://zhuanlan.zhihu.com/p/35258448
+  /*
+   * webpack 4 新增属性，选项配置，原先的一些插件部分放到这里设置
+   * 优化可以参考这里 https://zhuanlan.zhihu.com/p/35258448
+   */
   optimization: {
     removeEmptyChunks: true, // 空的块chunks会被移除。这可以减少文件系统的负载并且可以加快构建速度。
     mergeDuplicateChunks: true, // 相同的块被合并。这会减少生成的代码并缩短构建时间。
@@ -371,16 +415,20 @@ const webpackConfig = {
   plugins: [
     // 用来优化生成的代码 chunk，合并相同的代码
     new webpack.optimize.AggressiveMergingPlugin(),
-    // 开启 mode 后不需要设置
-    // new webpack.DefinePlugin({
-    //   'process.env': {
-    //     NODE_ENV: JSON.stringify('production'),
-    //   },
-    // }),
+    /*
+     * 开启 mode 后不需要设置
+     * new webpack.DefinePlugin({
+     *   'process.env': {
+     *     NODE_ENV: JSON.stringify('production'),
+     *   },
+     * }),
+     */
     new MiniCssExtractPlugin({
-      // Options similar to the same options in webpackOptions.output
-      // both options are optional
-      // css/[name].[contenthash:8].css
+      /*
+       * Options similar to the same options in webpackOptions.output
+       * both options are optional
+       * css/[name].[contenthash:8].css
+       */
       filename: 'css/[name].[hash].css',
       chunkFilename: 'css/[id].[hash].css',
     }),
@@ -400,8 +448,10 @@ const webpackConfig = {
     }),
     ...(isAnalyze
       ? [
-          // Webpack Bundle Analyzer
-          // https://github.com/th0r/webpack-bundle-analyzer
+          /*
+         * Webpack Bundle Analyzer
+         * https://github.com/th0r/webpack-bundle-analyzer
+         */
           new BundleAnalyzerPlugin(),
         ]
       : []),

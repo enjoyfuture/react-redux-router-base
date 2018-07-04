@@ -1,6 +1,6 @@
 import 'isomorphic-fetch';
 import perfect from './perfect';
-import {urlContext} from './config';
+import { urlContext } from './config';
 import commonHeadersInject from './commonHeadersInject';
 // 定义 fetch 默认选项， 看 https://github.com/github/fetch
 const defaultOptions = {
@@ -14,7 +14,7 @@ const defaultOptions = {
 
 // 检查请求是否成功
 function checkStatus(response) {
-  const {status} = response;
+  const { status } = response;
   if (status >= 200 && status < 300) {
     return response;
   }
@@ -31,7 +31,7 @@ function checkStatus(response) {
  * @param options // 可选参数项
  * @returns {Promise.<TResult>}
  */
-function callApi({url, body = {}, options = {}}) {
+function callApi({ url, body = {}, options = {} }) {
   if (!url) {
     const error = new Error('请传入 url');
     error.errorCode = 0;
@@ -46,29 +46,27 @@ function callApi({url, body = {}, options = {}}) {
     fullUrl = `${urlContext}/api/${url}`;
   }
 
-  const _options = {...defaultOptions, ...options};
-  const {method} = _options;
+  const _options = { ...defaultOptions, ...options };
+  const { method } = _options;
 
   if (method !== 'get' && method !== 'head') {
     if (body instanceof FormData) {
       _options.body = body;
     } else {
       // 数据为 null 不要传到后台
-      Object.keys(body).forEach((item) => {
+      Object.keys(body).forEach(item => {
         if (body[item] === null || body[item] === '') {
           delete body[item];
         }
       });
       _options.body = perfect.stringifyJSON(body);
     }
-
   }
 
   return fetch(fullUrl, _options)
     .then(checkStatus)
-    .then(response =>
-      response.json().then(json => ({json, response})),
-    ).then(({json, response}) => {
+    .then(response => response.json().then(json => ({ json, response })))
+    .then(({ json, response }) => {
       if (!response.ok || !json.code === '0') {
         // 根据后台实际返回数据来定义错误格式
         const error = new Error(json.msg || '获取数据出错');
@@ -76,9 +74,8 @@ function callApi({url, body = {}, options = {}}) {
         return Promise.reject(error, json);
       }
       return json;
-    }).catch((error) => {
-      return Promise.reject(error);
-    });
+    })
+    .catch(error => Promise.reject(error));
 }
 
 export async function callApiWithHeader({ url, body = {}, options = {} }) {

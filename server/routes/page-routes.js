@@ -1,28 +1,29 @@
 /**
  * 页面路由配置
  */
+
 const fs = require('fs');
 const path = require('path');
 const serialize = require('serialize-javascript');
 const handlebars = require('handlebars');
 const logger = require('digger-node').Logger;
-const {
-  URL_CONTEXT,
-} = require('../../common/constants');
+const service = require('../service/common');
+const wrapData = require('../helper/utils').wrapData;
+const { URL_CONTEXT } = require('../../common/constants');
 
-
-// services
+// environment
 const isDev = process.env.NODE_ENV === 'development';
+const isProd = process.env.NODE_ENV === 'production';
 
 // 加载 webpack 打包后的静态文件映射表
-const fileManifest = isDev ? null : require('../../public/dist/manifest.json');
+const manifest = isDev ? null : require('../../public/dist/manifest.json');
 
 // 静态文件上下文路径
 const staticResourceContext = `${URL_CONTEXT}/dist/`;
 
 // 加载html模板
-const htmlTemplate = (function (path) {
-  let content = fs.readFileSync(path, {encoding: 'utf8'});
+const htmlTemplate = (function(path) {
+  let content = fs.readFileSync(path, { encoding: 'utf8' });
   // 去掉模板中的注释
   content = content.replace(/<!--.*-->/g, '');
   return handlebars.compile(content);
@@ -32,32 +33,24 @@ const htmlTemplate = (function (path) {
  * 将页面初始值转换为scrip脚本，添加到data.scriptHtml属性中
  * @param data
  */
-const wrapScriptHtml = function (data) {
-
-  // 应该把所有的初始化数据都放到 __initialState__ 中，client 生成 store 时，传入该数据
+const wrapScriptHtml = function(data) {
+  // 应该把所有的初始化数据都放到 __initialData__ 中，client 生成 store 时，传入该数据
   if (data.initDatas) {
-    const scriptHtml = `window.__initialState__=${serialize(data.initDatas)};`;
+    const scriptHtml = `window.__initialData__=${serialize(data.initDatas)};`;
     data.scriptHtml = scriptHtml;
     delete data.initDatas;
   }
-
-  // 设置二级路径上下文
-  data.URL_CONTEXT = URL_CONTEXT;
-
 };
+
 /**
- * 构建页面样式表，添加到data.links属性中
+ * 构建页面样式表，添加到 data.links 属性中
  * @param data
- * @param isDev
- * @param manifest
  */
-const wrapStyleImports = function (data, isDev, manifest) {
-  const buildLink = function (href) {
-    if (href) {
-      return `<link href="${href}" rel="stylesheet">`;
-    }
-    return '';
+const wrapStyleImports = function(data) {
+  const buildLink = function(href) {
+    return href ? `<link href="${href}" rel="stylesheet">` : '';
   };
+
   if (!isDev) {
     let links = buildLink(manifest[`${staticResourceContext}${data.name}.css`]);
     // 公共的
@@ -66,7 +59,9 @@ const wrapStyleImports = function (data, isDev, manifest) {
     }
     // 引入第三方 css
     if (manifest[`${staticResourceContext}style.${data.name}.css`]) {
-      links += buildLink(manifest[`${staticResourceContext}style.${data.name}.css`]);
+      links += buildLink(
+        manifest[`${staticResourceContext}style.${data.name}.css`]
+      );
     }
     data.links = links;
   }
@@ -75,31 +70,30 @@ const wrapStyleImports = function (data, isDev, manifest) {
 /**
  * 构建页面外链脚本，添加到data.scripts属性中
  * @param data
- * @param isDev
- * @param manifest
  */
-const wrapScriptImports = function (data, isDev, manifest) {
-  const buildScript = function (src) {
-    if (src) {
-      return `<script src="${src}"></script>`;
-    }
-    return '';
+const wrapScriptImports = function(data) {
+  const buildScript = function(src) {
+    return src ? `<script src="${src}"></script>` : '';
   };
+
   if (isDev) {
     data.scripts = `${buildScript(`${URL_CONTEXT}/dll/vendor.dll.js`)}
          ${buildScript(`${staticResourceContext}vendors.chunk.js`)}
          ${buildScript(`${staticResourceContext}${data.name}.bundle.js`)}`;
   } else {
-    data.scripts = `${buildScript(manifest[`${staticResourceContext}manifest.js`])}
+    data.scripts = `${buildScript(
+      manifest[`${staticResourceContext}manifest.js`]
+    )}
         ${buildScript(manifest[`${staticResourceContext}vendors.js`])}
         ${buildScript(manifest[`${staticResourceContext}${data.name}.js`])}`;
   }
 };
+
 /**
  * 设置通用的响应头,页面不缓存！！
  * @param response
  */
-const setCommonHeader = function (response) {
+const setCommonHeader = function(response) {
   response.setHeader('cache-control', 'no-cache, no-store');
   response.setHeader('content-type', 'text/html; charset=UTF-8');
 };
@@ -110,39 +104,62 @@ const setCommonHeader = function (response) {
  * @param response
  * @param data
  * {
- *    title, //页面标题<必须>
- *    name,  //页面在webpack entry中对应的名称<必须>
+ *    title, // 页面标题<必须>
+ *    name,  // 页面在webpack entry中对应的名称<必须>
  *    initDatas:{
  *        _pageInitData,others...
  *    }
  * }
  */
-const renderTemplateSync = function (request, response, data) {
+const renderTemplateSync = function(request, response, data) {
   setCommonHeader(response);
 
   wrapScriptHtml(data);
-  wrapStyleImports(data, isDev, fileManifest);
-  wrapScriptImports(data, isDev, fileManifest);
+  wrapStyleImports(data);
+  wrapScriptImports(data);
   // 环境
-  data.isProd = process.env.NODE_ENV === 'production';
+  data.isProd = isProd;
+  // 设置二级路径上下文
+  data.URL_CONTEXT = URL_CONTEXT;
   /*
    * data 结构：
-   *     { title,name,scriptHtml,links,scripts,context }
+   *     { title,name,scriptHtml,links,scripts,URL_CONTEXT,isProd }
    */
   response.end(htmlTemplate(data));
 };
 
 /**
- * 渲染首页
+ * 重定向到首页
  * @param req
  * @param res
  * @param next
  */
-const renderIndex = function (req, res, next) {
-  res.redirect(`${URL_CONTEXT}/home`);
+const renderIndex = function(req, res, next) {
+  res.redirect(`${URL_CONTEXT}/`);
 };
 
+/**
+ * 添加路由管理
+ * @param app
+ * @param options
+ */
 function addRoute(app, options) {
+  // client-error，处理浏览器
+  app.get(`${URL_CONTEXT}/client-error`, (req, res, next) => {
+    let info;
+    try {
+      info = decodeURIComponent(req.query.i);
+    } catch (e) {
+      info = null;
+    }
+    logger.info(
+      `client error!!!error info is: ${info},header is: ${JSON.stringify(
+        req.headers
+      )}`
+    );
+    res.end(null);
+  });
+
   // page1
   app.get(`${URL_CONTEXT}/page1**`, (req, res, next) => {
     renderTemplateSync(req, res, {
@@ -151,32 +168,12 @@ function addRoute(app, options) {
     });
   });
 
-  // page2
-  app.get(`${URL_CONTEXT}/page2**`, (req, res, next) => {
+  // 对于单页面，直接写一个页面路由即可
+  app.get(`${URL_CONTEXT}**`, (req, res, next) => {
     renderTemplateSync(req, res, {
-      title: 'Page2',
-      name: 'page2',
+      title: 'React + Redux + Router',
+      name: 'index',
     });
-  });
-
-  // about
-  app.get(`${URL_CONTEXT}/about**`, (req, res, next) => {
-    renderTemplateSync(req, res, {
-      title: 'About Page',
-      name: 'about',
-    });
-  });
-
-  // 首页
-  app.get(`${URL_CONTEXT}/home**`, (req, res, next) => {
-    renderTemplateSync(req, res, {
-      title: 'Home Page',
-      name: 'home',
-    });
-  });
-
-  app.get(`${URL_CONTEXT}/`, (req, res, next) => {
-    renderIndex(req, res, next);
   });
 
   // 将未知的页面请求重定向到首页

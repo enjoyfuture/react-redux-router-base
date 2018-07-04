@@ -10,24 +10,27 @@ import './scss/perfect.scss';
 const isMobile = false;
 if (isMobile) {
   // 初始化 tapEvent 事件
-  import('react-tap-event-plugin')
-    .then(injectTapEventPlugin => injectTapEventPlugin.default());
+  import('react-tap-event-plugin').then(injectTapEventPlugin =>
+    injectTapEventPlugin.default()
+  );
 
   // 引入 eruda
-  import('eruda')
-    .then(eruda => eruda.default.init());
+  import('eruda').then(eruda => eruda.default.init());
 }
 // --- end
 
 // 中间件
 const middleware = [];
-if (process.env.NODE_ENV === 'development') { // 开发环境
-  const {createLogger} = require('redux-logger');
+if (process.env.NODE_ENV === 'development') {
+  // 开发环境
+  const { createLogger } = require('redux-logger');
   middleware.push(createLogger());
 }
 
-// 创建 app
-// https://dvajs.com/api
+/*
+ * 创建 app
+ * https://dvajs.com/api
+ */
 const app = dva({
   history: createBrowserHistory(),
   onAction: middleware, // 注册 redux 中间件
@@ -39,7 +42,7 @@ const app = dva({
 // 使用 dva 中间件
 app.use(createLoading());
 
-const Root = ({models = [], Container}) => {
+const Root = ({ models = [], Container }) => {
   // 设置 redux 中 的 action 和 reducer ，dva 中是以 models 形式设置的
   commonModels.concat(models).forEach(model => {
     app.model(model.default);
@@ -47,23 +50,21 @@ const Root = ({models = [], Container}) => {
 
   /**
    * dva 源码中会调用 router，传入参数 { app, history: app._history, ...extraProps }
-   function getProvider(store, app, router) {
-      const DvaRoot = extraProps => (
-        <Provider store={store}>
-          { router({ app, history: app._history, ...extraProps }) }
-        </Provider>
-      );
-      return DvaRoot;
-    }
+   * function getProvider(store, app, router) {
+   * const DvaRoot = extraProps => (
+   * <Provider store={store}>
+   * { router({ app, history: app._history, ...extraProps }) }
+   * </Provider>
+   * );
+   * return DvaRoot;
+   * }
    * 后续根据实际扩展参数 app 和 history 的用法
    */
-  app.router(({app, history}) => {
+  app.router(({ app, history }) => {
     console.log('params: app--------------', app);
     console.log('params: history--------------', history);
 
-    return (
-      <Container/>
-    );
+    return <Container />;
   });
 
   app.start('#layout');

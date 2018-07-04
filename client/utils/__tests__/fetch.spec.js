@@ -11,17 +11,17 @@ test('method defaults to GET', t => {
     data.push({
       id: '410000201204221401',
       link: 'prospero://dmehonku.bb/lwbnvtioi',
-      name: '637D(i'
+      name: '637D(i',
     });
   }
   const reply = {
     success: true,
-    data
+    data,
   };
   nock(SERVER_URL)
     .get('/page-2/film/all')
     .reply(200, reply);
-  return callApi({url: `${SERVER_URL}page-2/film/all`}).then(res => {
+  return callApi({ url: `${SERVER_URL}page-2/film/all` }).then(res => {
     // 因为模拟数据不固定，所以不能直接简单的使用 t.deepEqual(res, reply);
     t.is(res.success, reply.success);
     t.is(res.data.length, reply.data.length);
@@ -35,16 +35,24 @@ test('method defaults to POST', t => {
   const body = {
     firstName: 'zhang',
     lastName: 'san',
-    id: null
+    id: null,
   };
   const reply = {
     success: true,
-    data: {id: 'fBf2FFfA-b5fB-9Eb8-Bf3B-3EE914F66713', firstName: 'zhang', lastName: 'san'}
+    data: {
+      id: 'fBf2FFfA-b5fB-9Eb8-Bf3B-3EE914F66713',
+      firstName: 'zhang',
+      lastName: 'san',
+    },
   };
   nock(SERVER_URL)
     .post('/page-2/person', body)
     .reply(200, reply);
-  return callApi({url: `${SERVER_URL}page-2/person`, method: 'post', body}).then(response => {
+  return callApi({
+    url: `${SERVER_URL}page-2/person`,
+    method: 'post',
+    body,
+  }).then(response => {
     t.deepEqual(response, reply);
   });
 });
@@ -55,7 +63,7 @@ test('returns the 404 error', t => {
   nock(SERVER_URL)
     .get('/send_error')
     .reply(404, reply);
-  return callApi({url: `${SERVER_URL}send_error`}).catch(error => {
+  return callApi({ url: `${SERVER_URL}send_error` }).catch(error => {
     t.deepEqual(error, reply);
   });
 });
@@ -66,12 +74,16 @@ test('returns {success: false} error', t => {
   nock(SERVER_URL)
     .delete('/page-2/person', {})
     .reply(200, reply);
-  return callApi({url: `${SERVER_URL}page-2/person`, method: 'delete'}).catch((error) => {
-    t.deepEqual(error, reply);
-  });
+  return callApi({ url: `${SERVER_URL}page-2/person`, method: 'delete' }).catch(
+    error => {
+      t.deepEqual(error, reply);
+    }
+  );
 });
 
-// 该测试用例待改进
-// test('not pass by url error', t => {
-//   t.throws(callApi({}), '请传入 url');
-// });
+/*
+ * 该测试用例待改进
+ * test('not pass by url error', t => {
+ *   t.throws(callApi({}), '请传入 url');
+ * });
+ */

@@ -15,16 +15,14 @@ export default {
   },
   reducers: {
     hello(state, { payload = {} }) {
-      const {content} = payload;
+      const { content } = payload;
       return state.setIn(['hello', 'content'], content);
     },
     clearHello(state, { payload = {} }) {
-      return state.update('hello', (hello) => {
-        return hello.clear();
-      });
+      return state.update('hello', hello => hello.clear());
     },
     setHomeRoute(state, { payload = {} }) {
-      const {content} = payload;
+      const { content } = payload;
       return state.setIn(['homeRoute', 'content'], content);
     },
   },

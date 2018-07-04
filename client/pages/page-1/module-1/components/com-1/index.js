@@ -1,13 +1,11 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'dva/index';
+import { connect } from 'dva/index';
 import Module1Com2 from '../com-2';
 
-@connect(({module1}) => {
-  return {
-    module1,
-  };
-})
+@connect(({ module1 }) => ({
+  module1,
+}))
 export default class Com1 extends Component {
   static propTypes = {
     dispatch: PropTypes.func,
@@ -24,17 +22,16 @@ export default class Com1 extends Component {
    * Don't do Updating Context.
    */
   getChildContext() {
-    const {dispatch} = this.props;
-    return {dispatch};
+    const { dispatch } = this.props;
+    return { dispatch };
   }
 
   render() {
     return (
       <div>
         <h4 className="m-y-4 theme-primary">以下为子组件 Module1Com2</h4>
-        <Module1Com2 module1={this.props.module1}/>
+        <Module1Com2 module1={this.props.module1} />
       </div>
     );
   }
 }
-

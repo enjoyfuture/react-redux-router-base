@@ -33,7 +33,7 @@
     "lint:js": "eslint client server common scripts",
     "lint": "npm-run-all --parallel lint:*",
     "fix:css": "stylelint --fix \"client/**/*.scss\"",
-    "fix:js": "eslint --fix client server scripts",
+    "fix:js": "eslint --fix client server scripts common *.js",
     "fix": "npm-run-all --parallel fix:*",
     "validate": "node ./scripts/validate-code.js",
     "css-prefix": "node ./scripts/css-prefix.js",

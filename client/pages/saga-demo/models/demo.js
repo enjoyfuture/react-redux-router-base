@@ -1,7 +1,5 @@
 import { fromJS } from 'immutable';
-import {
-  fetchPersons,
-} from '../services';
+import { fetchPersons } from '../services';
 
 export default {
   namespace: 'demo',
@@ -26,8 +24,10 @@ export default {
     },
   },
   effects: {
-    // (action, effects)
-    // 拉取数据
+    /*
+     * (action, effects)
+     * 拉取数据
+     */
     *getPerson({ payload = {} }, { call, put }) {
       const { body } = payload;
       const { data } = yield call(fetchPersons, { body });

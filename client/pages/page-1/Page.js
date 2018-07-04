@@ -1,38 +1,59 @@
 import React from 'react';
-import {Route, NavLink} from 'dva/router';
+import { Route, NavLink } from 'dva/router';
 import Loadable from 'react-loadable';
 import LoadingComponent from '../../components/LoadingComponent';
 import PropTypes from 'prop-types';
 
-const Page = () => {
+const Page = () => (
+  <div className="container m-t-1">
+    <nav className="tab-bar tab-bar-primary">
+      <NavLink className="tab" activeClassName="active" to="/module1">
+        Module1
+      </NavLink>
+      <NavLink className="tab" activeClassName="active" to="/module2">
+        Module2
+      </NavLink>
+      <NavLink
+        className="tab"
+        activeClassName="active"
+        to="/file-download-upload"
+      >
+        File Download Upload
+      </NavLink>
+      <NavLink className="tab" activeClassName="active" to="/iconfont">
+        Icon Font
+      </NavLink>
+    </nav>
 
-  return (
-    <div className="container m-t-1">
-      <nav className="tab-bar tab-bar-primary">
-        <NavLink className="tab" activeClassName="active" to="/module1">Module1</NavLink>
-        <NavLink className="tab" activeClassName="active" to="/module2">Module2</NavLink>
-        <NavLink className="tab" activeClassName="active" to="/file-download-upload">File Download Upload</NavLink>
-        <NavLink className="tab" activeClassName="active" to="/iconfont">Icon Font</NavLink>
-      </nav>
-
-      <Route path="/module1" component={Loadable({
+    <Route
+      path="/module1"
+      component={Loadable({
         loader: () => import('./module-1/components/com-1'),
         loading: LoadingComponent,
-      })}/>
-      <Route path="/module2" component={Loadable({
+      })}
+    />
+    <Route
+      path="/module2"
+      component={Loadable({
         loader: () => import('./module-2/components/com-1'),
         loading: LoadingComponent,
-      })}/>
-      <Route path="/file-download-upload" component={Loadable({
+      })}
+    />
+    <Route
+      path="/file-download-upload"
+      component={Loadable({
         loader: () => import('./file-download-upload/components/FileUpload'),
         loading: LoadingComponent,
-      })}/>
-      <Route path="/iconfont" component={Loadable({
+      })}
+    />
+    <Route
+      path="/iconfont"
+      component={Loadable({
         loader: () => import('./iconfont/IconFont'),
         loading: LoadingComponent,
-      })}/>
-    </div>
-  );
-};
+      })}
+    />
+  </div>
+);
 
 export default Page;

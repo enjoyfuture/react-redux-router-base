@@ -1,8 +1,8 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'dva/index';
+import { connect } from 'dva/index';
 
-@connect(({home}) => ({
+@connect(({ home }) => ({
   homeRoute: home.get('homeRoute'),
 }))
 export default class HomeRoute1 extends Component {
@@ -12,24 +12,25 @@ export default class HomeRoute1 extends Component {
     location: PropTypes.object,
   };
 
-  componentWillMount() {
-    const {dispatch} = this.props;
+  componentDidMount() {
+    const { dispatch } = this.props;
     dispatch({
       type: 'home/setHomeRoute',
-      payload: {content: '首页路由1'}
+      payload: { content: '首页路由1' },
     });
   }
 
   render() {
-    const {homeRoute} = this.props;
+    const { homeRoute } = this.props;
     const {
-      location: {
-        pathname,
-      },
+      location: { pathname },
     } = this.props;
 
     return (
-      <h5 className="theme-secondary">{homeRoute.get('content')}，路由 pathname： {pathname}</h5>
+      <h5 className="theme-secondary">
+        {homeRoute.get('content')}
+        ，路由 pathname： {pathname}
+      </h5>
     );
   }
 }

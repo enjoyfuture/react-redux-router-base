@@ -1,27 +1,24 @@
 const utils = require('../../helper/utils');
 const apiUrls = require('../../api-url/page-2');
 
-exports.paging = (req, pageNum) => {
-  return utils.remoteGetJSON({
+exports.paging = (req, pageNum) =>
+  utils.remoteGetJSON({
     url: `${apiUrls.personPaging}?pageNum=${pageNum}`,
-    req
+    req,
   });
-};
 
-exports.removePerson = (req, data) => {
-  return new Promise((resolve, reject) => {
+exports.removePerson = (req, data) =>
+  new Promise((resolve, reject) => {
     setTimeout(() => {
       resolve({
-        success: true
+        success: true,
       });
     }, 300);
   });
-};
 
-exports.savePerson = (req, data) => {
-  return utils.remotePostJSON({
+exports.savePerson = (req, data) =>
+  utils.remotePostJSON({
     url: apiUrls.personSave,
     data,
-    req
+    req,
   });
-};

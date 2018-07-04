@@ -36,13 +36,14 @@ export const adjustFontSize = (designWidth = 375, fontSize = 16) => {
  * @returns {null}
  */
 export const getLocationParams = () => {
-  let {search} = location;
+  let { search } = location;
   if (search.length > 1) {
     const params = {};
     search = search.substring(1);
-    search.split('&').forEach((item) => {
+    search.split('&').forEach(item => {
       const tempParam = item.split('=');
-      params[tempParam[0]] = tempParam[1] === '' ? null : decodeURIComponent(tempParam[1]);
+      params[tempParam[0]] =
+        tempParam[1] === '' ? null : decodeURIComponent(tempParam[1]);
     });
     return params;
   }
@@ -65,7 +66,7 @@ export const getLocationOrigin = () => {
  * @returns {*}
  */
 export const getLocationRoot = () => {
-  const {pathname, origin} = location;
+  const { pathname, origin } = location;
   const [root] = pathname.match(/\/[\w\d-]+\//);
   return origin + root;
 };
@@ -74,12 +75,11 @@ export const getLocationRoot = () => {
  * 返回上下文路径，例如 /context/
  * @returns {*}
  */
-export const getLocationContext = () => {
-  return location.pathname.match(/\/[\w\d-]+\//)[0];
-};
+export const getLocationContext = () =>
+  location.pathname.match(/\/[\w\d-]+\//)[0];
 
 // 格式化 json 数据
-export const parseJSON = (str) => {
+export const parseJSON = str => {
   if (!str) {
     return null;
   }
@@ -114,11 +114,17 @@ export const stringifyJSON = (json, space = null) => {
  * 标准写法为 2016-06-02T05:01:50.333Z
  * @returns {Date}
  */
-export const createDate = (input) => {
+export const createDate = input => {
   if (!input || typeof input !== 'string') {
     return null;
   }
-  let y = 0, m = 0, d = 0, h = 0, M = 0, s = 0, ms = 0;
+  let y = 0,
+    m = 0,
+    d = 0,
+    h = 0,
+    M = 0,
+    s = 0,
+    ms = 0;
   const inputs = input.replace(/\//g, '-').split(' ');
   if (inputs.length > 0) {
     const ymd = inputs[0].split('-');
@@ -155,7 +161,13 @@ export const createDate = (input) => {
  * @returns {*}
  */
 /* eslint-disable prefer-template */
-export const formatDate = ({time, showMs = false, showTime = true, showYear = true, shortYear = false}) => {
+export const formatDate = ({
+  time,
+  showMs = false,
+  showTime = true,
+  showYear = true,
+  shortYear = false,
+}) => {
   if (!time) {
     return '';
   }
@@ -174,8 +186,10 @@ export const formatDate = ({time, showMs = false, showTime = true, showYear = tr
   }
 
   const H = date.getHours() <= 9 ? '0' + date.getHours() : date.getHours();
-  const M = date.getMinutes() <= 9 ? '0' + date.getMinutes() : date.getMinutes();
-  const S = date.getSeconds() <= 9 ? '0' + date.getSeconds() : date.getSeconds();
+  const M =
+    date.getMinutes() <= 9 ? '0' + date.getMinutes() : date.getMinutes();
+  const S =
+    date.getSeconds() <= 9 ? '0' + date.getSeconds() : date.getSeconds();
   let MS = date.getMilliseconds();
   if (MS <= 9) {
     MS = '00' + MS;
@@ -198,13 +212,15 @@ export const formatDate = ({time, showMs = false, showTime = true, showYear = tr
   let day = date.getDate();
   day = day <= 9 ? '0' + day : day;
 
-  return (showYear ? year + '-' : '') + month + '-' + day + (showTime ? hms : '');
+  return (
+    (showYear ? year + '-' : '') + month + '-' + day + (showTime ? hms : '')
+  );
 };
 
 /**
  *  格式化剩余时间
  */
-export const formatRemainingTime = (remainingTime) => {
+export const formatRemainingTime = remainingTime => {
   let time = Number(remainingTime);
   if (isNaN(time)) {
     return {};
@@ -217,7 +233,7 @@ export const formatRemainingTime = (remainingTime) => {
   const minute = Math.floor(time / 60);
   const second = time % 60;
 
-  return {day, hour, minute, second};
+  return { day, hour, minute, second };
 };
 
 /**
@@ -225,7 +241,7 @@ export const formatRemainingTime = (remainingTime) => {
  * @param styleProp
  * @returns {boolean}
  */
-export const styleSupport = (styleProp) => {
+export const styleSupport = styleProp => {
   const prefix = ['webkit', 'moz', 'ms', 'o'];
   const $el = document.createElement('div');
   const styleText = $el.style;
@@ -234,7 +250,8 @@ export const styleSupport = (styleProp) => {
   }
 
   for (let i = 0; i < prefix.length; i++) {
-    const _styleProp = prefix[i] + styleProp[0].toUpperCase() + styleProp.substring(1);
+    const _styleProp =
+      prefix[i] + styleProp[0].toUpperCase() + styleProp.substring(1);
     if (styleText[_styleProp] !== undefined) {
       return true;
     }
@@ -252,9 +269,7 @@ export const toPercentNum = (num, percent) => {
 };
 
 // 小数转换为百分比数
-export const toPercent = (num) => {
-  return toPercentNum(num, true);
-};
+export const toPercent = num => toPercentNum(num, true);
 
 /**
  * 把金额转换为千分位表示
@@ -265,7 +280,8 @@ export const toPercent = (num) => {
  */
 export const thousands = (num, fixed = 2, hundredThousand) => {
   num = Number(num);
-  if (isNaN(num) || !isFinite(num)) { // 如果 NaN或者不是Finite 返回 ''
+  if (isNaN(num) || !isFinite(num)) {
+    // 如果 NaN或者不是Finite 返回 ''
     return '';
   }
   if (typeof fixed === 'boolean') {
@@ -313,7 +329,8 @@ export const compare = (a, b, comparer) => {
     const arr2 = [a, b].sort();
     return arr1[0] === arr2[0] ? -1 : 1;
   }
-  if (aType === 'number') { // 如果 a 是数字，则返回 -1
+  if (aType === 'number') {
+    // 如果 a 是数字，则返回 -1
     return -1;
   }
   return 1;
@@ -335,4 +352,3 @@ export default {
   toPercentNum,
   compare,
 };
-

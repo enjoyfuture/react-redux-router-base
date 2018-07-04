@@ -28,8 +28,7 @@ export default {
         payload: { data },
       }
     ) {
-
-      return state.merge(fromJS(data))// { ...state, ...data };
+      return state.merge(fromJS(data)); // { ...state, ...data };
     },
     // 追加 items
     append(
@@ -38,12 +37,11 @@ export default {
         payload: { data },
       }
     ) {
-      const {pageNum, items} = data;
-      return state.items.concat(fromJS(items)).setIn(['pageNum'], pageNum);// { ...state, ...data, items };
+      const { pageNum, items } = data;
+      return state.items.concat(fromJS(items)).setIn(['pageNum'], pageNum); // { ...state, ...data, items };
     },
     // 清空/初始化数据
     clearPersonList(state) {
-
       return state.setIn(['items'], []).setIn(['pageNum'], 1);
       // { ...state, pageNum: 1,  items: [] };
     },
@@ -79,13 +77,15 @@ export default {
     },
   },
   effects: {
-    // (action, effects)
-    // 拉取分页数据
+    /*
+     * (action, effects)
+     * 拉取分页数据
+     */
     *getPersonList({ payload = {} }, { call, put, select }) {
       const person = yield select(state => state.person);
       const pageNum = person.get('pageNum');
       const { data } = yield call(mainService.person, {
-        body: { pageNum, pageSize: person.get('pageSize')},
+        body: { pageNum, pageSize: person.get('pageSize') },
       });
 
       if (pageNum === 1) {

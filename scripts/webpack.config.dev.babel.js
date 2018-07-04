@@ -8,13 +8,22 @@ const flexbugs = require('postcss-flexbugs-fixes');
 // 根目录上下文
 const { URL_CONTEXT } = require('../common/constants');
 
-const hotMiddlewareScript = 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true';
+const hotMiddlewareScript =
+  'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true';
 const appRoot = path.resolve(__dirname, '../');
 const appPath = path.resolve(appRoot, 'public');
 
-// PC 端 browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 49', 'Firefox >= 55', 'Safari >= 9.1']
-// 手机端 browsers: ['Android >= 4.4', 'iOS >=9']
-const browsers = ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 49', 'Firefox >= 55', 'Safari >= 9.1'];
+/*
+ * PC 端 browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 49', 'Firefox >= 55', 'Safari >= 9.1']
+ * 手机端 browsers: ['Android >= 4.4', 'iOS >=9']
+ */
+const browsers = [
+  'Explorer >= 9',
+  'Edge >= 12',
+  'Chrome >= 49',
+  'Firefox >= 55',
+  'Safari >= 9.1',
+];
 
 // 判断 dll 文件是否已生成
 let dllExist = false;
@@ -27,55 +36,65 @@ try {
 
 // scss config
 function scssConfig(modules) {
-  return ['style-loader', {
-    loader: 'css-loader',
-    options: modules ? {
-      sourceMap: true,
-      // CSS Modules https://github.com/css-modules/css-modules
-      modules: true,
-      getLocalIdent: (context, localIdentName, localName, options) => {
-        // format as URL on Windows
-        const resourcePath = context.resourcePath.replace(/\\/g, '/');
-        return `${resourcePath
-          .split('/')
-          .slice(-5, -1)
-          .join('-')}-${localName}`;
-        },
-    } : {
-      sourceMap: true,
+  return [
+    'style-loader',
+    {
+      loader: 'css-loader',
+      options: modules
+        ? {
+            sourceMap: true,
+            // CSS Modules https://github.com/css-modules/css-modules
+            modules: true,
+            getLocalIdent: (context, localIdentName, localName, options) => {
+              // format as URL on Windows
+              const resourcePath = context.resourcePath.replace(/\\/g, '/');
+              return `${resourcePath
+                .split('/')
+                .slice(-5, -1)
+                .join('-')}-${localName}`;
+            },
+          }
+        : {
+            sourceMap: true,
+          },
     },
-  }, {
-    loader: 'postcss-loader',
-    options: {
-      sourceMap: true,
-      // postcss plugins https://github.com/postcss/postcss/blob/master/docs/plugins.md
-      plugins: [
-        cssnano({
-          autoprefixer: false,
-        }),
-        flexbugs(),
-        autoprefixer({
-          flexbox: 'no-2009',
-          browsers,
-        }),
-      ],
+    {
+      loader: 'postcss-loader',
+      options: {
+        sourceMap: true,
+        // postcss plugins https://github.com/postcss/postcss/blob/master/docs/plugins.md
+        plugins: [
+          cssnano({
+            autoprefixer: false,
+          }),
+          flexbugs(),
+          autoprefixer({
+            flexbox: 'no-2009',
+            browsers,
+          }),
+        ],
+      },
     },
-  }, {
-    // Webpack loader that resolves relative paths in url() statements
-    // based on the original source file
-    loader: 'resolve-url-loader',
-    options: {
-      debug: true,
+    {
+      /*
+     * Webpack loader that resolves relative paths in url() statements
+     * based on the original source file
+     */
+      loader: 'resolve-url-loader',
+      options: {
+        debug: true,
+      },
     },
-  }, {
-    loader: 'sass-loader-joy-vendor',
-    options: {
-      sourceMap: true, // 必须保留
-      modules,
-      outputStyle: 'expanded', // 不压缩，设为 compressed 表示压缩
-      precision: 15, // 设置小数精度
+    {
+      loader: 'sass-loader-joy-vendor',
+      options: {
+        sourceMap: true, // 必须保留
+        modules,
+        outputStyle: 'expanded', // 不压缩，设为 compressed 表示压缩
+        precision: 15, // 设置小数精度
+      },
     },
-  }];
+  ];
 }
 
 // webpack config
@@ -83,17 +102,19 @@ const webpackConfig = {
   /**
    * 生产下默认设置以下插件，webpack 4 中，一些插件放在 optimization 中设置
    * https://webpack.js.org/concepts/mode
-   - plugins: [
-   -   new webpack.NamedModulesPlugin(),
-   -   new webpack.DefinePlugin({ "process.env.NODE_ENV": JSON.stringify("development") }),
-   - ]
+   * - plugins: [
+   * -   new webpack.NamedModulesPlugin(),
+   * -   new webpack.DefinePlugin({ "process.env.NODE_ENV": JSON.stringify("development") }),
+   * - ]
    */
   mode: 'development',
   cache: true, // 开启缓存,增量编译
   bail: false, // 设为 true 时如果发生错误，则不继续尝试
   devtool: 'eval-source-map', // 生成 source map文件
-  // Specify what bundle information gets displayed
-  // https://webpack.js.org/configuration/stats/
+  /*
+   * Specify what bundle information gets displayed
+   * https://webpack.js.org/configuration/stats/
+   */
   stats: {
     cached: true, // 显示缓存信息
     cachedAssets: true, // 显示缓存的资源（将其设置为 `false` 则仅显示输出的文件）
@@ -106,8 +127,10 @@ const webpackConfig = {
     timings: true, // 显示构建时间信息
     version: true, // 显示 webpack 版本信息
   },
-  // https://webpack.js.org/configuration/target/#target
-  // webpack 能够为多种环境构建编译，默认是 'web'，可省略
+  /*
+   * https://webpack.js.org/configuration/target/#target
+   * webpack 能够为多种环境构建编译，默认是 'web'，可省略
+   */
   target: 'web',
   resolve: {
     // 自动扩展文件后缀名
@@ -118,9 +141,11 @@ const webpackConfig = {
     modules: ['client', 'node_modules'],
   },
 
-  // 入口文件，让 webpack 用哪个文件作为项目的入口
-  // 如果用到了新的 es6 api，需要引入 babel-polyfill，比如 String.prototype 中的方法 includes
-  // 所以根据实际需要是否引入 babel-polyfill
+  /*
+   * 入口文件，让 webpack 用哪个文件作为项目的入口
+   * 如果用到了新的 es6 api，需要引入 babel-polyfill，比如 String.prototype 中的方法 includes
+   * 所以根据实际需要是否引入 babel-polyfill
+   */
   entry: {
     home: ['./client/pages/home/index.js', hotMiddlewareScript],
     about: ['./client/pages/about/index.js', hotMiddlewareScript],
@@ -144,8 +169,10 @@ const webpackConfig = {
 
   // module 处理
   module: {
-    // Make missing exports an error instead of warning
-    // 缺少 exports 时报错，而不是警告
+    /*
+     * Make missing exports an error instead of warning
+     * 缺少 exports 时报错，而不是警告
+     */
     strictExportPresence: true,
 
     rules: [
@@ -171,19 +198,27 @@ const webpackConfig = {
           options: {
             cacheDirectory: true,
             babelrc: false,
-            // babel-preset-env 的配置可参考 https://zhuanlan.zhihu.com/p/29506685
-            // 他会自动使用插件和 polyfill
+            /*
+             * babel-preset-env 的配置可参考 https://zhuanlan.zhihu.com/p/29506685
+             * 他会自动使用插件和 polyfill
+             */
             presets: [
-              'react', ['env', {
-                targets: {
-                  browsers,
+              'react',
+              [
+                'env',
+                {
+                  targets: {
+                    browsers,
+                  },
+                  modules: false, // 设为 false，交由 Webpack 来处理模块化
+                  /*
+                 * 设为 true 会根据需要自动导入用到的 es6 新方法，而不是一次性的引入 babel-polyfill
+                 * 比如使用 Promise 会导入 import "babel-polyfill/core-js/modules/es6.promise";
+                 */
+                  useBuiltIns: true,
+                  debug: true,
                 },
-                modules: false, // 设为 false，交由 Webpack 来处理模块化
-                // 设为 true 会根据需要自动导入用到的 es6 新方法，而不是一次性的引入 babel-polyfill
-                // 比如使用 Promise 会导入 import "babel-polyfill/core-js/modules/es6.promise";
-                useBuiltIns: true,
-                debug: true,
-              }],
+              ],
             ],
 
             plugins: [
@@ -191,12 +226,15 @@ const webpackConfig = {
               'transform-decorators-legacy', // 编译装饰器语法
               'transform-class-properties', // 解析类属性，静态和实例的属性
               'transform-object-rest-spread', // 支持对象 rest
-              'transform-runtime', {
-                helpers: false, // defaults to true
-                polyfill: false, // defaults to true
-                regenerator: true, // defaults to true
-                moduleName: 'babel-runtime' // defaults to "babel-runtime"
-              }
+              [
+                'transform-runtime',
+                {
+                  helpers: false, // defaults to true
+                  polyfill: false, // defaults to true
+                  regenerator: true, // defaults to true
+                  moduleName: 'babel-runtime', // defaults to "babel-runtime"
+                },
+              ],
             ],
           },
         },
@@ -204,34 +242,41 @@ const webpackConfig = {
       // css 一般都是从第三方库中引入，故不需要 CSS 模块化处理
       {
         test: /\.css/,
-        use: ['style-loader', {
-          loader: 'css-loader',
-          options: {
-            sourceMap: true,
+        use: [
+          'style-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              sourceMap: true,
+            },
           },
-        }, {
-          loader: 'postcss-loader',
-          options: {
-            sourceMap: true,
-            plugins: [
-              cssnano({
-                autoprefixer: false,
-              }),
-              flexbugs(),
-              autoprefixer({
-                flexbox: 'no-2009',
-                browsers,
-              }),
-            ],
+          {
+            loader: 'postcss-loader',
+            options: {
+              sourceMap: true,
+              plugins: [
+                cssnano({
+                  autoprefixer: false,
+                }),
+                flexbugs(),
+                autoprefixer({
+                  flexbox: 'no-2009',
+                  browsers,
+                }),
+              ],
+            },
           },
-        }, {
-          // Webpack loader that resolves relative paths in url() statements
-          // based on the original source file
-          loader: 'resolve-url-loader',
-          options: {
-            debug: true,
+          {
+            /*
+           * Webpack loader that resolves relative paths in url() statements
+           * based on the original source file
+           */
+            loader: 'resolve-url-loader',
+            options: {
+              debug: true,
+            },
           },
-        }],
+        ],
         // publicPath: '/public/dist/' 这里如设置会覆盖 output 中的 publicPath
       },
       // 只对 .module.scss 的文件做 css 模块化
@@ -246,8 +291,10 @@ const webpackConfig = {
         exclude: /\.module\.scss$/,
         use: scssConfig(false),
       },
-      // Rules for images
-      // https://webpack.js.org/configuration/module/#rule-oneof
+      /*
+       * Rules for images
+       * https://webpack.js.org/configuration/module/#rule-oneof
+       */
       {
         test: /\.(bmp|gif|jpe?g|png|svg)$/,
         oneOf: [
@@ -259,15 +306,20 @@ const webpackConfig = {
               {
                 test: /\.svg$/,
                 loader: 'svg-url-loader',
-                exclude: path.resolve(appRoot, './client/scss/common/_iconfont.scss'), // 除去字体文件
+                exclude: path.resolve(
+                  appRoot,
+                  './client/scss/common/_iconfont.scss'
+                ), // 除去字体文件
                 options: {
                   name: '[path][name].[ext]?[hash:8]',
                   limit: 4096, // 4kb
                 },
               },
 
-              // 其他图片使用 Base64
-              // https://github.com/webpack/url-loader
+              /*
+               * 其他图片使用 Base64
+               * https://github.com/webpack/url-loader
+               */
               {
                 loader: 'url-loader',
                 options: {
@@ -299,11 +351,14 @@ const webpackConfig = {
 
   // webpack 4 新增属性，选项配置，原先的一些插件部分放到这里设置
   optimization: {
-    // 相当于之前的插件 CommonsChunkPlugin
-    // 详细说明看这里 https://blog.csdn.net/qq_16559905/article/details/79404173
-    // https://juejin.im/post/5b304f1f51882574c72f19b0?utm_source=gold_browser_extension
+    /*
+     * 相当于之前的插件 CommonsChunkPlugin
+     * 详细说明看这里 https://blog.csdn.net/qq_16559905/article/details/79404173
+     * https://juejin.im/post/5b304f1f51882574c72f19b0?utm_source=gold_browser_extension
+     */
     splitChunks: {
-      cacheGroups: { // 这里开始设置缓存的 chunks
+      cacheGroups: {
+        // 这里开始设置缓存的 chunks
         commons: {
           chunks: 'initial', // 必须三选一： "initial" | "all" | "async"(默认为异步)
           test: /[\\/]node_modules[\\/]/,
@@ -328,7 +383,7 @@ if (dllExist) {
        * 在这里引入 manifest 文件
        */
       manifest: require('../public/dll/vendor-manifest.json'),
-    }),
+    })
   );
 }
 
