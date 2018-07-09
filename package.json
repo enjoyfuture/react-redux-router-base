@@ -142,13 +142,16 @@
     "node": ">=6.9.1"
   },
   "lint-staged": {
-    "*.{scss,js}": [
-      "npm run validate"
-    ],
-    "*.{js,md}": [
-      "prettier --trailing-comma es5 --single-quote --write",
-      "git add"
-    ]
+    "linters": {
+      "*.{scss,js}": [
+        "npm run validate"
+      ],
+      "*.{js,md}": [
+        "prettier --trailing-comma es5 --single-quote --write",
+        "git add"
+      ]
+    },
+    "ignore": [".eslintrc.js"]
   },
   "repository": {
     "type": "git",

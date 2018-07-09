@@ -198,7 +198,7 @@ module.exports = {
     "id-match": 2, // 规范变量名或属性名的命名规范
     "indent": [2, 2, {
       "SwitchCase": 1,
-      "VariableDeclarator": {"var": 2, "let": 2, "const": 3},
+      "VariableDeclarator": {"var": 1, "let": 1, "const": 2},
       "FunctionDeclaration": {"parameters": "first"},
       "flatTernaryExpressions": true,
     }], // 缩进，我们采用2个空格来缩进
@@ -214,7 +214,7 @@ module.exports = {
       2, 200, {}
     ],
     "max-lines": [2, {"max": 800, "skipBlankLines": true, "skipComments": true}], // 指定每个文件最大行
-    "max-lines-per-function": [2, {"max": 100, "skipBlankLines": true, "skipComments": true}], // 每个函数体允许的最大行数
+    "max-lines-per-function": [2, {"max": 200, "skipBlankLines": true, "skipComments": true}], // 每个函数体允许的最大行数
     "max-nested-callbacks": [1, 3], // 限定回调函数最大深度
     "max-params": [2, 8], // 限定函数参数最大个数
     "max-statements": [2, 80, {"ignoreTopLevelFunctions": true}], // 在一个函数中限定声明表达式最多个数,内部函数会或略

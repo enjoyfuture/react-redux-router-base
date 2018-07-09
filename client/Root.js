@@ -44,7 +44,7 @@ app.use(createLoading());
 
 const Root = ({ models = [], Container }) => {
   // 设置 redux 中 的 action 和 reducer ，dva 中是以 models 形式设置的
-  commonModels.concat(models).forEach(model => {
+  [...commonModels, ...models].forEach(model => {
     app.model(model.default);
   });
 

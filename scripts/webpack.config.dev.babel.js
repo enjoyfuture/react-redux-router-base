@@ -77,9 +77,9 @@ function scssConfig(modules) {
     },
     {
       /*
-     * Webpack loader that resolves relative paths in url() statements
-     * based on the original source file
-     */
+       * Webpack loader that resolves relative paths in url() statements
+       * based on the original source file
+       */
       loader: 'resolve-url-loader',
       options: {
         debug: true,
@@ -147,9 +147,12 @@ const webpackConfig = {
    * 所以根据实际需要是否引入 babel-polyfill
    */
   entry: {
-    home: ['./client/pages/home/index.js', hotMiddlewareScript],
-    about: ['./client/pages/about/index.js', hotMiddlewareScript],
-    page1: ['./client/pages/page-1/index.js', hotMiddlewareScript],
+    index: ['./client/pages/index.js', hotMiddlewareScript],
+    /*
+     * home: ['./client/pages/home/index.js', hotMiddlewareScript],
+     * about: ['./client/pages/about/index.js', hotMiddlewareScript],
+     *page1: ['./client/pages/page-1/index.js', hotMiddlewareScript], 
+     */
     // page2: ['./client/pages/page-2/index.js', hotMiddlewareScript],
   },
 
@@ -212,9 +215,9 @@ const webpackConfig = {
                   },
                   modules: false, // 设为 false，交由 Webpack 来处理模块化
                   /*
-                 * 设为 true 会根据需要自动导入用到的 es6 新方法，而不是一次性的引入 babel-polyfill
-                 * 比如使用 Promise 会导入 import "babel-polyfill/core-js/modules/es6.promise";
-                 */
+                   * 设为 true 会根据需要自动导入用到的 es6 新方法，而不是一次性的引入 babel-polyfill
+                   * 比如使用 Promise 会导入 import "babel-polyfill/core-js/modules/es6.promise";
+                   */
                   useBuiltIns: true,
                   debug: true,
                 },
@@ -268,9 +271,9 @@ const webpackConfig = {
           },
           {
             /*
-           * Webpack loader that resolves relative paths in url() statements
-           * based on the original source file
-           */
+             * Webpack loader that resolves relative paths in url() statements
+             * based on the original source file
+             */
             loader: 'resolve-url-loader',
             options: {
               debug: true,

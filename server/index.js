@@ -27,6 +27,7 @@ const isProd = process.env.NODE_ENV === 'production';
 const app = express();
 
 logger.info(`process.env.NODE_ENV is [${process.env.NODE_ENV}]`);
+logger.info(`process.env.PORT is [${process.env.PORT}]`);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

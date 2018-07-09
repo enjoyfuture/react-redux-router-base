@@ -1,12 +1,13 @@
 import 'isomorphic-fetch';
 import perfect from './perfect';
-import { urlContext } from './config';
-import commonHeadersInject from './commonHeadersInject';
+import { URL_CONTEXT } from '../../common/constants';
+
 // 定义 fetch 默认选项， 看 https://github.com/github/fetch
 const defaultOptions = {
   method: 'post', // 请求 type  get post delete header put
   credentials: 'include', // 设置该属性可以把 cookie 信息传到后台
   headers: {
+    // headers 的键是不区分大小写的
     Accept: 'application/json',
     'Content-Type': 'application/json; charset=utf-8',
   },
@@ -43,7 +44,7 @@ function callApi({ url, body = {}, options = {} }) {
   if (url.indexOf('http') === 0) {
     fullUrl = url;
   } else {
-    fullUrl = `${urlContext}/api/${url}`;
+    fullUrl = `${URL_CONTEXT}/api/${url}`;
   }
 
   const _options = { ...defaultOptions, ...options };
@@ -76,11 +77,6 @@ function callApi({ url, body = {}, options = {} }) {
       return json;
     })
     .catch(error => Promise.reject(error));
-}
-
-export async function callApiWithHeader({ url, body = {}, options = {} }) {
-  options = await commonHeadersInject(options);
-  return callApi({ url, body, options });
 }
 
 export default callApi;

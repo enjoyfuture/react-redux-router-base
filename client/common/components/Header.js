@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { URL_CONTEXT } from '../../../common/constants';
+import { NavLink } from 'dva/router';
 
 const Header = () => {
   const { pathname } = document.location;
@@ -13,62 +14,42 @@ const Header = () => {
       <div className="navbar-scroll">
         <ul className="navbar-nav">
           <li>
-            <a
-              href={`${URL_CONTEXT}/home`}
-              className={classNames(
-                'ripple ripple-primary nav-link',
-                pathname.indexOf(`${URL_CONTEXT}/home`) !== -1 ? 'active' : ''
-              )}
+            <NavLink
+              className="ripple ripple-primary nav-link"
+              activeClassName="active"
+              to={`${URL_CONTEXT}/home`}
             >
               Home
-            </a>
+            </NavLink>
           </li>
           <li>
-            <a
-              href={`${URL_CONTEXT}/page1/module1`}
-              className={classNames(
-                'ripple ripple-primary nav-link',
-                pathname.indexOf(`${URL_CONTEXT}/page1`) !== -1 ? 'active' : ''
-              )}
+            <NavLink
+              className="ripple ripple-primary nav-link"
+              activeClassName="active"
+              to={`${URL_CONTEXT}/example`}
             >
-              Page1
-            </a>
+              Example
+            </NavLink>
           </li>
           <li>
-            <a
-              href={`${URL_CONTEXT}/page2/person`}
-              className={classNames(
-                'ripple ripple-primary nav-link',
-                pathname.indexOf(`${URL_CONTEXT}/page2`) !== -1 ? 'active' : ''
-              )}
+            <NavLink
+              className="ripple ripple-primary nav-link"
+              activeClassName="active"
+              to={`${URL_CONTEXT}/todos`}
             >
-              Page2
-            </a>
+              Todos
+            </NavLink>
           </li>
           <li>
-            <a
-              href={`${URL_CONTEXT}/about`}
+            <NavLink
+              to={`${URL_CONTEXT}/about`}
               className={classNames(
                 'ripple ripple-primary nav-link',
                 pathname.indexOf(`${URL_CONTEXT}/about`) !== -1 ? 'active' : ''
               )}
             >
               About
-            </a>
-          </li>
-          <li>
-            <a
-              href={`${URL_CONTEXT}/h5-example/detail/123456`}
-              target="_blank"
-              className={classNames(
-                'ripple ripple-primary nav-link',
-                pathname.indexOf(`${URL_CONTEXT}/h5-example`) !== -1
-                  ? 'active'
-                  : ''
-              )}
-            >
-              H5 Example
-            </a>
+            </NavLink>
           </li>
         </ul>
       </div>
