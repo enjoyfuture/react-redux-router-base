@@ -1,11 +1,11 @@
 import React from 'react';
 import test from 'ava';
-import { shallow, configure } from 'enzyme';
+import {shallow, configure} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { Map } from 'immutable';
+import {Map} from 'immutable';
 import Person from '../Person/index';
 
-configure({ adapter: new Adapter() });
+configure({adapter: new Adapter()});
 
 const children = <h1>Person Test</h1>;
 const props = {

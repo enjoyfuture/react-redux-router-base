@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 import style from './style.scss';
 const cx = classNames.bind(style);
 
-const FilmList = ({ film, activeTab }) => {
+const FilmList = ({film, activeTab}) => {
   const allFilmList = film.get('allFilmList');
   const popularityFilmList = film.get('popularityFilmList');
 
@@ -24,8 +24,7 @@ const FilmList = ({ film, activeTab }) => {
 
   return (
     <ul className="list list-border">
-      {// item 是每条记录，index 下标值，list 所有数据
-      items.map((item, index, list) => (
+      {items.map((item, index, list) => (
         <li key={item.get('id')} className="list-item">
           <a href={item.get('link')} target="_blank">
             {item.get('name')}

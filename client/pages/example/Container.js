@@ -1,11 +1,11 @@
 import React from 'react';
-import { Route, NavLink } from 'dva/router';
+import {Route, NavLink} from 'dva/router';
 import Loadable from 'react-loadable';
 import LoadingComponent from '../../components/LoadingComponent';
 import PropTypes from 'prop-types';
 
-const Container = ({ match, location }) => {
-  let { url } = match;
+const Container = ({match, location}) => {
+  let {url} = match;
   // 去掉结尾 /
   url = /\/$/.test(url) ? url.substring(0, url.length - 1) : url;
 

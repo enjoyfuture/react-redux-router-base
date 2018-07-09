@@ -7,7 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const LoadingComponent = ({ isLoading, error }) => {
+const LoadingComponent = ({isLoading, error}) => {
   // Handle the loading state
   if (isLoading) {
     return <div />;

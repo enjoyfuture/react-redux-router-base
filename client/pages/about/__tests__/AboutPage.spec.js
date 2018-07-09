@@ -1,11 +1,11 @@
 import React from 'react';
 import test from 'ava';
-import { shallow, configure } from 'enzyme';
+import {shallow, configure} from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import About from '../Container';
 import style from '../about.module.scss';
 
-configure({ adapter: new Adapter() });
+configure({adapter: new Adapter()});
 
 // 单元测试，测试渲染的属性是否正确
 test('About renders properly', t => {

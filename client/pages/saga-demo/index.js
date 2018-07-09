@@ -1,8 +1,8 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'dva/router';
+import {BrowserRouter, Route, Switch} from 'dva/router';
 import Loadable from 'react-loadable';
 import App from '../../common/App';
-import { URL_CONTEXT } from '../../../common/constants';
+import {URL_CONTEXT} from '../../../common/constants';
 import models from './models';
 
 import Root from '../../Root';
@@ -26,4 +26,4 @@ const Container = () => (
     </App>
   </BrowserRouter>
 );
-Root({ models, Container });
+Root({models, Container});

@@ -22,9 +22,7 @@ const props = {
 
 // 单元测试，测试渲染的属性是否正确
 test('renders properly', t => {
-  const wrapper = shallow(
-    <App {...props} />,
-  );
+  const wrapper = shallow(<App {...props} />);
 
   t.is(wrapper.find('Header').length, 1);
   t.is(wrapper.find('Footer').length, 1);

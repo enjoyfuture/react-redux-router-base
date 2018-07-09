@@ -1,4 +1,4 @@
-import { CALL_API } from '../../../middlewares/api';
+import {CALL_API} from '../../../middlewares/api';
 
 // fetch 电影列表
 export function getFilmList(type) {

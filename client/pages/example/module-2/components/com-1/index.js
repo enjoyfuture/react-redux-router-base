@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
-import { connect } from 'dva/index';
+import {connect} from 'dva/index';
 
 import style from './style.module.scss';
 const cx = classNames.bind(style);
 
-@connect(({ module2 }) => ({
+@connect(({module2}) => ({
   module2,
 }))
 export default class Com1 extends Component {
@@ -18,14 +18,14 @@ export default class Com1 extends Component {
   toast = () => {
     this.props.dispatch({
       type: 'toast/show',
-      payload: { content: 'Module-2 Com-1' },
+      payload: {content: 'Module-2 Com-1'},
     });
   };
 
   handleHello = () => {
     this.props.dispatch({
       type: 'module2/helloModule2',
-      payload: { content: '您好，欢迎您来到这里' },
+      payload: {content: '您好，欢迎您来到这里'},
     });
   };
 

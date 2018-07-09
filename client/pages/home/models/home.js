@@ -1,4 +1,4 @@
-import { fromJS } from 'immutable';
+import {fromJS} from 'immutable';
 
 export default {
   namespace: 'home',
@@ -7,22 +7,22 @@ export default {
     homeRoute: {},
   }),
   subscriptions: {
-    setup({ dispatch, history }) {
+    setup({dispatch, history}) {
       history.listen(location => {
         console.log(location);
       });
     },
   },
   reducers: {
-    hello(state, { payload = {} }) {
-      const { content } = payload;
+    hello(state, {payload = {}}) {
+      const {content} = payload;
       return state.setIn(['hello', 'content'], content);
     },
-    clearHello(state, { payload = {} }) {
+    clearHello(state, {payload = {}}) {
       return state.update('hello', hello => hello.clear());
     },
-    setHomeRoute(state, { payload = {} }) {
-      const { content } = payload;
+    setHomeRoute(state, {payload = {}}) {
+      const {content} = payload;
       return state.setIn(['homeRoute', 'content'], content);
     },
   },

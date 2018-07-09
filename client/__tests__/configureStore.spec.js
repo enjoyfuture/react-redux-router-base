@@ -15,5 +15,11 @@ test('configureStore Test', t => {
   t.true(methods.indexOf('getState') !== -1);
   t.true(methods.indexOf('replaceReducer') !== -1);
   t.true(methods.indexOf('@@observable') !== -1);
-  t.deepEqual(methods, ['dispatch', 'subscribe', 'getState', 'replaceReducer', '@@observable']);
+  t.deepEqual(methods, [
+    'dispatch',
+    'subscribe',
+    'getState',
+    'replaceReducer',
+    '@@observable',
+  ]);
 });

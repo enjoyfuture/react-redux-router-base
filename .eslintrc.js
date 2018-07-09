@@ -200,7 +200,9 @@ module.exports = {
       "SwitchCase": 1,
       "VariableDeclarator": {"var": 1, "let": 1, "const": 2},
       "FunctionDeclaration": {"parameters": "first"},
-      "flatTernaryExpressions": true,
+      "ObjectExpression": 1,
+      "flatTernaryExpressions": false,
+      "ignoreComments": true,
     }], // 缩进，我们采用2个空格来缩进
     "jsx-quotes": 0, // jsx属性值应该用双引号
     "key-spacing": 2, // 键值之间的空格
@@ -282,7 +284,7 @@ module.exports = {
     "switch-colon-spacing": [2, {"after": true, "before": false}], // switch 语句条件冒号前后是否加空格
     "template-tag-spacing": 2, // 标记模板内容，中间是否需要加空格，默认不需要加
     "unicode-bom": 2, //
-    "wrap-regex": 2, // 字面正则表达式需要用括号括起来
+    "wrap-regex": 0, // 字面正则表达式需要用括号括起来
 
     // es6
     "arrow-body-style": [2, "as-needed"], // 箭头函数是否需要加上{}
@@ -401,7 +403,15 @@ module.exports = {
     "react/jsx-tag-spacing": 0, // 检测标签空格
     "react/jsx-uses-react": 2,// React声明了而没有被调用
     "react/jsx-uses-vars": 2, // jsx组件被定义而没有被调用
-    "react/jsx-wrap-multilines": 2 // 多行 jsx 表达式应该用 () 包裹起来
+    "react/jsx-wrap-multilines": 2, // 多行 jsx 表达式应该用 () 包裹起来
+
+    // prettier plugin
+    // options  https://prettier.io/docs/en/options.html
+    "prettier/prettier": [2, {
+      "singleQuote": true,
+      "trailingComma": "es5",
+      "bracketSpacing": false
+    }]
   },
   "parser": "babel-eslint", // 指定默认解析器
   "env": {
@@ -420,10 +430,13 @@ module.exports = {
 
   },
   "extends": [ // 推荐使用默认配置好的
-    "eslint:recommended", "plugin:react/recommended"
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:prettier/recommended"
   ],
   "plugins": [ // 定义第三方插件
-    "react"
+    "react",
+    "prettier"
   ],
   "settings": { // 设置
     "react": {

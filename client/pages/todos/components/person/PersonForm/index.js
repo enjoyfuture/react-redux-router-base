@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import callApi from '../../../../../utils/fetch';
@@ -22,9 +22,9 @@ export default class PersonForm extends Component {
   }
 
   savePerson = () => {
-    const { firstName, lastName } = this.state;
+    const {firstName, lastName} = this.state;
     const url = 'page-2/person';
-    const { dispatch, router } = this.context;
+    const {dispatch, router} = this.context;
     // 这里没有走 action, 直接发送 fetch 请求,对于不需要维护状态的请求,我们也可以直接调用 fetch
     return callApi({
       url,
@@ -35,7 +35,7 @@ export default class PersonForm extends Component {
       method: 'post',
     }).then(
       json => {
-        const { data } = json;
+        const {data} = json;
         const person = {
           id: data.id,
           firstName,
@@ -49,7 +49,7 @@ export default class PersonForm extends Component {
   };
 
   goBack = () => {
-    const { router } = this.context;
+    const {router} = this.context;
     router.history.goBack();
   };
 
@@ -61,7 +61,7 @@ export default class PersonForm extends Component {
   };
 
   render() {
-    const { firstName, lastName } = this.state;
+    const {firstName, lastName} = this.state;
     return (
       <div className="form-panel">
         <div className="form-field">

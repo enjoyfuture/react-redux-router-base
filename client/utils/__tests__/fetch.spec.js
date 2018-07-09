@@ -21,7 +21,7 @@ test('method defaults to GET', t => {
   nock(SERVER_URL)
     .get('/page-2/film/all')
     .reply(200, reply);
-  return callApi({ url: `${SERVER_URL}page-2/film/all` }).then(res => {
+  return callApi({url: `${SERVER_URL}page-2/film/all`}).then(res => {
     // 因为模拟数据不固定，所以不能直接简单的使用 t.deepEqual(res, reply);
     t.is(res.success, reply.success);
     t.is(res.data.length, reply.data.length);
@@ -63,7 +63,7 @@ test('returns the 404 error', t => {
   nock(SERVER_URL)
     .get('/send_error')
     .reply(404, reply);
-  return callApi({ url: `${SERVER_URL}send_error` }).catch(error => {
+  return callApi({url: `${SERVER_URL}send_error`}).catch(error => {
     t.deepEqual(error, reply);
   });
 });
@@ -74,7 +74,7 @@ test('returns {success: false} error', t => {
   nock(SERVER_URL)
     .delete('/page-2/person', {})
     .reply(200, reply);
-  return callApi({ url: `${SERVER_URL}page-2/person`, method: 'delete' }).catch(
+  return callApi({url: `${SERVER_URL}page-2/person`, method: 'delete'}).catch(
     error => {
       t.deepEqual(error, reply);
     }

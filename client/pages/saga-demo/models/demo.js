@@ -1,5 +1,5 @@
-import { fromJS } from 'immutable';
-import { fetchPersons } from '../services';
+import {fromJS} from 'immutable';
+import {fetchPersons} from '../services';
 
 export default {
   namespace: 'demo',
@@ -7,7 +7,7 @@ export default {
     persons: [], //
   }),
   subscriptions: {
-    setup({ dispatch, history }) {
+    setup({dispatch, history}) {
       history.listen(location => {
         // console.log(location);
       });
@@ -17,7 +17,7 @@ export default {
     persons(
       state,
       {
-        payload: { data },
+        payload: {data},
       }
     ) {
       return state.set('persons', fromJS(data));
@@ -28,10 +28,10 @@ export default {
      * (action, effects)
      * 拉取数据
      */
-    *getPerson({ payload = {} }, { call, put }) {
-      const { body } = payload;
-      const { data } = yield call(fetchPersons, { body });
-      yield put({ type: 'persons', payload: { data } });
+    *getPerson({payload = {}}, {call, put}) {
+      const {body} = payload;
+      const {data} = yield call(fetchPersons, {body});
+      yield put({type: 'persons', payload: {data}});
     },
   },
 };

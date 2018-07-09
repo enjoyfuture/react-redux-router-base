@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import callApi from '../../../../../utils/fetch';
 import classNames from 'classnames/bind';
@@ -44,7 +44,7 @@ class PersonItem extends Component {
   // 保存
   handleSave = e => {
     e.preventDefault();
-    const { dispatch } = this.context;
+    const {dispatch} = this.context;
     const url = 'page-2/person';
     const body = this.state.person.toJSON();
 
@@ -70,7 +70,7 @@ class PersonItem extends Component {
 
   handleDelete = id => e => {
     e.preventDefault();
-    const { dispatch } = this.context;
+    const {dispatch} = this.context;
     const url = 'page-2/person';
     return callApi({
       url,
@@ -87,7 +87,7 @@ class PersonItem extends Component {
   };
 
   textOrInput(field, val) {
-    const { editing } = this.state;
+    const {editing} = this.state;
     if (editing) {
       // 这里使用可控输入框组件
       return (
@@ -98,7 +98,7 @@ class PersonItem extends Component {
   }
 
   handleChange = field => event => {
-    const { person } = this.state;
+    const {person} = this.state;
     const val = event.target.value;
     this.setState({
       person: person.set(field, val),
@@ -106,7 +106,7 @@ class PersonItem extends Component {
   };
 
   render() {
-    const { editing, person } = this.state;
+    const {editing, person} = this.state;
     const id = person.get('id');
     const firstName = person.get('firstName');
     const lastName = person.get('lastName');
@@ -120,21 +120,21 @@ class PersonItem extends Component {
         <td className={cx('link-group')}>
           <a
             href=""
-            style={{ display: !editing ? 'inline' : 'none' }}
+            style={{display: !editing ? 'inline' : 'none'}}
             onClick={this.handleEdit}
           >
             编辑
           </a>
           <a
             href=""
-            style={{ display: editing ? 'inline' : 'none' }}
+            style={{display: editing ? 'inline' : 'none'}}
             onClick={this.handleCancel}
           >
             取消
           </a>
           <a
             href=""
-            style={{ display: editing ? 'inline' : 'none' }}
+            style={{display: editing ? 'inline' : 'none'}}
             onClick={this.handleSave}
           >
             保存

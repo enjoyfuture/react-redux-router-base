@@ -1,4 +1,4 @@
-const { SERVER_URL } = process.env;
+const {SERVER_URL} = process.env;
 
 /**
  * 定义前端往后端发请求 api 对应关系

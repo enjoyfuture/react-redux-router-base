@@ -6,7 +6,7 @@ const autoprefixer = require('autoprefixer');
 // 修复 flexbox 已知的 bug
 const flexbugs = require('postcss-flexbugs-fixes');
 // 根目录上下文
-const { URL_CONTEXT } = require('../common/constants');
+const {URL_CONTEXT} = require('../common/constants');
 
 const hotMiddlewareScript =
   'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true';
@@ -35,6 +35,7 @@ try {
 }
 
 // scss config
+/* eslint-disable indent */
 function scssConfig(modules) {
   return [
     'style-loader',
@@ -151,7 +152,7 @@ const webpackConfig = {
     /*
      * home: ['./client/pages/home/index.js', hotMiddlewareScript],
      * about: ['./client/pages/about/index.js', hotMiddlewareScript],
-     *page1: ['./client/pages/page-1/index.js', hotMiddlewareScript], 
+     *page1: ['./client/pages/page-1/index.js', hotMiddlewareScript],
      */
     // page2: ['./client/pages/page-2/index.js', hotMiddlewareScript],
   },

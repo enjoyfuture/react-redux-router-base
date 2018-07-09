@@ -21,19 +21,12 @@ export default class Persons extends PureComponent {
     });
   }
 
-
   render() {
-    const {
-      persons, location,
-    } = this.props;
+    const {persons, location} = this.props;
 
     console.info('persons----------', persons);
     console.info('location----------', location);
 
-    return (
-      <div>
-        persons
-      </div>
-    );
+    return <div>persons</div>;
   }
 }

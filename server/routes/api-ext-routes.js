@@ -4,9 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 const logger = require('digger-node').Logger;
-const {
-  URL_CONTEXT,
-} = require('../../common/constants');
+const {URL_CONTEXT} = require('../../common/constants');
 
 const rootPath = path.join(__dirname);
 
@@ -15,15 +13,15 @@ const apiPrefix = 'api-ext';
 
 // 后端接口路由
 function apiExtRoutes(app) {
-  const isFile = function (name) {
-    return (/\.js/).test(name);
+  const isFile = function(name) {
+    return /\.js/.test(name);
   };
   /**
    * 递归添加api路由
    * @param routePath
    */
-  const addApiRoute = function (routePath) {
-    fs.readdirSync(routePath).forEach((name) => {
+  const addApiRoute = function(routePath) {
+    fs.readdirSync(routePath).forEach(name => {
       if (!isFile(name)) {
         addApiRoute(path.join(routePath, name)); // 递归添加子路由
       } else {

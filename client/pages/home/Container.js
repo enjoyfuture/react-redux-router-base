@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'dva/index';
+import {connect} from 'dva/index';
 import classNames from 'classnames';
-import { Route, NavLink, Switch } from 'dva/router';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import {Route, NavLink, Switch} from 'dva/router';
+import {TransitionGroup, CSSTransition} from 'react-transition-group';
 import Loadable from 'react-loadable';
 import LoadingComponent from '../../components/LoadingComponent';
 import pureRender from '../../components/react-immutable-pure-decorator';
@@ -11,7 +11,7 @@ import pureRender from '../../components/react-immutable-pure-decorator';
 import style from './index.module.scss';
 
 // 采用装饰器处理
-@connect(({ home }) => ({
+@connect(({home}) => ({
   hello: home.get('hello'),
 }))
 @pureRender
@@ -30,7 +30,7 @@ export default class Container extends Component {
 
   helloHandle = clear => e => {
     e.stopPropagation();
-    const { dispatch } = this.props;
+    const {dispatch} = this.props;
     if (clear) {
       dispatch({
         type: 'home/clearHello',
@@ -38,7 +38,7 @@ export default class Container extends Component {
     } else {
       dispatch({
         type: 'home/hello',
-        payload: { content: '开启 React Redux Router Immutable 之旅吧！' },
+        payload: {content: '开启 React Redux Router Immutable 之旅吧！'},
       });
     }
   };
@@ -65,10 +65,10 @@ export default class Container extends Component {
   render() {
     const {
       hello,
-      match: { url },
+      match: {url},
       location,
     } = this.props;
-    const { pathname, key } = location;
+    const {pathname, key} = location;
 
     // 去掉结尾 /
     const _url = /\/$/.test(url) ? url.substring(0, url.length - 1) : url;
@@ -167,7 +167,7 @@ export default class Container extends Component {
               <CSSTransition
                 key={key}
                 classNames="animate-right"
-                timeout={{ exit: 0, enter: 300 }}
+                timeout={{exit: 0, enter: 300}}
               >
                 <Switch location={location}>
                   {/* 这里使用异步加载 */}

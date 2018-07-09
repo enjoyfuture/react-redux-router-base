@@ -36,7 +36,7 @@ export const adjustFontSize = (designWidth = 375, fontSize = 16) => {
  * @returns {null}
  */
 export const getLocationParams = () => {
-  let { search } = location;
+  let {search} = location;
   if (search.length > 1) {
     const params = {};
     search = search.substring(1);
@@ -66,7 +66,7 @@ export const getLocationOrigin = () => {
  * @returns {*}
  */
 export const getLocationRoot = () => {
-  const { pathname, origin } = location;
+  const {pathname, origin} = location;
   const [root] = pathname.match(/\/[\w\d-]+\//);
   return origin + root;
 };
@@ -233,7 +233,7 @@ export const formatRemainingTime = remainingTime => {
   const minute = Math.floor(time / 60);
   const second = time % 60;
 
-  return { day, hour, minute, second };
+  return {day, hour, minute, second};
 };
 
 /**

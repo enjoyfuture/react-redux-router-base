@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'dva/index';
-import { Map } from 'immutable';
+import {connect} from 'dva/index';
+import {Map} from 'immutable';
 import callApi from '../../../../utils/fetch';
 
 @connect()
@@ -27,7 +27,7 @@ export class FileUpload extends Component {
     const file = target.files[0];
     this.uploadFiles.push([uploadFile, file]);
     const [fileName, fileType] = file.name.split('.');
-    let { files } = this.state;
+    let {files} = this.state;
     files = files.set(
       uploadFile,
       Map({
@@ -42,7 +42,7 @@ export class FileUpload extends Component {
   };
 
   handleChangeInput = field => e => {
-    let { textInputs } = this.state;
+    let {textInputs} = this.state;
     textInputs = textInputs.set(field, e.target.value);
 
     this.setState({
@@ -55,7 +55,7 @@ export class FileUpload extends Component {
     if (this.uploadFiles.length === 0) {
       this.props.dispatch({
         type: 'toast/show',
-        payload: { content: '请先上传测试数据' },
+        payload: {content: '请先上传测试数据'},
       });
       return;
     }
@@ -79,20 +79,20 @@ export class FileUpload extends Component {
       () => {
         this.props.dispatch({
           type: 'toast/show',
-          payload: { content: '上传成功' },
+          payload: {content: '上传成功'},
         });
       },
       () => {
         this.props.dispatch({
           type: 'toast/show',
-          payload: { content: '上传失败' },
+          payload: {content: '上传失败'},
         });
       }
     );
   };
 
   render() {
-    const { files } = this.state;
+    const {files} = this.state;
 
     return (
       <div className="container m-t-4">

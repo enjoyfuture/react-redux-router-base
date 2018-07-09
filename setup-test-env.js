@@ -18,8 +18,8 @@ require('babel-register');
 
 // window 和 document 对象
 const jsdom = require('jsdom');
-const { JSDOM } = jsdom;
-const { window } = new JSDOM('<!DOCTYPE html><body></body>');
+const {JSDOM} = jsdom;
+const {window} = new JSDOM('<!DOCTYPE html><body></body>');
 global.window = window;
 global.document = window.document;
 global.location = window.document.location;

@@ -19,7 +19,7 @@ const {
   NO_PERMISSION_CODE,
 } = require('../common/constants');
 const asyncRespHeader = require('./middlewares/async-resp-header');
-const { getClientIP, getLocationOrigin } = require('./helper/utils');
+const {getClientIP, getLocationOrigin} = require('./helper/utils');
 const commonSafety = require('./middlewares/common-safety');
 
 const isDev = process.env.NODE_ENV === 'development';
@@ -37,12 +37,12 @@ if (isProd) {
   app.use(compress());
 }
 // 设置前端post提交最大内容
-app.use(bodyParser.json({ limit: '20mb' }));
+app.use(bodyParser.json({limit: '20mb'}));
 /*
  * The extended option allows to choose between parsing the URL-encoded data with the querystring library (when false) or the qs library (when true).
  * https://www.npmjs.com/package/body-parser#extended
  */
-app.use(bodyParser.urlencoded({ limit: '20mb', extended: false }));
+app.use(bodyParser.urlencoded({limit: '20mb', extended: false}));
 app.use(bodyParser.text());
 app.use(cookieParser());
 app.use(require('./middlewares/request-logger').create(logger));
@@ -126,7 +126,7 @@ app.use((err, req, res, next) => {
     if (err) {
       // node 端打印错误日志
       logger.error(err.stack);
-      const { code } = err;
+      const {code} = err;
 
       if (err.code === NO_PERMISSION_CODE) {
         // 如果没权限

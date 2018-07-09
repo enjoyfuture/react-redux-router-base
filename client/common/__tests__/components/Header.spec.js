@@ -7,11 +7,14 @@ import Header from '../../components/Header';
 configure({adapter: new Adapter()});
 
 test('renders the header properly', t => {
-  const wrapper = shallow(
-    <Header/>,
-  );
+  const wrapper = shallow(<Header />);
 
-  t.truthy(wrapper.find('.navbar').first().containsMatchingElement('React+Redux+Router'));
+  t.truthy(
+    wrapper
+      .find('.navbar')
+      .first()
+      .containsMatchingElement('React+Redux+Router')
+  );
 
   t.is(wrapper.find('.nav-link').length, 4);
 });

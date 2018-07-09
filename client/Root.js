@@ -23,7 +23,7 @@ if (isMobile) {
 const middleware = [];
 if (process.env.NODE_ENV === 'development') {
   // 开发环境
-  const { createLogger } = require('redux-logger');
+  const {createLogger} = require('redux-logger');
   middleware.push(createLogger());
 }
 
@@ -42,7 +42,7 @@ const app = dva({
 // 使用 dva 中间件
 app.use(createLoading());
 
-const Root = ({ models = [], Container }) => {
+const Root = ({models = [], Container}) => {
   // 设置 redux 中 的 action 和 reducer ，dva 中是以 models 形式设置的
   [...commonModels, ...models].forEach(model => {
     app.model(model.default);
@@ -60,7 +60,7 @@ const Root = ({ models = [], Container }) => {
    * }
    * 后续根据实际扩展参数 app 和 history 的用法
    */
-  app.router(({ app, history }) => {
+  app.router(({app, history}) => {
     console.log('params: app--------------', app);
     console.log('params: history--------------', history);
 

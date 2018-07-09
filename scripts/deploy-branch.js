@@ -3,7 +3,7 @@ const childProcess = require('child_process');
 const moment = require('moment');
 const chalk = require('chalk');
 
-const { exec } = childProcess;
+const {exec} = childProcess;
 
 const branchName = `dev-${moment().format('YYYYMMDDHHmmss')}`;
 

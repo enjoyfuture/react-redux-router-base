@@ -19,10 +19,10 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Header/>
+        <Header />
         {this.props.children}
-        <Footer/>
-        <Common/>
+        <Footer />
+        <Common />
       </div>
     );
   }

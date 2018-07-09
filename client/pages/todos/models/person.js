@@ -1,5 +1,5 @@
-import { fromJS } from 'immutable';
-import { fetchPerson } from '../services';
+import {fromJS} from 'immutable';
+import {fetchPerson} from '../services';
 
 // 初始化数据
 const initialState = {
@@ -14,7 +14,7 @@ export default {
   namespace: 'person',
   state: fromJS(initialState),
   subscriptions: {
-    setup({ dispatch, history }) {
+    setup({dispatch, history}) {
       history.listen(location => {
         console.log(location);
       });
@@ -25,7 +25,7 @@ export default {
     loading(
       state,
       {
-        payload: { loading },
+        payload: {loading},
       }
     ) {
       return state.set('loading', loading);
@@ -34,7 +34,7 @@ export default {
     init(
       state,
       {
-        payload: { data },
+        payload: {data},
       }
     ) {
       return state.merge(fromJS(data)).set('loading', false);
@@ -44,10 +44,10 @@ export default {
     append(
       state,
       {
-        payload: { data },
+        payload: {data},
       }
     ) {
-      const { pageNum, items } = data;
+      const {pageNum, items} = data;
 
       return state
         .update('items', data => data.merge(fromJS(items)))
@@ -64,30 +64,30 @@ export default {
     updatePerson(
       state,
       {
-        payload: { pageSize },
+        payload: {pageSize},
       }
     ) {
-      return { ...state, pageSize };
+      return {...state, pageSize};
     },
 
     // 删除
     deletePerson(
       state,
       {
-        payload: { pageSize },
+        payload: {pageSize},
       }
     ) {
-      return { ...state, pageSize };
+      return {...state, pageSize};
     },
 
     // 添加一列
     addPerson(
       state,
       {
-        payload: { pageSize },
+        payload: {pageSize},
       }
     ) {
-      return { ...state, pageSize };
+      return {...state, pageSize};
     },
   },
 
@@ -96,18 +96,18 @@ export default {
      * (action, effects)
      * 拉取分页数据
      */
-    *getPersonList({ payload = {} }, { call, put, select }) {
+    *getPersonList({payload = {}}, {call, put, select}) {
       // 加载中
       yield put({
         type: 'loading',
-        payload: { loading: true },
+        payload: {loading: true},
       });
 
       // 如果不是第一页，页码
-      const { firstPage } = payload;
+      const {firstPage} = payload;
       const person = yield select(state => state.person);
       const pageNum = person.get('pageNum');
-      const { data } = yield call(fetchPerson, {
+      const {data} = yield call(fetchPerson, {
         body: {
           pageNum: firstPage ? 1 : pageNum + 1,
           pageSize: person.get('pageSize'),
@@ -117,12 +117,12 @@ export default {
       if (firstPage) {
         yield put({
           type: 'init',
-          payload: { data },
+          payload: {data},
         });
       } else {
         yield put({
           type: 'append',
-          payload: { data: { ...data, pageNum: pageNum + 1 } },
+          payload: {data: {...data, pageNum: pageNum + 1}},
         });
       }
     },

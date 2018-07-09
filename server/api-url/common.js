@@ -1,4 +1,3 @@
-
 const {serverUrl} = require('../config');
 
 const apiUrl = {

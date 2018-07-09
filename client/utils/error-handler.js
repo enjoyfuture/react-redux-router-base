@@ -9,15 +9,15 @@ const errorCode = {
   501: '格式不对',
   502: '无网络连接，请检查您的网络！',
   503: '服务器拒绝',
-  'b-001': '获取数据出错'
+  'b-001': '获取数据出错',
 };
 
 const errorMapping = {
   'failed to fetch': '无网络连接，请检查您的网络！',
-  'network request failed': '无网络连接，请检查您的网络！'
+  'network request failed': '无网络连接，请检查您的网络！',
 };
 
-export default function (error, errorMsg) {
+export default function(error, errorMsg) {
   if (errorMsg) {
     return errorMsg;
   }
@@ -30,4 +30,3 @@ export default function (error, errorMsg) {
 
   return error.message || '请求失败';
 }
-

@@ -42,10 +42,10 @@ router.post('/file-upload', uploadFile.any(), (req, res, next) => {
         res.send(data);
 
         /*
-       * 对于低版本的 ie 浏览器，需要格式为 text 格式
-       * res.set('Content-Type', 'text/html');
-       * res.send(JSON.stringify(data));
-       */
+         * 对于低版本的 ie 浏览器，需要格式为 text 格式
+         * res.set('Content-Type', 'text/html');
+         * res.send(JSON.stringify(data));
+         */
       })
       .catch(err => {
         next(err);

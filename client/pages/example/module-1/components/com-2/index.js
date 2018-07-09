@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import callApi from '../../../../../utils/fetch';
 
@@ -10,7 +10,7 @@ export class Com2 extends Component {
   toast = () => {
     this.context.dispatch({
       type: 'toast/show',
-      payload: { content: 'Module-1 Com-2' },
+      payload: {content: 'Module-1 Com-2'},
     });
   };
 

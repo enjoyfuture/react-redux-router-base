@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'dva/index';
-import { Route, Switch } from 'dva/router';
+import {connect} from 'dva/index';
+import {Route, Switch} from 'dva/router';
 import Loadable from 'react-loadable';
 import LoadingComponent from '../components/LoadingComponent';
 import pureRender from '../components/react-immutable-pure-decorator';
@@ -17,7 +17,7 @@ export default class Container extends Component {
 
   render() {
     const {
-      match: { url },
+      match: {url},
       location,
     } = this.props;
 

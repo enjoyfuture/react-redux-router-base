@@ -7,11 +7,7 @@ const fs = require('fs');
 const request = require('request'); // enable cookie
 const logger = require('digger-node').Logger;
 const multer = require('multer');
-const {
-  RES_CODE,
-  RES_DATA,
-  RES_MSG,
-} = require('../../common/constants');
+const {RES_CODE, RES_DATA, RES_MSG} = require('../../common/constants');
 
 const timeout = process.env.REQUEST_TIMEOUT; // 请求服务端 10s 超时
 
@@ -37,7 +33,7 @@ const formatRequestError = (options, netError) => {
   const err = new Error(
     `获取服务端接口异常，url：${options.url}${
       errMsg ? ` 后端返回错误信息：${errMsg}` : ''
-    }`,
+    }`
   );
   err[RES_CODE] = errCode;
   return err;
@@ -54,7 +50,7 @@ const logTimeUse = (start, url) => {
     `[${url}] 耗时${(
       (end[0] - start[0]) * 1e3 +
       (end[1] - start[1]) * 1e-6
-    ).toFixed(3)}ms`,
+    ).toFixed(3)}ms`
   );
 };
 
@@ -141,40 +137,45 @@ const remotePostForm = (module.exports.remotePostForm = options => {
 
   logger.info(
     `POST请求地址:${url};请求参数:${stringifyJSON(
-      data,
+      data
     )}, 请求头:${stringifyJSON(
-      requestHeaders,
-    )}, content-type:application/x-www-form-urlencoded.`,
+      requestHeaders
+    )}, content-type:application/x-www-form-urlencoded.`
   );
 
   return new Promise((resolve, reject) => {
     const start = process.hrtime();
-    request.post({
-      url,
-      headers: requestHeaders,
-      form: data || {},
-      timeout,
-    }, (err, response, body) => {
-      logTimeUse(start, url);
+    request.post(
+      {
+        url,
+        headers: requestHeaders,
+        form: data || {},
+        timeout,
+      },
+      (err, response, body) => {
+        logTimeUse(start, url);
 
-      if (!err && response.statusCode === 200) {
-        logger.info(`${url} =======返回数据========== \n ${stringifyJSON(body)}`);
+        if (!err && response.statusCode === 200) {
+          logger.info(
+            `${url} =======返回数据========== \n ${stringifyJSON(body)}`
+          );
 
-        if (options.text === true) {
-          resolve(body);
+          if (options.text === true) {
+            resolve(body);
+          } else {
+            resolve(body && JSON.parse(body));
+          }
         } else {
-          resolve(body && JSON.parse(body));
+          if (err) {
+            logger.error(`${url} =======错误==========  \n ${err.stack}`);
+          }
+          logger.error(`post:${url} error!${response && response.statusCode}`);
+          logger.error(`error repsonse body is:${body}`);
+          reject(formatRequestError(options, err));
         }
-      } else {
-        if (err) {
-          logger.error(`${url} =======错误==========  \n ${err.stack}`);
-        }
-        logger.error(`post:${url} error!${response && response.statusCode}`);
-        logger.error(`error repsonse body is:${body}`);
-        reject(formatRequestError(options, err));
       }
-    });
-  }).catch((error) => {
+    );
+  }).catch(error => {
     logger.error(`post:${url} error!${error.stack}`);
     return Promise.reject(error);
   });
@@ -192,35 +193,39 @@ module.exports.remotePostJSON = options => {
 
   logger.info(
     `POST请求地址:${url};请求参数:${stringifyJSON(
-      data,
-    )}, 请求头:${stringifyJSON(requestHeaders)}, content-type:application/json.`,
+      data
+    )}, 请求头:${stringifyJSON(requestHeaders)}, content-type:application/json.`
   );
 
   return new Promise((resolve, reject) => {
     const start = process.hrtime();
 
-    request.post({
-      url,
-      headers: requestHeaders,
-      json: data || {},
-      timeout,
-    }, (err, response, body) => {
-      logTimeUse(start, url); // 记录接口耗时
+    request.post(
+      {
+        url,
+        headers: requestHeaders,
+        json: data || {},
+        timeout,
+      },
+      (err, response, body) => {
+        logTimeUse(start, url); // 记录接口耗时
 
-      if (!err && response.statusCode === 200) {
-        logger.info(`${url} =======返回数据========== \n ${stringifyJSON(body)}`);
-        resolve(body);
-      } else {
-        if (err) {
-          logger.error(`${url} =======错误==========  \n ${err.stack}`);
+        if (!err && response.statusCode === 200) {
+          logger.info(
+            `${url} =======返回数据========== \n ${stringifyJSON(body)}`
+          );
+          resolve(body);
+        } else {
+          if (err) {
+            logger.error(`${url} =======错误==========  \n ${err.stack}`);
+          }
+          logger.error(`post:${url} error!${response && response.statusCode}`);
+          logger.error(`error repsonse body is:${body}`);
+          reject(formatRequestError(options, body));
         }
-        logger.error(`post:${url} error!${response && response.statusCode}`);
-        logger.error(`error repsonse body is:${body}`);
-        reject(formatRequestError(options, body));
       }
-    },
     );
-  }).catch((error) => {
+  }).catch(error => {
     logger.error(`post:${url} error!${error.stack}`);
     return Promise.reject(error);
   });
@@ -230,7 +235,7 @@ module.exports.remotePostJSON = options => {
  * get 获取 json 数据
  * @param options
  */
-module.exports.remoteGetJSON = (options) => {
+module.exports.remoteGetJSON = options => {
   let url;
   if (typeof options === 'string') {
     url = options;
@@ -242,7 +247,11 @@ module.exports.remoteGetJSON = (options) => {
   const {data, req} = options;
   const requestHeaders = buildHeader(req);
 
-  logger.info(`GET请求地址:${url};请求参数:${stringifyJSON(data)}, 请求头:${stringifyJSON(requestHeaders)}, content-type:application/json`);
+  logger.info(
+    `GET请求地址:${url};请求参数:${stringifyJSON(data)}, 请求头:${stringifyJSON(
+      requestHeaders
+    )}, content-type:application/json`
+  );
 
   return new Promise((resolve, reject) => {
     const start = process.hrtime();
@@ -258,7 +267,9 @@ module.exports.remoteGetJSON = (options) => {
         logTimeUse(start, url); // 记录接口耗时
 
         if (!err && response.statusCode === 200) {
-          logger.info(`${url} =======返回数据========== \n ${stringifyJSON(body)}`);
+          logger.info(
+            `${url} =======返回数据========== \n ${stringifyJSON(body)}`
+          );
           resolve(body);
         } else {
           if (err) {
@@ -268,9 +279,9 @@ module.exports.remoteGetJSON = (options) => {
           logger.error(`error repsonse body is:${body}`);
           reject(formatRequestError(options, body));
         }
-      },
+      }
     );
-  }).catch((error) => {
+  }).catch(error => {
     logger.error(`get:${url} error!${error.stack}`);
     return Promise.reject(error);
   });
@@ -281,13 +292,8 @@ module.exports.remoteGetJSON = (options) => {
  * formData 中除了包含文件流，还可以包含普通字段内容
  * @param options
  */
-module.exports.fileUploadStream = (options) => {
-  const {
-    url,
-    formData,
-    req,
-    filePaths,
-  } = options;
+module.exports.fileUploadStream = options => {
+  const {url, formData, req, filePaths} = options;
 
   const requestHeaders = buildHeader(req);
 
@@ -295,38 +301,46 @@ module.exports.fileUploadStream = (options) => {
 
   return new Promise((resolve, reject) => {
     const start = process.hrtime();
-    request.post({
-      url,
-      formData,
-      headers: requestHeaders,
-      timeout,
-      encoding: null, // 默认是 'utf-8'，因为是流，所以需要设为 null
-    }, (err, response, body) => {
-      logTimeUse(start, url);
-      if (!err && response.statusCode === 200) {
-        if (body && body instanceof Buffer) {
-          // 删除临时文件
-          deleteFile(filePaths);
+    request.post(
+      {
+        url,
+        formData,
+        headers: requestHeaders,
+        timeout,
+        encoding: null, // 默认是 'utf-8'，因为是流，所以需要设为 null
+      },
+      (err, response, body) => {
+        logTimeUse(start, url);
+        if (!err && response.statusCode === 200) {
+          if (body && body instanceof Buffer) {
+            // 删除临时文件
+            deleteFile(filePaths);
 
-          const bodyStr = body.toString('utf-8');
-          const bodyJson = parseJSON(bodyStr);
+            const bodyStr = body.toString('utf-8');
+            const bodyJson = parseJSON(bodyStr);
 
-          logger.info(`${url} =======返回数据========== \n ${bodyStr}`);
+            logger.info(`${url} =======返回数据========== \n ${bodyStr}`);
 
-          resolve(bodyJson);
+            resolve(bodyJson);
+          } else {
+            reject(
+              formatRequestError(
+                options,
+                new Error('返回的数据流错误，上传文件失败！')
+              )
+            );
+          }
         } else {
-          reject(formatRequestError(options, new Error('返回的数据流错误，上传文件失败！')));
+          if (err) {
+            logger.error(`${url} =======错误==========  \n ${err.stack}`);
+          }
+          logger.error(`post:${url} error!${response && response.statusCode}`);
+          logger.error(`error repsonse body is:${body}`);
+          reject(formatRequestError(options, err));
         }
-      } else {
-        if (err) {
-          logger.error(`${url} =======错误==========  \n ${err.stack}`);
-        }
-        logger.error(`post:${url} error!${response && response.statusCode}`);
-        logger.error(`error repsonse body is:${body}`);
-        reject(formatRequestError(options, err));
       }
-    });
-  }).catch((error) => {
+    );
+  }).catch(error => {
     logger.error(`post:${url} error!${error.stack}`);
     // 删除临时文件
     deleteFile(filePaths);
@@ -339,12 +353,8 @@ module.exports.fileUploadStream = (options) => {
  * @param options
  * @returns {*|Promise<any>}
  */
-module.exports.fileDownloadStream = (options) => {
-  const {
-    url,
-    data,
-    req,
-  } = options;
+module.exports.fileDownloadStream = options => {
+  const {url, data, req} = options;
 
   const requestHeaders = buildHeader(req);
 
@@ -353,32 +363,48 @@ module.exports.fileDownloadStream = (options) => {
   return new Promise((resolve, reject) => {
     const start = process.hrtime();
 
-    request.post({
-      url,
-      json: data,
-      headers: requestHeaders,
-      timeout,
-      encoding: null, // 默认是 'utf-8'，因为是流，所以需要设为 null
-    }, (err, response, body) => {
-      logTimeUse(start, url);
+    request.post(
+      {
+        url,
+        json: data,
+        headers: requestHeaders,
+        timeout,
+        encoding: null, // 默认是 'utf-8'，因为是流，所以需要设为 null
+      },
+      (err, response, body) => {
+        logTimeUse(start, url);
 
-      if (!err && response.statusCode === 200) {
-        if (body) {
-          resolve(body instanceof Buffer ? body : Buffer.from(stringifyJSON(body, null)));
+        if (!err && response.statusCode === 200) {
+          if (body) {
+            resolve(
+              body instanceof Buffer
+                ? body
+                : Buffer.from(stringifyJSON(body, null))
+            );
+          } else {
+            reject(
+              formatRequestError(
+                options,
+                new Error('返回的数据流错误，下载文件失败！')
+              )
+            );
+          }
         } else {
-          reject(formatRequestError(options, new Error('返回的数据流错误，下载文件失败！')));
+          if (err) {
+            logger.error(`${url} =======错误==========  \n ${err.stack}`);
+          }
+          logger.error(`post:${url} error!${response && response.statusCode}`);
+          logger.error(`error repsonse body is:${body}`);
+          reject(
+            formatRequestError(
+              options,
+              new Error('返回的数据流错误，下载文件失败！')
+            )
+          );
         }
-      } else {
-        if (err) {
-          logger.error(`${url} =======错误==========  \n ${err.stack}`);
-        }
-        logger.error(`post:${url} error!${response && response.statusCode}`);
-        logger.error(`error repsonse body is:${body}`);
-        reject(formatRequestError(options,
-          new Error('返回的数据流错误，下载文件失败！')));
       }
-    });
-  }).catch((error) => {
+    );
+  }).catch(error => {
     logger.error(`post:${url} error!${error.stack}`);
     return Promise.reject(error);
   });
@@ -389,8 +415,10 @@ module.exports.fileDownloadStream = (options) => {
  * @param req
  * @returns {null}
  */
-module.exports.getClientIP = (req) => {
-  let ipAddress = req.get('X-Forwarded-For') ? req.get('X-Forwarded-For').split(',')[0] : req.get('X-Real-Ip');
+module.exports.getClientIP = req => {
+  let ipAddress = req.get('X-Forwarded-For')
+    ? req.get('X-Forwarded-For').split(',')[0]
+    : req.get('X-Real-Ip');
   if (!ipAddress) {
     ipAddress = req.connection.remoteAddress || req.socket.remoteAddress;
   }
@@ -410,8 +438,11 @@ module.exports.getUploadFile = () => {
 
     // 给上传文件重命名，获取添加后缀名
     filename: (req, file, cb) => {
-      const fileFormat = (file.originalname).split('.');
-      cb(null, `${file.fieldname}-${Date.now()}.${fileFormat[fileFormat.length - 1]}`);
+      const fileFormat = file.originalname.split('.');
+      cb(
+        null,
+        `${file.fieldname}-${Date.now()}.${fileFormat[fileFormat.length - 1]}`
+      );
     },
   });
 
@@ -422,7 +453,7 @@ module.exports.getUploadFile = () => {
 };
 
 // 首字母大写
-module.exports.upperFirstLetter = (str) => {
+module.exports.upperFirstLetter = str => {
   if (!str) {
     return '';
   }

@@ -9,10 +9,19 @@ const root = path.join(__dirname, '../');
 console.log(`in setup Env , process.env.NODE_ENV is [${process.env.NODE_ENV}]`);
 
 // 根据当前编译环境的配置拼接对应的配置文件地址
-const envFilePath = path.join(root, 'server/config', process.env.NODE_ENV, 'index.js');
+const envFilePath = path.join(
+  root,
+  'server/config',
+  process.env.NODE_ENV,
+  'index.js'
+);
 
 if (!fs.existsSync(envFilePath)) {
-  console.error(`error : 根据当前NODE_ENV[${process.env.NODE_ENV}]定义，没有找到对应的环境配置文件:${envFilePath}`);
+  console.error(
+    `error : 根据当前NODE_ENV[${
+      process.env.NODE_ENV
+    }]定义，没有找到对应的环境配置文件:${envFilePath}`
+  );
   process.exit(1);
 }
 
