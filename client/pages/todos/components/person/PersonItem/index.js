@@ -8,9 +8,7 @@ const cx = classNames.bind(style);
 class PersonItem extends Component {
   static propTypes = {
     person: PropTypes.object.isRequired,
-  };
-
-  static contextTypes = {
+    index: PropTypes.number,
     dispatch: PropTypes.func,
   };
 
@@ -18,10 +16,10 @@ class PersonItem extends Component {
     super(props);
     this.state = {
       editing: false,
-      person: this.props.person,
+      person: props.person,
     };
 
-    this.personDefault = this.props.person;
+    this.personDefault = props.person;
   }
 
   // 编辑
@@ -44,25 +42,26 @@ class PersonItem extends Component {
   // 保存
   handleSave = e => {
     e.preventDefault();
-    const {dispatch} = this.context;
-    const url = 'page-2/person';
-    const body = this.state.person.toJSON();
+    const {dispatch, index} = this.props;
+    const {person} = this.state;
+    const body = person.toJSON();
 
+    // 也可以在 model 中 处理
     return callApi({
-      url,
+      url: 'person/save',
       body,
       method: 'post',
     }).then(
       json => {
-        // dispatch(updatePerson(this.state.person));
         this.setState(
           {
             editing: false,
           },
           () => {
-            this.personDefault = this.state.person;
+            this.personDefault = person;
           }
         );
+        dispatch({type: 'person/updatePerson', payload: {person, index}});
       },
       error => {}
     );
@@ -70,20 +69,8 @@ class PersonItem extends Component {
 
   handleDelete = id => e => {
     e.preventDefault();
-    const {dispatch} = this.context;
-    const url = 'page-2/person';
-    return callApi({
-      url,
-      body: {
-        id,
-      },
-      method: 'delete',
-    }).then(
-      json => {
-        // dispatch(deletePerson(id));
-      },
-      error => {}
-    );
+    const {dispatch, index} = this.props;
+    dispatch({type: 'person/deletePerson', payload: {id, index}});
   };
 
   textOrInput(field, val) {

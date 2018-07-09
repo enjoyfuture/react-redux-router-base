@@ -28,13 +28,13 @@ const Container = ({match, location}) => {
           })}
         />
 
-        {/* <Route */}
-        {/* path={`${url}/film`} */}
-        {/* component={Loadable({ */}
-        {/* loader: () => import('./film/components/Film'), */}
-        {/* loading: LoadingComponent, */}
-        {/* })} */}
-        {/* /> */}
+        <Route
+          path={`${url}/film`}
+          component={Loadable({
+            loader: () => import('./components/film/Film'),
+            loading: LoadingComponent,
+          })}
+        />
       </div>
     </div>
   );

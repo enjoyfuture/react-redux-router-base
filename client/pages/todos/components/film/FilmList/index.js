@@ -5,15 +5,14 @@ import style from './style.scss';
 const cx = classNames.bind(style);
 
 const FilmList = ({film, activeTab}) => {
-  const allFilmList = film.get('allFilmList');
-  const popularityFilmList = film.get('popularityFilmList');
+  const allFilmList = film.get('all');
+  const popularityFilmList = film.get('popularity');
 
   const filmList = activeTab === 'all' ? allFilmList : popularityFilmList;
-  const items = filmList.get('items');
 
-  if (!items) {
+  if (!filmList) {
     return null;
-  } else if (items && items.size === 0) {
+  } else if (filmList.size === 0) {
     return (
       <div className={cx('no-items')}>
         <div className={cx('no-items-icon')} />
@@ -24,7 +23,7 @@ const FilmList = ({film, activeTab}) => {
 
   return (
     <ul className="list list-border">
-      {items.map((item, index, list) => (
+      {filmList.map((item, index, list) => (
         <li key={item.get('id')} className="list-item">
           <a href={item.get('link')} target="_blank">
             {item.get('name')}

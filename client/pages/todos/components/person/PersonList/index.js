@@ -38,22 +38,19 @@ export default class PersonList extends Component {
 
   refresh = e => {
     const {dispatch} = this.props;
-    dispatch({type: 'person/clearPersonList'});
-    dispatch({type: 'person/getPersonList'});
+    dispatch({type: 'person/getPersonList', payload: {firstPage: true}});
   };
 
   renderList() {
-    const {person} = this.props;
-
-    const loading = person.get('loading');
-
-    if (loading) {
-      return <div className={cx('page-loading')}>载入中，请稍后 ...</div>;
-    }
+    const {person, dispatch} = this.props;
 
     const items = person.get('items');
 
-    if (items.length === 0) {
+    if (!items) {
+      return null;
+    }
+
+    if (items.size === 0) {
       return (
         <div className={cx('no-items')}>
           <div className={cx('no-items-icon')} />
@@ -61,6 +58,8 @@ export default class PersonList extends Component {
         </div>
       );
     }
+
+    const loading = person.get('loading');
 
     return (
       <div>
@@ -75,11 +74,19 @@ export default class PersonList extends Component {
             </tr>
           </thead>
           <tbody>
-            {items.map(item => (
-              <PersonItem key={item.get('id')} person={item} />
+            {items.map((item, index) => (
+              <PersonItem
+                key={item.get('id')}
+                person={item}
+                index={index}
+                dispatch={dispatch}
+              />
             ))}
           </tbody>
         </table>
+        {loading ? (
+          <div className={cx('page-loading')}>载入中，请稍后 ...</div>
+        ) : null}
       </div>
     );
   }
@@ -91,7 +98,10 @@ export default class PersonList extends Component {
     return (
       <div>
         <div className="m-b-4">
-          <NavLink className="btn btn-primary btn-raised" to="/person/create">
+          <NavLink
+            className="btn btn-primary btn-raised"
+            to="/todos/person/create"
+          >
             Add Person
           </NavLink>
         </div>

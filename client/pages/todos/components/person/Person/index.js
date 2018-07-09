@@ -17,14 +17,18 @@ const Person = ({match}) => {
           exact
           path={`${url}`}
           component={Loadable({
-            loader: () => import('../PersonList/index'),
+            loader: () => import('../PersonList'),
             loading: LoadingComponent,
           })}
         />
-        {/* <Route path={`${url}/create`} component={Loadable({
+        <Route
+          exact
+          path={`${url}/create`}
+          component={Loadable({
             loader: () => import('../PersonForm'),
             loading: LoadingComponent,
-          })}/> */}
+          })}
+        />
       </Switch>
     </div>
   );

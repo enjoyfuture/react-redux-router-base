@@ -410,7 +410,7 @@ module.exports = {
     "prettier/prettier": [2, {
       "singleQuote": true,
       "trailingComma": "es5",
-      "bracketSpacing": false
+      "bracketSpacing": true
     }]
   },
   "parser": "babel-eslint", // 指定默认解析器
@@ -427,7 +427,7 @@ module.exports = {
     }
   },
   "globals": { // 定义全局的变量
-
+    "MtaH5": true
   },
   "extends": [ // 推荐使用默认配置好的
     "eslint:recommended",

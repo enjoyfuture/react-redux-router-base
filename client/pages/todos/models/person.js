@@ -1,5 +1,5 @@
 import {fromJS} from 'immutable';
-import {fetchPerson} from '../services';
+import {fetchPerson, deletePerson, savePerson} from '../services/person';
 
 // 初始化数据
 const initialState = {
@@ -7,7 +7,7 @@ const initialState = {
   pageNum: 1,
   pageSize: 20,
   items: [], // 分页数据
-  totalPages: 0,
+  totalPages: 1,
 };
 
 export default {
@@ -50,7 +50,7 @@ export default {
       const {pageNum, items} = data;
 
       return state
-        .update('items', data => data.merge(fromJS(items)))
+        .update('items', data => data.concat(fromJS(items)))
         .set('pageNum', pageNum)
         .set('loading', false);
     },
@@ -64,30 +64,30 @@ export default {
     updatePerson(
       state,
       {
-        payload: {pageSize},
+        payload: {person, index},
       }
     ) {
-      return {...state, pageSize};
+      return state.updateIn(['items', index], () => person);
     },
 
     // 删除
-    deletePerson(
+    removePerson(
       state,
       {
-        payload: {pageSize},
+        payload: {index},
       }
     ) {
-      return {...state, pageSize};
+      return state.update('items', items => items.delete(index));
     },
 
     // 添加一列
     addPerson(
       state,
       {
-        payload: {pageSize},
+        payload: {person},
       }
     ) {
-      return {...state, pageSize};
+      return state.update('items', items => items.unshift(fromJS(person)));
     },
   },
 
@@ -125,6 +125,32 @@ export default {
           payload: {data: {...data, pageNum: pageNum + 1}},
         });
       }
+    },
+
+    *deletePerson({payload = {}}, {call, put, select}) {
+      const {id, index} = payload;
+
+      yield call(deletePerson, {
+        body: {id},
+      });
+
+      yield put({
+        type: 'removePerson',
+        payload: {index},
+      });
+    },
+
+    *savePerson({payload = {}}, {call, put, select}) {
+      const {body} = payload;
+
+      const {data} = yield call(savePerson, {
+        body,
+      });
+
+      yield put({
+        type: 'addPerson',
+        payload: {person: {...body, id: data.id}},
+      });
     },
   },
 };
