@@ -408,8 +408,7 @@ module.exports = {
     // options  https://prettier.io/docs/en/options.html
     "prettier/prettier": [2, {
       "singleQuote": true,
-      "trailingComma": "es5",
-      "bracketSpacing": true
+      "trailingComma": "es5"
     }]
   },
   "parser": "babel-eslint", // 指定默认解析器
