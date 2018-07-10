@@ -1,13 +1,13 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {CSSTransition, TransitionGroup} from 'react-transition-group';
+import { connect } from 'react-redux';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import classNames from 'classnames';
 import FilmList from '../FilmList/index';
 import pureRender from '../../../../../components/react-immutable-pure-decorator';
 
 // 采用装饰器处理
-@connect(({film, caches}) => ({
+@connect(({ film, caches }) => ({
   film,
   caches,
 }))
@@ -38,15 +38,15 @@ export class Film extends Component {
       e.preventDefault();
       e.stopPropagation();
     }
-    const {caches, dispatch} = this.props;
+    const { caches, dispatch } = this.props;
 
     this.setState({
       activeTab: type,
     });
 
     if (!caches.get(`film-${type}`)) {
-      dispatch({type: 'film/getFilmList', payload: {type}});
-      dispatch({type: 'caches/setCache', payload: {key: `film-${type}`}});
+      dispatch({ type: 'film/getFilmList', payload: { type } });
+      dispatch({ type: 'caches/setCache', payload: { key: `film-${type}` } });
     }
   };
 
@@ -56,8 +56,8 @@ export class Film extends Component {
    * 对于多个组件需要动画时，需要使用 TransitionGroup ，然后 children 中 用 CSSTransition 或 Transition包裹
    */
   render() {
-    const {film} = this.props;
-    const {activeTab} = this.state;
+    const { film } = this.props;
+    const { activeTab } = this.state;
     const random = Math.ceil(Math.random() * 10);
     let index = 0;
     if (random < 3 && random <= 5) {
@@ -105,7 +105,7 @@ export class Film extends Component {
             key={activeTab}
             in={activeTab === 'popularity'}
             classNames={transitionName}
-            timeout={{exit: 500, enter: 500}}
+            timeout={{ exit: 500, enter: 500 }}
           >
             <div className="m-t-1">
               <FilmList film={film} activeTab={activeTab} />

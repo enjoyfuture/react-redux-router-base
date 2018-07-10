@@ -7,7 +7,7 @@ const fs = require('fs');
 const request = require('request'); // enable cookie
 const logger = require('digger-node').Logger;
 const multer = require('multer');
-const {RES_CODE, RES_DATA, RES_MSG} = require('../../common/constants');
+const { RES_CODE, RES_DATA, RES_MSG } = require('../../common/constants');
 
 const timeout = process.env.REQUEST_TIMEOUT; // 请求服务端 10s 超时
 
@@ -60,7 +60,7 @@ const logTimeUse = (start, url) => {
  * @returns {{clientIp, cookie}}
  */
 const buildHeader = req => {
-  const {headers} = req;
+  const { headers } = req;
 
   return {
     clientIp: headers.clientIp,
@@ -132,7 +132,7 @@ module.exports.remotePostFormRejectError = options =>
  * @param options
  */
 const remotePostForm = (module.exports.remotePostForm = options => {
-  const {url, data, req} = options;
+  const { url, data, req } = options;
   const requestHeaders = buildHeader(req);
 
   logger.info(
@@ -186,7 +186,7 @@ const remotePostForm = (module.exports.remotePostForm = options => {
  * @param options
  */
 module.exports.remotePostJSON = options => {
-  const {url, req, res} = options;
+  const { url, req, res } = options;
   const data = req.body || {};
   const requestHeaders = buildHeader(req);
   requestHeaders['User-Agent'] = req.get('user-agent');
@@ -244,7 +244,7 @@ module.exports.remoteGetJSON = options => {
     url = options.url;
   }
 
-  const {data, req} = options;
+  const { data, req } = options;
   const requestHeaders = buildHeader(req);
 
   logger.info(
@@ -293,7 +293,7 @@ module.exports.remoteGetJSON = options => {
  * @param options
  */
 module.exports.fileUploadStream = options => {
-  const {url, formData, req, filePaths} = options;
+  const { url, formData, req, filePaths } = options;
 
   const requestHeaders = buildHeader(req);
 
@@ -354,7 +354,7 @@ module.exports.fileUploadStream = options => {
  * @returns {*|Promise<any>}
  */
 module.exports.fileDownloadStream = options => {
-  const {url, data, req} = options;
+  const { url, data, req } = options;
 
   const requestHeaders = buildHeader(req);
 

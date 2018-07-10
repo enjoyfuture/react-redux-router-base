@@ -1,4 +1,4 @@
-import {Map} from 'immutable';
+import { Map } from 'immutable';
 
 /**
  * 设置 toast 内容和效果
@@ -8,15 +8,15 @@ export default {
   state: Map(),
   reducers: {
     // (state, action)
-    show(state, {payload = {}}) {
-      const {content = '', time = 0} = payload;
+    show(state, { payload = {} }) {
+      const { content = '', time = 0 } = payload;
       return state
         .set('content', content)
         .set('time', time)
         .set('show', true);
     },
-    hide(state, {payload = {}}) {
-      const {content, time = 0} = payload;
+    hide(state, { payload = {} }) {
+      const { content, time = 0 } = payload;
       if (content) {
         return state
           .set('content', content)

@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import test from 'ava';
-import {shallow, configure} from 'enzyme';
+import { shallow, configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import sinon from 'sinon';
-import Immutable, {Map} from 'immutable';
+import Immutable, { Map } from 'immutable';
 import PersonItem from '../PersonItem/index';
-import {deletePerson} from '../../action';
+import { deletePerson } from '../../action';
 
-configure({adapter: new Adapter()});
+configure({ adapter: new Adapter() });
 const props = {
-  person: Map({id: 1, firstName: 'zhang', lastName: 'san'}),
+  person: Map({ id: 1, firstName: 'zhang', lastName: 'san' }),
 };
 
 const dispatch = sinon.spy(); // mock方法
@@ -65,11 +65,11 @@ test('test cancel and the method handleCancel', t => {
     .find('td')
     .at(0)
     .find('input')
-    .simulate('change', {target: {value: 'wang'}});
+    .simulate('change', { target: { value: 'wang' } });
   t.true(
     Immutable.is(
       wrapper.state('person'),
-      Map({id: 1, firstName: 'wang', lastName: 'san'})
+      Map({ id: 1, firstName: 'wang', lastName: 'san' })
     )
   );
 
@@ -84,7 +84,7 @@ test('test cancel and the method handleCancel', t => {
   t.true(
     Immutable.is(
       wrapper.state('person'),
-      Map({id: 1, firstName: 'zhang', lastName: 'san'})
+      Map({ id: 1, firstName: 'zhang', lastName: 'san' })
     )
   );
 });
@@ -106,7 +106,7 @@ test('test save and the method handleSave', t => {
     .find('td')
     .at(0)
     .find('input')
-    .simulate('change', {target: {value: 'zhao'}});
+    .simulate('change', { target: { value: 'zhao' } });
 
   // call handleSave to save
   const instance = wrapper.instance();
@@ -115,7 +115,7 @@ test('test save and the method handleSave', t => {
     t.true(
       Immutable.is(
         instance.personDefault,
-        Map({id: 1, firstName: 'zhao', lastName: 'san'})
+        Map({ id: 1, firstName: 'zhao', lastName: 'san' })
       )
     );
   });

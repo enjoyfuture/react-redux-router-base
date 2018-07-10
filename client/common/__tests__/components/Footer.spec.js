@@ -1,10 +1,10 @@
 import React from 'react';
 import test from 'ava';
-import {shallow, configure} from 'enzyme';
+import { shallow, configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import Footer from '../../components/Footer';
 
-configure({adapter: new Adapter()});
+configure({ adapter: new Adapter() });
 
 test('renders the footer properly', t => {
   const wrapper = shallow(<Footer />);

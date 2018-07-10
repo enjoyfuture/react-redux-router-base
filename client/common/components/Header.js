@@ -1,10 +1,10 @@
 import React from 'react';
 import classNames from 'classnames';
-import {URL_CONTEXT} from '../../../common/constants';
-import {NavLink} from 'dva/router';
+import { URL_CONTEXT } from '../../../common/constants';
+import { NavLink } from 'dva/router';
 
 const Header = () => {
-  const {pathname} = document.location;
+  const { pathname } = document.location;
 
   return (
     <header className="navbar navbar-expand navbar-primary navbar-top flex-column flex-sm-row">

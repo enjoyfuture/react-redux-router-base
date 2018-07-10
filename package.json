@@ -149,7 +149,7 @@
         "npm run validate"
       ],
       "*.{js,md}": [
-        "prettier --trailing-comma es5 --no-bracket-spacing true --single-quote --write",
+        "prettier --trailing-comma es5 --single-quote --write",
         "git add"
       ]
     },

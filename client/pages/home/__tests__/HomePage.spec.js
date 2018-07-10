@@ -1,19 +1,19 @@
 import React from 'react';
 import test from 'ava';
-import {shallow, mount, configure} from 'enzyme';
+import { shallow, mount, configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import {Map} from 'immutable';
+import { Map } from 'immutable';
 import sinon from 'sinon';
-import {hello, clearHello} from '../action';
-import {openToast} from '../../../common/action/toast';
-import {Home} from '../HomePage';
+import { hello, clearHello } from '../action';
+import { openToast } from '../../../common/action/toast';
+import { Home } from '../HomePage';
 
-configure({adapter: new Adapter()});
+configure({ adapter: new Adapter() });
 
 const dispatch = sinon.spy();
 
 const props = {
-  home: Map({content: 'Hello World'}),
+  home: Map({ content: 'Hello World' }),
   dispatch,
 };
 

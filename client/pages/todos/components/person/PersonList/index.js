@@ -1,17 +1,17 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {NavLink} from 'dva/router';
+import { NavLink } from 'dva/router';
 import classNames from 'classnames/bind';
 import PersonItem from '../PersonItem/index';
 
 import style from './style.module.scss';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import pureRender from '../../../../../components/react-immutable-pure-decorator';
 
 const cx = classNames.bind(style);
 
 // 采用装饰器处理
-@connect(({person}) => ({
+@connect(({ person }) => ({
   person,
 }))
 @pureRender
@@ -22,27 +22,27 @@ export default class PersonList extends Component {
   };
 
   componentDidMount() {
-    const {dispatch} = this.props;
-    dispatch({type: 'person/getPersonList', payload: {firstPage: true}});
+    const { dispatch } = this.props;
+    dispatch({ type: 'person/getPersonList', payload: { firstPage: true } });
   }
 
   // 加载更多
   loadMore = () => {
-    const {person, dispatch} = this.props;
+    const { person, dispatch } = this.props;
     const pageNum = person.get('pageNum');
     const totalPages = person.get('totalPages');
     if (pageNum < totalPages) {
-      dispatch({type: 'person/getPersonList'});
+      dispatch({ type: 'person/getPersonList' });
     }
   };
 
   refresh = e => {
-    const {dispatch} = this.props;
-    dispatch({type: 'person/getPersonList', payload: {firstPage: true}});
+    const { dispatch } = this.props;
+    dispatch({ type: 'person/getPersonList', payload: { firstPage: true } });
   };
 
   renderList() {
-    const {person, dispatch} = this.props;
+    const { person, dispatch } = this.props;
 
     const items = person.get('items');
 
@@ -92,7 +92,7 @@ export default class PersonList extends Component {
   }
 
   render() {
-    const {person} = this.props;
+    const { person } = this.props;
     const pageNum = person.get('pageNum');
     const totalPages = person.get('totalPages');
     return (

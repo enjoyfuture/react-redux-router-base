@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Route, Switch} from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import Loadable from 'react-loadable';
 import LoadingComponent from '../../../../../components/LoadingComponent';
 
-const Person = ({match}) => {
-  let {url} = match;
+const Person = ({ match }) => {
+  let { url } = match;
   // 去掉结尾 /
   url = /\/$/.test(url) ? url.substring(0, url.length - 1) : url;
 

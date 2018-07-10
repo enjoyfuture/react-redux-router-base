@@ -9,7 +9,7 @@ const handlebars = require('handlebars');
 const logger = require('digger-node').Logger;
 const service = require('../service/common');
 const wrapData = require('../helper/utils').wrapData;
-const {URL_CONTEXT} = require('../../common/constants');
+const { URL_CONTEXT } = require('../../common/constants');
 
 // environment
 const isDev = process.env.NODE_ENV === 'development';
@@ -23,7 +23,7 @@ const staticResourceContext = `${URL_CONTEXT}/dist/`;
 
 // 加载html模板
 const htmlTemplate = (function(filePath) {
-  let content = fs.readFileSync(filePath, {encoding: 'utf8'});
+  let content = fs.readFileSync(filePath, { encoding: 'utf8' });
   // 去掉模板中的注释
   content = content.replace(/<!--.*-->/g, '');
   return handlebars.compile(content);

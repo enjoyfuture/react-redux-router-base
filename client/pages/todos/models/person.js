@@ -1,5 +1,5 @@
-import {fromJS} from 'immutable';
-import {fetchPerson, deletePerson, savePerson} from '../services/person';
+import { fromJS } from 'immutable';
+import { fetchPerson, deletePerson, savePerson } from '../services/person';
 
 // 初始化数据
 const initialState = {
@@ -14,7 +14,7 @@ export default {
   namespace: 'person',
   state: fromJS(initialState),
   subscriptions: {
-    setup({dispatch, history}) {
+    setup({ dispatch, history }) {
       history.listen(location => {
         console.log(location);
       });
@@ -25,7 +25,7 @@ export default {
     loading(
       state,
       {
-        payload: {loading},
+        payload: { loading },
       }
     ) {
       return state.set('loading', loading);
@@ -34,7 +34,7 @@ export default {
     init(
       state,
       {
-        payload: {data},
+        payload: { data },
       }
     ) {
       return state.merge(fromJS(data)).set('loading', false);
@@ -44,10 +44,10 @@ export default {
     append(
       state,
       {
-        payload: {data},
+        payload: { data },
       }
     ) {
-      const {pageNum, items} = data;
+      const { pageNum, items } = data;
 
       return state
         .update('items', _data => _data.concat(fromJS(items)))
@@ -64,7 +64,7 @@ export default {
     updatePerson(
       state,
       {
-        payload: {person, index},
+        payload: { person, index },
       }
     ) {
       return state.updateIn(['items', index], () => person);
@@ -74,7 +74,7 @@ export default {
     removePerson(
       state,
       {
-        payload: {index},
+        payload: { index },
       }
     ) {
       return state.update('items', items => items.delete(index));
@@ -84,7 +84,7 @@ export default {
     addPerson(
       state,
       {
-        payload: {person},
+        payload: { person },
       }
     ) {
       return state.update('items', items => items.unshift(fromJS(person)));
@@ -96,18 +96,18 @@ export default {
      * (action, effects)
      * 拉取分页数据
      */
-    *getPersonList({payload = {}}, {call, put, select}) {
+    *getPersonList({ payload = {} }, { call, put, select }) {
       // 加载中
       yield put({
         type: 'loading',
-        payload: {loading: true},
+        payload: { loading: true },
       });
 
       // 如果不是第一页，页码
-      const {firstPage} = payload;
+      const { firstPage } = payload;
       const person = yield select(state => state.person);
       const pageNum = person.get('pageNum');
-      const {data} = yield call(fetchPerson, {
+      const { data } = yield call(fetchPerson, {
         body: {
           pageNum: firstPage ? 1 : pageNum + 1,
           pageSize: person.get('pageSize'),
@@ -117,39 +117,39 @@ export default {
       if (firstPage) {
         yield put({
           type: 'init',
-          payload: {data},
+          payload: { data },
         });
       } else {
         yield put({
           type: 'append',
-          payload: {data: {...data, pageNum: pageNum + 1}},
+          payload: { data: { ...data, pageNum: pageNum + 1 } },
         });
       }
     },
 
-    *deletePerson({payload = {}}, {call, put, select}) {
-      const {id, index} = payload;
+    *deletePerson({ payload = {} }, { call, put, select }) {
+      const { id, index } = payload;
 
       yield call(deletePerson, {
-        body: {id},
+        body: { id },
       });
 
       yield put({
         type: 'removePerson',
-        payload: {index},
+        payload: { index },
       });
     },
 
-    *savePerson({payload = {}}, {call, put, select}) {
-      const {body} = payload;
+    *savePerson({ payload = {} }, { call, put, select }) {
+      const { body } = payload;
 
-      const {data} = yield call(savePerson, {
+      const { data } = yield call(savePerson, {
         body,
       });
 
       yield put({
         type: 'addPerson',
-        payload: {person: {...body, id: data.id}},
+        payload: { person: { ...body, id: data.id } },
       });
     },
   },

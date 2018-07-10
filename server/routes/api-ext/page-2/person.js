@@ -3,12 +3,12 @@ const service = require('../../../service/page-2/person');
 const router = express.Router();
 
 router.get('/', (req, res, next) => {
-  const {pageNum} = req.query;
+  const { pageNum } = req.query;
   service
     .paging(req, pageNum)
     .then(body => {
       if (body.success) {
-        const {data} = body;
+        const { data } = body;
         data.pageNum = Number(pageNum);
         data.lastPage = Number(pageNum) === data.totalPages;
       }
@@ -20,7 +20,7 @@ router.get('/', (req, res, next) => {
 });
 
 router.delete('/', (req, res, next) => {
-  const {id} = req.body;
+  const { id } = req.body;
   service
     .removePerson(req, {
       id,
@@ -34,7 +34,7 @@ router.delete('/', (req, res, next) => {
 });
 
 router.post('/', (req, res, next) => {
-  const {id, firstName, lastName} = req.body;
+  const { id, firstName, lastName } = req.body;
   service
     .savePerson(req, {
       id,

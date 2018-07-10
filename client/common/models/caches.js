@@ -1,4 +1,4 @@
-import {Map} from 'immutable';
+import { Map } from 'immutable';
 
 /**
  * 缓存数据，这里只标示一下缓存数据的 key 值，即把 key 设为 true，而不会真正缓存数据，
@@ -9,13 +9,13 @@ export default {
   state: Map(),
   reducers: {
     // 设置缓存
-    setCache(state, {payload = {}}) {
-      const {key, value = true} = payload;
+    setCache(state, { payload = {} }) {
+      const { key, value = true } = payload;
       return state.set(key, value);
     },
     // 删除一个或多个缓存
-    removeCache(state, {payload = {}}) {
-      const {keys} = payload;
+    removeCache(state, { payload = {} }) {
+      const { keys } = payload;
       let _state = state;
       keys.forEach(item => {
         _state = _state.remove(item);
@@ -23,7 +23,7 @@ export default {
       return _state;
     },
     // 清空所有缓存
-    clearCache(state, {payload = {}}) {
+    clearCache(state, { payload = {} }) {
       return state.clear();
     },
   },

@@ -18,7 +18,7 @@ const cookieManage = {
      */
     // ie 低版本需要设置 P3P
     res.set('P3P', 'CP=CAO PSA OUR');
-    const options = {domain, path, maxAge: 30 * 24 * 60 * 60 * 1000};
+    const options = { domain, path, maxAge: 30 * 24 * 60 * 60 * 1000 };
     Object.keys(keys).forEach(k => {
       res.cookie(k, keys[k], options);
     });
@@ -31,7 +31,7 @@ const cookieManage = {
    * @returns {{}}
    */
   get(keys, req, domain) {
-    const {cookies} = req;
+    const { cookies } = req;
     const rs = {};
     Object.keys(keys).forEach(k => {
       rs[k] = cookies[k];
@@ -44,7 +44,7 @@ const cookieManage = {
    * @param res
    */
   clear(keys, res, domain) {
-    const options = {domain, path};
+    const options = { domain, path };
     Object.keys(keys).forEach(k => {
       res.clearCookie(k, options);
     });

@@ -6,7 +6,7 @@ const autoprefixer = require('autoprefixer');
 // 修复 flexbox 已知的 bug
 const flexbugs = require('postcss-flexbugs-fixes');
 // 根目录上下文
-const {URL_CONTEXT} = require('../common/constants');
+const { URL_CONTEXT } = require('../common/constants');
 
 const hotMiddlewareScript =
   'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=20000&reload=true';

@@ -20,12 +20,12 @@ test('Test method stringifyJSON', t => {
 });
 
 test('Test method formatDate, showMs and showYear', t => {
-  const time = perfect.formatDate({time: 1476784801248, showMs: true});
+  const time = perfect.formatDate({ time: 1476784801248, showMs: true });
   t.is(time, '2016-10-18 18:00:01.248');
 });
 
 test('Test method formatDate, not showMs and showYear', t => {
-  const time = perfect.formatDate({time: 1476784801248, showYear: false});
+  const time = perfect.formatDate({ time: 1476784801248, showYear: false });
   t.is(time, '10-18 18:00:01');
 });
 

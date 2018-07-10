@@ -4,7 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 const logger = require('digger-node').Logger;
-const {URL_CONTEXT} = require('../../common/constants');
+const { URL_CONTEXT } = require('../../common/constants');
 
 const rootPath = path.join(__dirname);
 

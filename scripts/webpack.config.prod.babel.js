@@ -4,14 +4,14 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import ManifestPlugin from 'webpack-manifest-plugin';
 import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
 import OptimizeCSSAssetsPlugin from 'optimize-css-assets-webpack-plugin';
-import {BundleAnalyzerPlugin} from 'webpack-bundle-analyzer';
+import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import autoprefixer from 'autoprefixer';
 import flexbugs from 'postcss-flexbugs-fixes'; // 修复 flexbox 已知的 bug
 import cssnano from 'cssnano'; // 优化 css，对于长格式优化成短格式等
 import incstr from 'incstr';
 
 // 根目录上下文
-const {URL_CONTEXT} = require('../common/constants');
+const { URL_CONTEXT } = require('../common/constants');
 
 const appRoot = path.resolve(__dirname, '../');
 const appPath = path.resolve(appRoot, 'public');
@@ -271,7 +271,7 @@ const webpackConfig = {
               sourceMap: true,
               // CSS Nano options http://cssnano.co/
               minimize: {
-                discardComments: {removeAll: true},
+                discardComments: { removeAll: true },
               },
             },
           },

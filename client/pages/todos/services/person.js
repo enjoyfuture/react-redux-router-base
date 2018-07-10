@@ -1,8 +1,8 @@
 import callApi from '../../../utils/fetch';
 
 // 拉取 Person 列表
-export function fetchPerson({body = {}}) {
-  const {pageNum, pageSize} = body;
+export function fetchPerson({ body = {} }) {
+  const { pageNum, pageSize } = body;
   return callApi({
     url: `person/paging?pageNum=${pageNum}&&pageSize=${pageSize}`,
     options: {
@@ -12,7 +12,7 @@ export function fetchPerson({body = {}}) {
 }
 
 // 删除 Person
-export function deletePerson({body = {}}) {
+export function deletePerson({ body = {} }) {
   return callApi({
     url: 'person/delete',
     body,
@@ -20,7 +20,7 @@ export function deletePerson({body = {}}) {
 }
 
 // 保存 Person
-export function savePerson({body = {}}) {
+export function savePerson({ body = {} }) {
   return callApi({
     url: 'person/save',
     body,

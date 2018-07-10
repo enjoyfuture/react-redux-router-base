@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 
 import style from './style.module.scss';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import pureRender from '../../../../../components/react-immutable-pure-decorator';
 
 const cx = classNames.bind(style);
@@ -29,20 +29,20 @@ export default class PersonForm extends Component {
   }
 
   savePerson = () => {
-    const {firstName, lastName} = this.state;
-    const {router} = this.context;
-    const {dispatch} = this.props;
+    const { firstName, lastName } = this.state;
+    const { router } = this.context;
+    const { dispatch } = this.props;
 
     dispatch({
       type: 'person/savePerson',
-      payload: {body: {firstName, lastName}},
+      payload: { body: { firstName, lastName } },
     }).then(() => {
       router.history.goBack();
     });
   };
 
   goBack = () => {
-    const {router} = this.context;
+    const { router } = this.context;
     router.history.goBack();
   };
 
@@ -54,7 +54,7 @@ export default class PersonForm extends Component {
   };
 
   render() {
-    const {firstName, lastName} = this.state;
+    const { firstName, lastName } = this.state;
     return (
       <div className="form-panel">
         <div className="form-field">

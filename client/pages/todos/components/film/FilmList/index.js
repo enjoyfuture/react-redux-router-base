@@ -4,7 +4,7 @@ import classNames from 'classnames/bind';
 import style from './style.scss';
 const cx = classNames.bind(style);
 
-const FilmList = ({film, activeTab}) => {
+const FilmList = ({ film, activeTab }) => {
   const allFilmList = film.get('all');
   const popularityFilmList = film.get('popularity');
 

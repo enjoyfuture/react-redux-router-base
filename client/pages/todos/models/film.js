@@ -1,5 +1,5 @@
-import {fromJS} from 'immutable';
-import {fetchFilm} from '../services/film';
+import { fromJS } from 'immutable';
+import { fetchFilm } from '../services/film';
 
 export default {
   namespace: 'film',
@@ -8,7 +8,7 @@ export default {
     popularity: null,
   }),
   subscriptions: {
-    setup({dispatch, history}) {
+    setup({ dispatch, history }) {
       history.listen(location => {
         console.log(location);
       });
@@ -18,7 +18,7 @@ export default {
     filmList(
       state,
       {
-        payload: {data, type},
+        payload: { data, type },
       }
     ) {
       return state.set(type, fromJS(data));
@@ -30,15 +30,15 @@ export default {
      * (action, effects)
      * 拉取数据
      */
-    *getFilmList({payload = {}}, {call, put, select}) {
-      const {type} = payload;
-      const {data} = yield call(fetchFilm, {
+    *getFilmList({ payload = {} }, { call, put, select }) {
+      const { type } = payload;
+      const { data } = yield call(fetchFilm, {
         type,
       });
 
       yield put({
         type: 'filmList',
-        payload: {data, type},
+        payload: { data, type },
       });
     },
   },

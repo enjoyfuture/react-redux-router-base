@@ -4,7 +4,7 @@ const exec = util.promisify(require('child_process').exec);
 
 const CLIEngine = require('eslint').CLIEngine;
 // https://eslint.org/docs/developer-guide/nodejs-api#cliengine
-const cli = new CLIEngine({fix: true});
+const cli = new CLIEngine({ fix: true });
 const stylelint = require('stylelint');
 
 function getstderrLevel(number) {
@@ -25,7 +25,7 @@ async function runEsLint() {
   // 标记是否通过检测
   let pass = 0;
   // --cached 表示暂存区，即执行 git add 后的文件
-  const {stdout, stderr} = await exec(
+  const { stdout, stderr } = await exec(
     'git diff --cached --name-only| grep .js$'
   );
 
@@ -78,7 +78,7 @@ async function runStyleLint() {
   // 标记是否通过检测
   let pass = 0;
 
-  const {stdout, stderr} = await exec(
+  const { stdout, stderr } = await exec(
     'git diff --cached --name-only| grep .scss$'
   );
   if (stderr) {

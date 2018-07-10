@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'dva/index';
+import { connect } from 'dva/index';
 import Module1Com2 from '../com-2';
 
-@connect(({module1}) => ({
+@connect(({ module1 }) => ({
   module1,
 }))
 export default class Com1 extends Component {
@@ -22,8 +22,8 @@ export default class Com1 extends Component {
    * Don't do Updating Context.
    */
   getChildContext() {
-    const {dispatch} = this.props;
-    return {dispatch};
+    const { dispatch } = this.props;
+    return { dispatch };
   }
 
   render() {

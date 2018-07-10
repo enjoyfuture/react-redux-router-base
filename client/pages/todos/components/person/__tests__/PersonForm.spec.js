@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import test from 'ava';
-import {shallow, configure} from 'enzyme';
+import { shallow, configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import sinon from 'sinon';
 import PersonForm from '../PersonForm/index';
-import {addPerson} from '../../action';
+import { addPerson } from '../../action';
 
-configure({adapter: new Adapter()});
+configure({ adapter: new Adapter() });
 const dispatch = sinon.spy(); // mock方法
 
 // mock router，这里为了展示，多写了一些方法，实际该测试中只用到了 goBack
@@ -50,11 +50,11 @@ test('test addPerson', t => {
   wrapper
     .find('input')
     .at(0)
-    .simulate('change', {target: {value: 'li'}});
+    .simulate('change', { target: { value: 'li' } });
   wrapper
     .find('input')
     .at(1)
-    .simulate('change', {target: {value: 'si'}});
+    .simulate('change', { target: { value: 'si' } });
   t.is(wrapper.state('firstName'), 'li');
   t.is(wrapper.state('lastName'), 'si');
 
