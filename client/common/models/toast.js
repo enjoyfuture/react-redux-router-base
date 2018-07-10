@@ -13,7 +13,7 @@ export default {
       return state
         .set('content', content)
         .set('time', time)
-        .set('open', true);
+        .set('show', true);
     },
     hide(state, {payload = {}}) {
       const {content, time = 0} = payload;
@@ -21,9 +21,9 @@ export default {
         return state
           .set('content', content)
           .set('time', time)
-          .set('open', false);
+          .set('show', false);
       }
-      return state.set('time', time).set('open', false);
+      return state.set('time', time).set('show', false);
     },
   },
   effects: {},

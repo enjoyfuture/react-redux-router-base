@@ -21,13 +21,14 @@ function apiExtRoutes(app) {
    * @param routePath
    */
   const addApiRoute = function(routePath) {
-    fs.readdirSync(routePath).forEach(name => {
-      if (!isFile(name)) {
-        addApiRoute(path.join(routePath, name)); // 递归添加子路由
+    fs.readdirSync(routePath).forEach(pathName => {
+      if (!isFile(pathName)) {
+        addApiRoute(path.join(routePath, pathName)); // 递归添加子路由
       } else {
         // 路由相对路径
         const route = `${routePath.substring(rootPath.length)}/`;
-        const routeName = (route + name.replace(/.js/, '')).replace(/\\/g, '/');
+        let routeName = route + pathName.replace(/.js/, '');
+        routeName = routeName.replace(/\\/g, '/');
 
         const obj = require(`.${routeName}`);
         logger.info(`add api route automatic:${routeName}`);

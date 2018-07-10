@@ -54,9 +54,9 @@ test('calling helloHandle dispatches to clear hello', t => {
 });
 
 test('calling toastHandle dispatches setToast', t => {
-  const wrapper = shallow(<Home {...props} />);
+  const _wrapper = shallow(<Home {...props} />);
 
-  wrapper.instance().toastHandle({
+  _wrapper.instance().toastHandle({
     stopPropagation: () => {},
   });
   t.truthy(dispatch.callCount === 4);

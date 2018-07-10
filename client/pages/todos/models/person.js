@@ -50,7 +50,7 @@ export default {
       const {pageNum, items} = data;
 
       return state
-        .update('items', data => data.concat(fromJS(items)))
+        .update('items', _data => _data.concat(fromJS(items)))
         .set('pageNum', pageNum)
         .set('loading', false);
     },

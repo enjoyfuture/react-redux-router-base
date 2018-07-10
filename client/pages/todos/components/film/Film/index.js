@@ -33,10 +33,10 @@ export class Film extends Component {
     this.switchTab('all')();
   }
 
-  switchTab = type => event => {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
+  switchTab = type => e => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
     }
     const {caches, dispatch} = this.props;
 

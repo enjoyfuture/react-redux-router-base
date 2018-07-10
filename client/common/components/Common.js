@@ -29,13 +29,13 @@ export class Common extends Component {
     const {toast} = this.props;
 
     const content = toast.get('content');
-    const open = toast.get('open');
+    const show = toast.get('show');
 
     return (
       <div>
         <Toast
           duration={2000}
-          open={open}
+          show={show}
           content={content}
           handleClose={this.handleClose}
         />

@@ -84,9 +84,9 @@ class PersonItem extends Component {
     return <span>{val}</span>;
   }
 
-  handleChange = field => event => {
+  handleChange = field => e => {
     const {person} = this.state;
-    const val = event.target.value;
+    const val = e.target.value;
     this.setState({
       person: person.set(field, val),
     });

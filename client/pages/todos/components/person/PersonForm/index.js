@@ -46,8 +46,8 @@ export default class PersonForm extends Component {
     router.history.goBack();
   };
 
-  handleChange = field => event => {
-    const val = event.target.value;
+  handleChange = field => e => {
+    const val = e.target.value;
     this.setState({
       [field]: val,
     });

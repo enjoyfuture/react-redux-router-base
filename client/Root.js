@@ -31,7 +31,7 @@ if (process.env.NODE_ENV === 'development') {
  * 创建 app
  * https://dvajs.com/api
  */
-const app = dva({
+const myApp = dva({
   history: createBrowserHistory(),
   onAction: middleware, // 注册 redux 中间件
   onError(e, dispatch) {
@@ -40,12 +40,12 @@ const app = dva({
 });
 
 // 使用 dva 中间件
-app.use(createLoading());
+myApp.use(createLoading());
 
 const Root = ({models = [], Container}) => {
   // 设置 redux 中 的 action 和 reducer ，dva 中是以 models 形式设置的
   [...commonModels, ...models].forEach(model => {
-    app.model(model.default);
+    myApp.model(model.default);
   });
 
   /**
@@ -60,14 +60,14 @@ const Root = ({models = [], Container}) => {
    * }
    * 后续根据实际扩展参数 app 和 history 的用法
    */
-  app.router(({app, history}) => {
+  myApp.router(({app, history}) => {
     console.log('params: app--------------', app);
     console.log('params: history--------------', history);
 
     return <Container />;
   });
 
-  app.start('#layout');
+  myApp.start('#layout');
 };
 
 export default Root;

@@ -101,8 +101,8 @@ module.exports.stringifyJSON = stringifyJSON;
 // 异步删除文件
 const deleteFile = filePaths => {
   if (filePaths && filePaths.length > 0) {
-    filePaths.forEach(path => {
-      fs.unlink(path, err => {
+    filePaths.forEach(filePath => {
+      fs.unlink(filePath, err => {
         if (err) {
           return logger.error(`删除临时文件失败： ${err.stack}`);
         }

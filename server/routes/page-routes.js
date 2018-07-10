@@ -22,8 +22,8 @@ const manifest = isDev ? null : require('../../public/dist/manifest.json');
 const staticResourceContext = `${URL_CONTEXT}/dist/`;
 
 // 加载html模板
-const htmlTemplate = (function(path) {
-  let content = fs.readFileSync(path, {encoding: 'utf8'});
+const htmlTemplate = (function(filePath) {
+  let content = fs.readFileSync(filePath, {encoding: 'utf8'});
   // 去掉模板中的注释
   content = content.replace(/<!--.*-->/g, '');
   return handlebars.compile(content);

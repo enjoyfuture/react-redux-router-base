@@ -290,7 +290,7 @@ rules:
       unspecified: ignore # 为未知的忽略，即未知的不参与排序显示
       disableFix: true # 自动按照配置好的顺序 fix
   # 以下排序参考 https://github.com/sasstools/sass-lint/blob/develop/lib/config/property-sort-orders/smacss.yml
-  # 和 Bootstrap 并做了调整，对于四个方向设置，采用先写上下，再写左右的风格
+  # 和 Bootstrap 并做了调整
   order/properties-order:
     # 伪类内容
     - content
@@ -461,7 +461,7 @@ rules:
     # 对齐方式
     - text-align
     - text-align-last
-    - text-emphasis # 目前Firefox和 chrome浏览器支持
+    - text-emphasis # 目前 Firefox 和 Chrome 浏览器支持
     - text-emphasis-color
     - text-emphasis-style
     - text-emphasis-position
@@ -540,7 +540,7 @@ rules:
     - nav-down
     - nav-left
     - nav-right
-    - appearance # 设置元素的默认形状
+    - appearance # 设置元素的默认展示样式
     - speak
 
     # 打印属性
