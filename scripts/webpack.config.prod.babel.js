@@ -15,8 +15,7 @@ const { URL_CONTEXT } = require('../common/constants');
 
 const appRoot = path.resolve(__dirname, '../');
 const appPath = path.resolve(appRoot, 'public');
-// 区分测试和生产环境
-const isProd = process.env.NODE_ENV === 'production';
+
 // 是否做 webpack bundle 分析
 const isAnalyze = process.env.ANALYZE === 'true';
 
@@ -98,6 +97,7 @@ function scssConfig(modules) {
       loader: 'postcss-loader',
       options: {
         sourceMap: true,
+        // postcss plugins https://github.com/postcss/postcss/blob/master/docs/plugins.md
         plugins: [
           cssnano({
             autoprefixer: false,
@@ -155,16 +155,16 @@ const webpackConfig = {
    * https://webpack.js.org/configuration/stats/
    */
   stats: {
-    cached: false,
-    cachedAssets: false,
-    chunks: false,
-    chunkModules: false,
+    cached: false, // 显示缓存信息
+    cachedAssets: false, // 显示缓存的资源（将其设置为 `false` 则仅显示输出的文件）
+    chunks: false, // 显示 chunk 信息（设置为 `false` 仅显示较少的输出）
+    chunkModules: false, // 将构建模块信息添加到 chunk 信息
     colors: true,
-    hash: false,
-    modules: false,
-    reasons: false,
-    timings: true,
-    version: false,
+    hash: false, // 显示编译后的 hash 值
+    modules: false, // 显示构建模块信息
+    reasons: false, // 显示被导入的模块信息
+    timings: true, // 显示构建时间信息
+    version: false, // 显示 webpack 版本信息
   },
   /*
    * https://webpack.js.org/configuration/target/#target
@@ -180,21 +180,24 @@ const webpackConfig = {
     modules: ['client', 'node_modules'],
   },
 
-  // 入口文件 让 webpack 用哪个文件作为项目的入口
+  /*
+   * 入口文件，让 webpack 用哪个文件作为项目的入口
+   * 如果用到了新的 es6 api，需要引入 babel-polyfill，比如 String.prototype 中的方法 includes
+   * 所以根据实际需要是否引入 babel-polyfill
+   */
   entry: {
-    home: ['./client/pages/home/index.js'],
-    about: ['./client/pages/about/index.js'],
-    page1: ['./client/pages/page-1/index.js'],
-    page2: ['./client/pages/page-2/index.js'],
-    'h5-example': ['./client/pages/h5-example/index.js'],
+    index: ['./client/pages/index.js'],
   },
 
   // 出口 让 webpack 把处理完成的文件放在哪里
   output: {
-    path: path.join(appPath, 'dist'),
+    // 打包输出目录（必选项, 不能省略）
+    path: path.resolve(appPath, 'dist'),
     filename: '[name].[chunkhash:8].js',
     chunkFilename: '[name].[chunkhash:8].chunk.js',
+    // 资源上下文路径，可以设置为 cdn 路径，比如 publicPath: 'http://cdn.example.com/assets/[hash]/'
     publicPath: `${URL_CONTEXT}/dist/`,
+    pathinfo: false, // 打印路径信息
     // Point sourcemap entries to original disk location (format as URL on Windows)
     devtoolModuleFilenameTemplate: info =>
       path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
@@ -226,7 +229,6 @@ const webpackConfig = {
               [
                 'env',
                 {
-                  // 设为 true 会根据需要自动导入用到的 es6 新方法，而不是一次性的引入 babel-polyfill
                   targets: {
                     browsers,
                   },
@@ -244,6 +246,15 @@ const webpackConfig = {
               'transform-decorators-legacy', // 编译装饰器语法
               'transform-class-properties', // 解析类属性，静态和实例的属性
               'transform-object-rest-spread', // 支持对象 rest
+              [
+                'transform-runtime',
+                {
+                  helpers: false, // defaults to true
+                  polyfill: false, // defaults to true
+                  regenerator: true, // defaults to true
+                  moduleName: 'babel-runtime', // defaults to "babel-runtime"
+                },
+              ],
               // https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-constant-elements
               'transform-react-constant-elements',
               // https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-inline-elements
@@ -269,7 +280,6 @@ const webpackConfig = {
             loader: 'css-loader',
             options: {
               sourceMap: true,
-              // CSS Nano options http://cssnano.co/
               minimize: {
                 discardComments: { removeAll: true },
               },
@@ -297,8 +307,12 @@ const webpackConfig = {
              * based on the original source file
              */
             loader: 'resolve-url-loader',
+            options: {
+              debug: true,
+            },
           },
         ],
+        // publicPath: '/public/dist/' 这里如设置会覆盖 output 中的 publicPath
       },
       // 只对 .module.scss 的文件做 css 模块化
       {
@@ -312,7 +326,10 @@ const webpackConfig = {
         exclude: /\.module\.scss$/,
         use: scssConfig(false),
       },
-      // Rules for images
+      /*
+       * Rules for images
+       * https://webpack.js.org/configuration/module/#rule-oneof
+       */
       {
         test: /\.(bmp|gif|jpe?g|png|svg)$/,
         oneOf: [
@@ -358,6 +375,7 @@ const webpackConfig = {
           },
         ],
       },
+      // 在其他地方引入的图片文件使用 file-loader 即可
       {
         test: /\.(mp4|ogg|eot|woff2?|ttf)$/,
         loader: 'file-loader',
@@ -390,7 +408,7 @@ const webpackConfig = {
             drop_console: true,
           },
           mangle: {
-            except: [''], // 设置不混淆变量名
+            reserved: [''], // 设置不混淆变量名
           },
         },
       }),
@@ -398,10 +416,11 @@ const webpackConfig = {
     ],
     splitChunks: {
       cacheGroups: {
+        // 这里开始设置缓存的 chunks
         commons: {
-          chunks: 'initial',
-          test: /[\\/]node_modules[\\/]/, // 指定文件夹
-          name: 'vendors',
+          chunks: 'initial', // 必须三选一： "initial" | "all" | "async"(默认为异步)
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors', // 要缓存的分隔出来的 chunk 名称
         },
       },
     },

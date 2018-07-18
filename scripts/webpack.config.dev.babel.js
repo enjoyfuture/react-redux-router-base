@@ -149,12 +149,6 @@ const webpackConfig = {
    */
   entry: {
     index: ['./client/pages/index.js', hotMiddlewareScript],
-    /*
-     * home: ['./client/pages/home/index.js', hotMiddlewareScript],
-     * about: ['./client/pages/about/index.js', hotMiddlewareScript],
-     *page1: ['./client/pages/page-1/index.js', hotMiddlewareScript],
-     */
-    // page2: ['./client/pages/page-2/index.js', hotMiddlewareScript],
   },
 
   // 出口， 让 webpack 把处理完成的文件放在哪里
@@ -343,6 +337,7 @@ const webpackConfig = {
           },
         ],
       },
+      // 在其他地方引入的图片文件使用 file-loader 即可
       {
         test: /\.(mp4|ogg|eot|woff2?|ttf)$/,
         loader: 'file-loader',
@@ -370,7 +365,7 @@ const webpackConfig = {
         },
       },
     },
-    namedChunks: true, // 给代码块赋予有意义的名称，而不是数字的id。
+    namedChunks: true, // 开启后给代码块赋予有意义的名称，而不是数字的 id
   },
 
   // https://webpack.js.org/concepts/mode/#mode-development
