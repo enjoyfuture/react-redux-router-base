@@ -1,12 +1,15 @@
 import { fromJS } from 'immutable';
 import { fetchFilm } from '../services/film';
 
+// 初始化数据
+const initialState = {
+  all: null,
+  popularity: null,
+};
+
 export default {
   namespace: 'film',
-  state: fromJS({
-    all: null,
-    popularity: null,
-  }),
+  state: fromJS(initialState),
   subscriptions: {
     setup({ dispatch, history }) {
       history.listen(location => {

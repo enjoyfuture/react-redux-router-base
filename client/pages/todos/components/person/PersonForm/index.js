@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
-
+import { connect } from 'dva';
 import style from './style.module.scss';
-import { connect } from 'react-redux';
 import pureRender from '../../../../../components/react-immutable-pure-decorator';
 
 const cx = classNames.bind(style);
@@ -34,10 +33,10 @@ export default class PersonForm extends Component {
     const { dispatch } = this.props;
 
     dispatch({
-      type: 'person/savePerson',
+      type: 'person/addPerson',
       payload: { body: { firstName, lastName } },
     }).then(() => {
-      router.history.goBack();
+      this.goBack();
     });
   };
 

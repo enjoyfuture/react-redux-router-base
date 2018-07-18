@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import callApi from '../../../../../utils/fetch';
 import classNames from 'classnames/bind';
 import style from './style.module.scss';
 const cx = classNames.bind(style);
@@ -46,11 +45,9 @@ class PersonItem extends Component {
     const { person } = this.state;
     const body = person.toJSON();
 
-    // 也可以在 model 中 处理
-    return callApi({
-      url: 'person/save',
-      body,
-      method: 'post',
+    dispatch({
+      type: 'person/updatePerson',
+      payload: { person, index },
     }).then(
       json => {
         this.setState(
@@ -61,7 +58,6 @@ class PersonItem extends Component {
             this.personDefault = person;
           }
         );
-        dispatch({ type: 'person/updatePerson', payload: { person, index } });
       },
       error => {}
     );

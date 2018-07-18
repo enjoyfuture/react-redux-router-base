@@ -1,23 +1,25 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'dva';
 import { NavLink } from 'dva/router';
 import classNames from 'classnames/bind';
 import PersonItem from '../PersonItem/index';
 
 import style from './style.module.scss';
-import { connect } from 'react-redux';
 import pureRender from '../../../../../components/react-immutable-pure-decorator';
 
 const cx = classNames.bind(style);
 
 // 采用装饰器处理
-@connect(({ person }) => ({
+@connect(({ person, loading }) => ({
   person,
+  loading: loading.effects['person/getPersonList'] || false,
 }))
 @pureRender
 export default class PersonList extends Component {
   static propTypes = {
     person: PropTypes.object,
+    loading: PropTypes.bool,
     dispatch: PropTypes.func,
   };
 
@@ -42,7 +44,7 @@ export default class PersonList extends Component {
   };
 
   renderList() {
-    const { person, dispatch } = this.props;
+    const { person, dispatch, loading } = this.props;
 
     const items = person.get('items');
 
@@ -58,8 +60,6 @@ export default class PersonList extends Component {
         </div>
       );
     }
-
-    const loading = person.get('loading');
 
     return (
       <div>

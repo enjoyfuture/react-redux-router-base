@@ -11,7 +11,7 @@ import LoadingComponent from '../components/LoadingComponent';
 // 如果整个项目就一个页面，则以 / 开头即可，如果分为好几个页面，则可以加前缀来区分
 const basename = `${URL_CONTEXT}/`;
 
-const Container = () => (
+const container = () => (
   /*
    * 使用 BrowserRouter 后，不用再单独设置 history
    * 在 BrowserRouter 上设置 basename 后，子路由会基于 basename 匹配
@@ -34,4 +34,4 @@ const Container = () => (
   </BrowserRouter>
 );
 
-Root({ models, Container });
+Root({ models, container });

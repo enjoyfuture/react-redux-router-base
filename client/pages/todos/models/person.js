@@ -3,7 +3,6 @@ import { fetchPerson, deletePerson, savePerson } from '../services/person';
 
 // 初始化数据
 const initialState = {
-  loading: false,
   pageNum: 1,
   pageSize: 20,
   items: [], // 分页数据
@@ -21,23 +20,13 @@ export default {
     },
   },
   reducers: {
-    // 设置加载中和加载结束
-    loading(
-      state,
-      {
-        payload: { loading },
-      }
-    ) {
-      return state.set('loading', loading);
-    },
-
     init(
       state,
       {
         payload: { data },
       }
     ) {
-      return state.merge(fromJS(data)).set('loading', false);
+      return state.merge(fromJS(data));
     },
 
     // 追加 items
@@ -50,18 +39,17 @@ export default {
       const { pageNum, items } = data;
 
       return state
-        .update('items', _data => _data.concat(fromJS(items)))
-        .set('pageNum', pageNum)
-        .set('loading', false);
+        .update('items', _oldItems => _oldItems.concat(fromJS(items)))
+        .set('pageNum', pageNum);
     },
 
     // 清空/初始化数据
-    clearPerson() {
+    clear() {
       return fromJS(initialState);
     },
 
     // 修改
-    updatePerson(
+    update(
       state,
       {
         payload: { person, index },
@@ -71,7 +59,7 @@ export default {
     },
 
     // 删除
-    removePerson(
+    remove(
       state,
       {
         payload: { index },
@@ -81,7 +69,7 @@ export default {
     },
 
     // 添加一列
-    addPerson(
+    add(
       state,
       {
         payload: { person },
@@ -97,12 +85,6 @@ export default {
      * 拉取分页数据
      */
     *getPersonList({ payload = {} }, { call, put, select }) {
-      // 加载中
-      yield put({
-        type: 'loading',
-        payload: { loading: true },
-      });
-
       // 如果不是第一页，页码
       const { firstPage } = payload;
       const person = yield select(state => state.person);
@@ -127,6 +109,19 @@ export default {
       }
     },
 
+    *addPerson({ payload = {} }, { call, put, select }) {
+      const { body } = payload;
+
+      const { data } = yield call(savePerson, {
+        body,
+      });
+
+      yield put({
+        type: 'add',
+        payload: { person: { ...body, id: data.id } },
+      });
+    },
+
     *deletePerson({ payload = {} }, { call, put, select }) {
       const { id, index } = payload;
 
@@ -137,19 +132,6 @@ export default {
       yield put({
         type: 'removePerson',
         payload: { index },
-      });
-    },
-
-    *savePerson({ payload = {} }, { call, put, select }) {
-      const { body } = payload;
-
-      const { data } = yield call(savePerson, {
-        body,
-      });
-
-      yield put({
-        type: 'addPerson',
-        payload: { person: { ...body, id: data.id } },
       });
     },
   },

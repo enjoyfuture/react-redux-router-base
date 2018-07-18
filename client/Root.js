@@ -42,12 +42,14 @@ const myApp = dva({
 // 使用 dva 中间件
 myApp.use(createLoading());
 
-const Root = ({ models = [], Container }) => {
+// 在 production 构建时，参数如果是 Container，会构建失败，故这里传入小写 container， 然后在方法体中定义大写的 Container
+const Root = ({ models = [], container }) => {
   // 设置 redux 中 的 action 和 reducer ，dva 中是以 models 形式设置的
   [...commonModels, ...models].forEach(model => {
     myApp.model(model.default);
   });
 
+  const Container = container;
   /**
    * dva 源码中会调用 router，传入参数 { app, history: app._history, ...extraProps }
    * function getProvider(store, app, router) {
