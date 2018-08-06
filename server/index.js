@@ -58,7 +58,7 @@ app.use(favicon(path.join(__dirname, '..', 'public', 'favicon.ico')));
 commonSafety(app);
 
 if (isDev) {
-  const webpackConfig = require('../scripts/webpack.config.dev.babel');
+  const webpackConfig = require('../build/webpack.config.dev.babel');
   const webpack = require('webpack');
   const compiler = webpack(webpackConfig);
 

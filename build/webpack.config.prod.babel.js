@@ -202,6 +202,7 @@ const webpackConfig = {
     devtoolModuleFilenameTemplate: info =>
       path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
     sourceMapFilename: 'map/[file].map',
+    crossOriginLoading: 'anonymous',
   },
 
   // module 处理
@@ -449,8 +450,8 @@ const webpackConfig = {
        * both options are optional
        * css/[name].[contenthash:8].css
        */
-      filename: 'css/[name].[hash].css',
-      chunkFilename: 'css/[id].[hash].css',
+      filename: 'css/[name].[contenthash:8].css',
+      // chunkFilename: 'css/[id].[contenthash:8].css',
     }),
     new webpack.HashedModuleIdsPlugin(),
     new ManifestPlugin({

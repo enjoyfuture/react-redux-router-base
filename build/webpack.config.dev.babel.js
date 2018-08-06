@@ -25,15 +25,6 @@ const browsers = [
   'Safari >= 9.1',
 ];
 
-// 判断 dll 文件是否已生成
-let dllExist = false;
-try {
-  fs.statSync(path.resolve(appPath, 'dll', 'vendor.dll.js'));
-  dllExist = true;
-} catch (e) {
-  dllExist = false;
-}
-
 // scss config
 /* eslint-disable indent */
 function scssConfig(modules) {
@@ -163,6 +154,7 @@ const webpackConfig = {
     // Point sourcemap entries to original disk location (format as URL on Windows)
     devtoolModuleFilenameTemplate: info =>
       path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
+    crossOriginLoading: 'anonymous',
   },
 
   // module 处理
@@ -373,6 +365,15 @@ const webpackConfig = {
     new webpack.HotModuleReplacementPlugin(), // 热部署替换模块
   ],
 };
+
+// 判断 dll 文件是否已生成
+let dllExist = false;
+try {
+  fs.statSync(path.resolve(appPath, 'dll', 'vendor.dll.js'));
+  dllExist = true;
+} catch (e) {
+  dllExist = false;
+}
 
 if (dllExist) {
   webpackConfig.plugins.push(
