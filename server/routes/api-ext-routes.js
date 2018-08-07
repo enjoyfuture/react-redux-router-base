@@ -31,7 +31,7 @@ function apiExtRoutes(app) {
         routeName = routeName.replace(/\\/g, '/');
 
         const obj = require(`.${routeName}`);
-        logger.info(`add api route automatic:${routeName}`);
+        logger.info(`add api route automatic:${URL_CONTEXT + routeName}`);
         app.use(URL_CONTEXT + routeName, obj);
       }
     });

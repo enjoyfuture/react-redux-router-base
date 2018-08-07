@@ -32,7 +32,7 @@ function checkStatus(response) {
  * @param options // 可选参数项
  * @returns {Promise.<TResult>}
  */
-function callApi({ url, body = {}, options = {} }) {
+function callApi({ url, body = {}, options = {}, prefix = 'api' }) {
   if (!url) {
     const error = new Error('请传入 url');
     error.errorCode = 0;
@@ -44,7 +44,7 @@ function callApi({ url, body = {}, options = {} }) {
   if (url.indexOf('http') === 0) {
     fullUrl = url;
   } else {
-    fullUrl = `${URL_CONTEXT}/api/${url}`;
+    fullUrl = `${URL_CONTEXT}/${prefix}/${url}`;
   }
 
   const _options = { ...defaultOptions, ...options };
@@ -53,6 +53,7 @@ function callApi({ url, body = {}, options = {} }) {
   if (method !== 'get' && method !== 'head') {
     if (body instanceof FormData) {
       _options.body = body;
+      delete _options.headers;
     } else {
       // 数据为 null 不要传到后台
       Object.keys(body).forEach(item => {
