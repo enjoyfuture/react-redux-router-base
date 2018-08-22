@@ -25,15 +25,15 @@ async function runEsLint() {
   // 标记是否通过检测
   let pass = 0;
   // --cached 表示暂存区，即执行 git add 后的文件
-  const result = await exec('git diff --cached --name-only| grep .js$').catch(
+  const res = await exec('git diff --cached --name-only| grep .js$').catch(
     error => console.log(chalk.green('\ngit 暂存区没有要提交的 js 文件'))
   );
 
-  if (!result) {
+  if (!res) {
     return Promise.resolve(0);
   }
 
-  const { stdout, stderr } = result;
+  const { stdout, stderr } = res;
 
   if (stderr) {
     console.log(chalk.red(`exec stderr: ${stderr}`));
@@ -84,15 +84,15 @@ async function runStyleLint() {
   // 标记是否通过检测
   let pass = 0;
 
-  const result = await exec('git diff --cached --name-only| grep .scss$').catch(
+  const res = await exec('git diff --cached --name-only| grep .scss$').catch(
     error => console.log(chalk.green('\ngit 暂存区没有要提交的 scss 文件'))
   );
 
-  if (!result) {
+  if (!res) {
     return Promise.resolve(0);
   }
 
-  const { stdout, stderr } = result;
+  const { stdout, stderr } = res;
 
   if (stderr) {
     console.log(chalk.red(`exec stderr: ${stderr}`));
