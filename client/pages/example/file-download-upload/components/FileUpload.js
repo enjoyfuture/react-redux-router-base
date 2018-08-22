@@ -73,6 +73,7 @@ export class FileUpload extends Component {
     }
 
     callApi({
+      prefix: 'api-ext',
       url: 'common/file-upload',
       body: formData,
     }).then(

@@ -1,8 +1,8 @@
-const { serverUrl } = require('../config');
+const { SERVER_URL } = require('../config');
 
 const apiUrl = {
-  fileUpload: `${serverUrl}file-upload`,
-  fileDownload: `${serverUrl}file-download`,
+  fileUpload: `${SERVER_URL}file-upload`,
+  fileDownload: `${SERVER_URL}file-download`,
 };
 
 module.exports = apiUrl;

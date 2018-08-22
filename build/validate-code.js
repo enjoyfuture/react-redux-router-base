@@ -4,7 +4,7 @@ const exec = util.promisify(require('child_process').exec);
 
 const CLIEngine = require('eslint').CLIEngine;
 // https://eslint.org/docs/developer-guide/nodejs-api#cliengine
-const cli = new CLIEngine({ fix: true });
+const cli = new CLIEngine({ fix: true, ignore: false });
 const stylelint = require('stylelint');
 
 function getstderrLevel(number) {
@@ -25,9 +25,15 @@ async function runEsLint() {
   // 标记是否通过检测
   let pass = 0;
   // --cached 表示暂存区，即执行 git add 后的文件
-  const { stdout, stderr } = await exec(
-    'git diff --cached --name-only| grep .js$'
+  const result = await exec('git diff --cached --name-only| grep .js$').catch(
+    error => console.log(chalk.green('\ngit 暂存区没有要提交的 js 文件'))
   );
+
+  if (!result) {
+    return Promise.resolve(0);
+  }
+
+  const { stdout, stderr } = result;
 
   if (stderr) {
     console.log(chalk.red(`exec stderr: ${stderr}`));
@@ -40,22 +46,22 @@ async function runEsLint() {
     let errorCount = 0;
     let warningCount = 0;
     results.forEach(result => {
-      errorCount += result.stderrCount;
+      errorCount += result.errorCount;
       warningCount += result.warningCount;
       if (result.messages.length > 0) {
         console.log('\n');
         console.log(
-          chalk.red('不符合 eslint 规则文件：'),
-          chalk.red(result.filePath)
+          chalk.cyan('不符合 eslint 规则文件：'),
+          chalk.cyan(result.filePath)
         );
         result.messages.forEach(obj => {
           const level = getstderrLevel(obj.severity);
           console.log(
             chalk.red(
-              `错误或警告信息：  ${obj.line}:${obj.column}  ${level} ${
-                obj.message
-              }  ${obj.ruleId}`
-            )
+              `错误或警告信息:  行${obj.line || 0}, 列${obj.column ||
+                0}, 错误信息:  ${level} ${obj.message}`
+            ),
+            chalk.redBright(` 错误规则：${obj.ruleId || '未知'}`)
           );
           pass = 1;
         });
@@ -78,9 +84,16 @@ async function runStyleLint() {
   // 标记是否通过检测
   let pass = 0;
 
-  const { stdout, stderr } = await exec(
-    'git diff --cached --name-only| grep .scss$'
+  const result = await exec('git diff --cached --name-only| grep .scss$').catch(
+    error => console.log(chalk.green('\ngit 暂存区没有要提交的 scss 文件'))
   );
+
+  if (!result) {
+    return Promise.resolve(0);
+  }
+
+  const { stdout, stderr } = result;
+
   if (stderr) {
     console.log(chalk.red(`exec stderr: ${stderr}`));
   }
@@ -100,21 +113,23 @@ async function runStyleLint() {
         let errorCount = 0;
         let warningCount = 0;
         JSON.parse(results.output).forEach(result => {
-          warningCount += result.warnings.length;
-          // FIXME
-          errorCount += result.warnings.length;
-
           if (result.warnings.length > 0) {
             console.log('\n');
-            console.log(chalk.red(`不符合 stylelint 文件：${result.source}`));
+            console.log(
+              chalk.cyan(`不符合 stylelint 规则文件：${result.source}`)
+            );
             result.warnings.forEach(obj => {
               const level = getstderrLevel(obj.severity);
+
+              warningCount += obj.severity === 'error' ? 0 : 1;
+              errorCount += obj.severity === 'error' ? 1 : 0;
+
               console.log(
                 chalk.red(
-                  `   ${obj.line}:${obj.column}  ${level}  ${obj.text}  ${
-                    obj.rule
-                  }`
-                )
+                  `错误或警告信息:  行${obj.line || 0}, 列${obj.column ||
+                    0}, 错误信息:  ${level}  ${obj.text}`
+                ),
+                chalk.redBright(` 错误规则：${obj.rule || '未知'}`)
               );
               pass = 1;
             });

@@ -4,6 +4,7 @@
  "warn" or 1 - turn the rule on as a warning (doesn’t affect exit code)
  "error" or 2 - turn the rule on as an error (exit code is 1 when triggered)
  **/
+/* eslint-disable max-len */
 module.exports = {
   "rules": {
     // 检测 for loop 书写是否正确，以下写法都是错误的
@@ -146,7 +147,7 @@ module.exports = {
     "no-delete-var": 2, // 不能删除变量，而只能删除属性
     "no-label-var": 2, // 使用标签label语句时，不要跟变量同名，建议不要使用标签
     "no-restricted-globals": 2, // 不要使用全局变量
-    "no-shadow": [2, { "hoist": "never", "allow": ["Map", "location", "history", "caches", "status", "origin", "window", "name"], "builtinGlobals": true }], // 全局和局部变量名不要用相同的名称
+    "no-shadow": [0, { "hoist": "never", "allow": ["Map", "location", "history", "caches", "status", "origin", "window", "name"], "builtinGlobals": true }], // 全局和局部变量名不要用相同的名称
     "no-shadow-restricted-names": 2, // 不要使用 NaN, Infinity, undefined 等内部定义的变量来声明变量
     "no-undef": 2, // 不要使用还没有定义的变量或函数，如果引用第三方定义的变量，可以用 /*global */ 来标注，例如 /*global require define:true*/
     "no-undef-init": 2, // 定义变量的时候，如果没有合适的赋值，不用显式设置 undefined ，因为默认声明而未赋值的变量，其默认值为 undefined
