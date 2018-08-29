@@ -2,12 +2,12 @@ const util = require('util');
 const chalk = require('chalk');
 const exec = util.promisify(require('child_process').exec);
 
-const CLIEngine = require('eslint').CLIEngine;
+const { CLIEngine } = require('eslint');
 // https://eslint.org/docs/developer-guide/nodejs-api#cliengine
 const cli = new CLIEngine({ fix: true, ignore: false });
 const stylelint = require('stylelint');
 
-function getstderrLevel(number) {
+function getStderrLevel(number) {
   if (typeof number === 'string') {
     return number;
   }
@@ -55,7 +55,7 @@ async function runEsLint() {
           chalk.cyan(result.filePath)
         );
         result.messages.forEach(obj => {
-          const level = getstderrLevel(obj.severity);
+          const level = getStderrLevel(obj.severity);
           console.log(
             chalk.red(
               `错误或警告信息:  行${obj.line || 0}, 列${obj.column ||
@@ -119,7 +119,7 @@ async function runStyleLint() {
               chalk.cyan(`不符合 stylelint 规则文件：${result.source}`)
             );
             result.warnings.forEach(obj => {
-              const level = getstderrLevel(obj.severity);
+              const level = getStderrLevel(obj.severity);
 
               warningCount += obj.severity === 'error' ? 0 : 1;
               errorCount += obj.severity === 'error' ? 1 : 0;
