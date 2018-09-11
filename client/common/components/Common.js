@@ -13,7 +13,7 @@ import { Toast } from 'react-perfect-component';
 @connect(({ toast }) => ({
   toast,
 }))
-export class Common extends Component {
+class Common extends Component {
   static propTypes = {
     toast: PropTypes.object,
     dispatch: PropTypes.func.isRequired,

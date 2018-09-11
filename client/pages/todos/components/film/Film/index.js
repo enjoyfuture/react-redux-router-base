@@ -12,7 +12,7 @@ import pureRender from '../../../../../components/react-immutable-pure-decorator
   caches,
 }))
 @pureRender
-export class Film extends Component {
+class Film extends Component {
   static propTypes = {
     film: PropTypes.object,
     caches: PropTypes.object,

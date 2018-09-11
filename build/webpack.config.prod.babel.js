@@ -226,34 +226,33 @@ const webpackConfig = {
              * 他会自动使用插件和 polyfill
              */
             presets: [
-              'react',
+              '@babel/preset-react',
               [
-                'env',
+                '@babel/preset-env',
                 {
                   targets: {
                     browsers,
                   },
                   modules: false, // 设为 false，交由 Webpack 来处理模块化
                   /*
-                   * 设为 true 会根据需要自动导入用到的 es6 新方法，而不是一次性的引入 babel-polyfill
+                   * 设为 usage 会根据需要自动导入用到的 es6 新方法，而不是一次性的引入 babel-polyfill
                    * 比如使用 Promise 会导入 import "babel-polyfill/core-js/modules/es6.promise";
                    */
-                  useBuiltIns: true,
+                  useBuiltIns: 'usage',
                 },
               ],
             ],
             plugins: [
-              'syntax-dynamic-import', // 支持'import()'
-              'transform-decorators-legacy', // 编译装饰器语法
-              'transform-class-properties', // 解析类属性，静态和实例的属性
-              'transform-object-rest-spread', // 支持对象 rest
+              '@babel/plugin-syntax-dynamic-import', // 支持'import()'
+              ['@babel/plugin-proposal-decorators', { legacy: true }], // 编译装饰器语法
+              '@babel/plugin-proposal-class-properties', // 解析类属性，静态和实例的属性
+              '@babel/plugin-proposal-object-rest-spread', // 支持对象 rest
               [
                 'transform-runtime',
                 {
-                  helpers: false, // defaults to true
-                  polyfill: false, // defaults to true
+                  corejs: false, // defaults to false
+                  helpers: true, // defaults to true
                   regenerator: true, // defaults to true
-                  moduleName: 'babel-runtime', // defaults to "babel-runtime"
                 },
               ],
               // https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-constant-elements

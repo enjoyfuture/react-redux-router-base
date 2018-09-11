@@ -9,7 +9,7 @@ const cx = classNames.bind(style);
 @connect(({ module2 }) => ({
   module2,
 }))
-export default class Com1 extends Component {
+class Com1 extends Component {
   static propTypes = {
     module2: PropTypes.object,
     dispatch: PropTypes.func,
@@ -57,3 +57,5 @@ export default class Com1 extends Component {
     );
   }
 }
+
+export default Com1;

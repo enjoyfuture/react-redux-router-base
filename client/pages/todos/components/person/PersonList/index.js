@@ -16,7 +16,7 @@ const cx = classNames.bind(style);
   loading: loading.effects['person/getPersonList'] || false,
 }))
 @pureRender
-export default class PersonList extends Component {
+class PersonList extends Component {
   static propTypes = {
     person: PropTypes.object,
     loading: PropTypes.bool,
@@ -127,3 +127,5 @@ export default class PersonList extends Component {
     );
   }
 }
+
+export default PersonList;

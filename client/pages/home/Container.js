@@ -15,7 +15,7 @@ import style from './index.module.scss';
   hello: home.get('hello'),
 }))
 @pureRender
-export default class Container extends Component {
+class Container extends Component {
   static propTypes = {
     match: PropTypes.object,
     history: PropTypes.object,
@@ -196,3 +196,5 @@ export default class Container extends Component {
     );
   }
 }
+
+export default Container;

@@ -10,7 +10,7 @@ const cx = classNames.bind(style);
 // 采用装饰器处理
 @connect()
 @pureRender
-export default class PersonForm extends Component {
+class PersonForm extends Component {
   static propTypes = {
     dispatch: PropTypes.func,
   };
@@ -102,3 +102,5 @@ export default class PersonForm extends Component {
     );
   }
 }
+
+export default PersonForm;

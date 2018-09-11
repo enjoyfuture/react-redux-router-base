@@ -6,6 +6,13 @@
 - 采用 axios 来发送请求
 - 加入 react-hot-loader 支持
 
+## version 0.12.0 (2018-09-11)
+
+- 升级 babel 到 7
+  执行命令 `npx babel-upgrade --write` 完成 node_modules 和 .babelrc 升级，其他需要手动调整升级
+  - https://babeljs.io/docs/en/v7-migration
+  - https://github.com/babel/babel-upgrade
+
 ## version 0.11.0 (2018-06-18)
 
 - 基于 saga 来构建基础平台脚手架

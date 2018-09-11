@@ -6,7 +6,7 @@ import Module1Com2 from '../com-2';
 @connect(({ module1 }) => ({
   module1,
 }))
-export default class Com1 extends Component {
+class Com1 extends Component {
   static propTypes = {
     dispatch: PropTypes.func,
     module1: PropTypes.object,
@@ -35,3 +35,5 @@ export default class Com1 extends Component {
     );
   }
 }
+
+export default Com1;

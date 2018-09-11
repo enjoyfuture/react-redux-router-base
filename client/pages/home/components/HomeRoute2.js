@@ -5,7 +5,7 @@ import { connect } from 'dva/index';
 @connect(({ home }) => ({
   homeRoute: home.get('homeRoute'),
 }))
-export default class HomeRoute2 extends Component {
+class HomeRoute2 extends Component {
   static propTypes = {
     homeRoute: PropTypes.object,
     dispatch: PropTypes.func,
@@ -34,3 +34,5 @@ export default class HomeRoute2 extends Component {
     );
   }
 }
+
+export default HomeRoute2;

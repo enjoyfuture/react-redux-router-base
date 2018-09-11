@@ -9,7 +9,7 @@ import pureRender from '../components/react-immutable-pure-decorator';
 // 采用装饰器处理
 @pureRender
 @connect()
-export default class Container extends Component {
+class Container extends Component {
   static propTypes = {
     match: PropTypes.object,
     location: PropTypes.object,
@@ -58,3 +58,5 @@ export default class Container extends Component {
     );
   }
 }
+
+export default Container;

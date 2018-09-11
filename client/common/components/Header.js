@@ -8,9 +8,9 @@ const Header = () => {
 
   return (
     <header className="navbar navbar-expand navbar-primary navbar-top flex-column flex-sm-row">
-      <a className="navbar-brand" href={`${URL_CONTEXT}/home`}>
+      <NavLink className="navbar-brand" to={`${URL_CONTEXT}/home`}>
         React+Redux+Router
-      </a>
+      </NavLink>
       <div className="navbar-scroll">
         <ul className="navbar-nav">
           <li>

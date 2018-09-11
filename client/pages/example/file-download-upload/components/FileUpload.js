@@ -5,7 +5,7 @@ import { Map } from 'immutable';
 import callApi from '../../../../utils/fetch';
 
 @connect()
-export class FileUpload extends Component {
+class FileUpload extends Component {
   static propTypes = {
     dispatch: PropTypes.func,
   };

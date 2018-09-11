@@ -5,7 +5,11 @@ const chalk = require('chalk');
 
 const { exec } = childProcess;
 
-const branchName = `dev-${moment().format('YYYYMMDDHHmmss')}`;
+// 可以额外输入分支别名，用来简单的标示分支名称
+const branchAlias = process.argv[2];
+const branchName = `dev-${moment().format('YYYYMMDDHHmmss')}${
+  branchAlias ? `-${branchAlias}` : ''
+}`;
 
 console.log(chalk.green('正在创建上线分支，请稍等'));
 console.log(chalk.green('.......'));
