@@ -229,6 +229,7 @@ const webpackConfig = {
             loader: 'css-loader',
             options: {
               sourceMap: true,
+              localIdentName: '[name]_[local]_[hash:base64:5]',
             },
           },
           {

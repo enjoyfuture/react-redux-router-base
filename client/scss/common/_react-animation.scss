@@ -35,7 +35,7 @@
     transition: all .35s ease-out;
   }
 
-  //fade in 效果
+  // fade in 效果
   .fade-in-enter {
     transform: translate(-100%, -100%);
   }
@@ -54,7 +54,7 @@
     transition: translate 300ms ease-in;
   }
 
-  //右侧进入
+  // 右侧进入
   .animate-right-appear {
     transform: translate(100%, 0);
   }
@@ -82,7 +82,7 @@
     transition: transform 300ms ease-in;
   }
 
-  //渐入效果
+  // 渐入效果
   .burst-in-enter {
     opacity: .01;
     animation-name: burstIn;

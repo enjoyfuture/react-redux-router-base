@@ -6,7 +6,7 @@
     "README.md",
     "CHANGELOG.md",
     "nodemon.json",
-    "webpack*",
+    "build/webpack*",
     "node_modules/*",
     "bin/*",
     "client/*",

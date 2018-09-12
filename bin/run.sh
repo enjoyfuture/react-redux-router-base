@@ -21,8 +21,11 @@ if [ $2 -a $2 = "beta" ]; then
     # 测试环境带上项目名称，防止pm2_home冲突，可以一台服务器部署多个服务
     export PM2_HOME=/export/local/pm2-home-react-redux-router-base
 else
-    # 生产环境
-    export PM2_HOME=/export/local/pm2-home-v1.0.0
+    if [ -d "/export/local/pm2-home-v1.0.0" ]; then
+        export PM2_HOME=/export/local/pm2-home-v1.0.0 #生产环境
+    else
+        export PM2_HOME=/export/local/pm2-home #测试环境
+    fi
 fi
 
 baseDir=`cd $(dirname $0);pwd`

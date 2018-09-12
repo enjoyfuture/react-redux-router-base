@@ -4,11 +4,10 @@ if (process.env.NODE_ENV === undefined) {
 }
 console.log(`process.env.NODE_ENV=${process.env.NODE_ENV}.`);
 
-let realFileName = './webpack.config.prod.babel';
-
-if (process.env.NODE_ENV === 'development') {
-  realFileName = './webpack.config.dev.babel';
-}
+const realFileName =
+  process.env.NODE_ENV === 'development'
+    ? './webpack.config.dev.babel'
+    : './webpack.config.prod.babel';
 
 console.log(`use webpack config file :"${realFileName}"`);
 

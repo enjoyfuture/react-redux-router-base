@@ -12,11 +12,13 @@
   执行命令 `npx babel-upgrade --write` 完成 node_modules 和 .babelrc 升级，其他需要手动调整升级
   - https://babeljs.io/docs/en/v7-migration
   - https://github.com/babel/babel-upgrade
+- 更新 AVA 单元测试到 1.0.0 beta 版，并给出相关单元测试
+- 重新整理 stylelint
 
 ## version 0.11.0 (2018-06-18)
 
 - 基于 saga 来构建基础平台脚手架
-- 增加了生成上线分支脚本 `npm run deploy-branch`
+- 增加了生成上线分支脚本 `npm run git-branch [branchAlias] 详见 README.md 说明`
 - 增加了检测 css 前缀脚本 `npm run css-prefix`
 - 去掉了 pre-commit 改用 lint-staged 来检测 js 和 css 代码
 

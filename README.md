@@ -164,8 +164,8 @@ npm run check-coverage
 
 | 官方的依赖             | 加入 vendor 的依赖 | 官方当前版本 |
 | ---------------------- | ------------------ | ------------ |
-| node-sass              | node-sass-vendor   | 4.5.3        |
-| sass-loader-joy-vendor | sass-loader        | 6.0.6        |
+| node-sass              | node-sass-vendor   | 4.9.3        |
+| sass-loader-joy-vendor | sass-loader        | 7.1.0        |
 
 注意：如官方有新版本时，可以重新 forked 更新自定义的依赖包
 

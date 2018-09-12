@@ -8,10 +8,10 @@ import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import autoprefixer from 'autoprefixer';
 import flexbugs from 'postcss-flexbugs-fixes'; // 修复 flexbox 已知的 bug
 import cssnano from 'cssnano'; // 优化 css，对于长格式优化成短格式等
-import incstr from 'incstr';
+import getCSSModuleLocalIdent from './webpack/getCSSModuleLocalIdent';
 
 // 根目录上下文
-const { URL_CONTEXT } = require('../common/constants');
+import { URL_CONTEXT } from '../common/constants';
 
 const appRoot = path.resolve(__dirname, '../');
 const appPath = path.resolve(appRoot, 'public');
@@ -31,48 +31,6 @@ const browsers = [
   'Safari >= 9.1',
 ];
 
-// 混淆 css 变量名
-const createUniqueIdGenerator = () => {
-  const index = {};
-
-  const generateNextId = incstr.idGenerator({
-    /*
-     * Removed "d" letter to avoid accidental "ad" construct.
-     * @see https://medium.com/@mbrevda/just-make-sure-ad-isnt-being-used-as-a-class-name-prefix-or-you-might-suffer-the-wrath-of-the-558d65502793
-     */
-    alphabet: 'abcefghijklmnopqrstuvwxyz0123456789_',
-  });
-
-  return name => {
-    if (index[name]) {
-      return index[name];
-    }
-
-    let nextId;
-
-    do {
-      // Class name cannot start with a number.
-      nextId = generateNextId();
-    } while (/^[0-9]/.test(nextId));
-
-    index[name] = nextId;
-
-    return index[name];
-  };
-};
-
-const uniqueIdGenerator = createUniqueIdGenerator();
-
-const generateScopedName = (localName, resourcePath) => {
-  // format as URL on Windows
-  resourcePath = resourcePath.replace(/\\/g, '/');
-  const componentName = resourcePath
-    .split('/')
-    .slice(-2, -1)
-    .join('-');
-  return uniqueIdGenerator(`${componentName}-${localName}`);
-};
-
 // scss config
 /* eslint-disable indent */
 function scssConfig(modules) {
@@ -85,9 +43,7 @@ function scssConfig(modules) {
             sourceMap: true,
             // CSS Modules https://github.com/css-modules/css-modules
             modules: true,
-            localIdentName: '[local][chunkhash:base64:5]',
-            getLocalIdent: (context, localIdentName, localName) =>
-              generateScopedName(localName, context.resourcePath),
+            getLocalIdent: getCSSModuleLocalIdent,
           }
         : {
             sourceMap: true,
@@ -99,8 +55,10 @@ function scssConfig(modules) {
         sourceMap: true,
         // postcss plugins https://github.com/postcss/postcss/blob/master/docs/plugins.md
         plugins: [
+          // https://cssnano.co/guides/optimisations
           cssnano({
             autoprefixer: false,
+            zindex: false,
           }),
           flexbugs(),
           autoprefixer({
@@ -248,9 +206,9 @@ const webpackConfig = {
               '@babel/plugin-proposal-class-properties', // 解析类属性，静态和实例的属性
               '@babel/plugin-proposal-object-rest-spread', // 支持对象 rest
               // https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-constant-elements
-              'transform-react-constant-elements',
+              '@babel/plugin-transform-react-constant-elements',
               // https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-inline-elements
-              'transform-react-inline-elements',
+              '@babel/plugin-transform-react-inline-elements',
               [
                 'transform-react-remove-prop-types',
                 {
@@ -387,6 +345,10 @@ const webpackConfig = {
     mergeDuplicateChunks: true, // 相同的块被合并。这会减少生成的代码并缩短构建时间。
     occurrenceOrder: true, // Webpack将会用更短的名字去命名引用频度更高的chunk
     sideEffects: true, // 剔除掉没有依赖的模块
+    // 为 webpack 运行时代码和 chunk manifest 创建一个单独的代码块。这个代码块应该被内联到 HTML 中，生产环境不需要
+    runtimeChunk: false,
+    // 开启后给代码块赋予有意义的名称，而不是数字的 id
+    namedChunks: false,
     // https://github.com/webpack-contrib/mini-css-extract-plugin#minimizing-for-production
     minimizer: [
       new UglifyJsPlugin({
@@ -402,6 +364,11 @@ const webpackConfig = {
           mangle: {
             reserved: [''], // 设置不混淆变量名
           },
+          // https://github.com/mishoo/UglifyJS2/tree/harmony#compress-options
+          output: {
+            comments: false,
+            beautify: false,
+          },
         },
       }),
       new OptimizeCSSAssetsPlugin({}),
@@ -411,17 +378,18 @@ const webpackConfig = {
         // 这里开始设置缓存的 chunks
         commons: {
           chunks: 'initial', // 必须三选一： "initial" | "all" | "async"(默认为异步)
-          test: /[\\/]node_modules[\\/]/,
+          test: /[\\/]node_modules[\\/]/, // 合并指定的模块，这里只 node_modules 下所有公共的，也可以设为 /react|babel/ 等
           name: 'vendors', // 要缓存的分隔出来的 chunk 名称
+        },
+        // 所有的 css 生成一个文件，如果不需要的话，可以把这个去掉
+        styles: {
+          name: 'styles',
+          test: /\.s?css$/,
+          chunks: 'all',
+          enforce: true,
         },
       },
     },
-    // 为 webpack 运行时代码和 chunk manifest 创建一个单独的代码块。这个代码块应该被内联到 HTML 中
-    runtimeChunk: {
-      name: 'manifest',
-    },
-    // 开启后给代码块赋予有意义的名称，而不是数字的 id
-    namedChunks: false,
   },
 
   plugins: [
