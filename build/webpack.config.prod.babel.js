@@ -205,6 +205,14 @@ const webpackConfig = {
               ['@babel/plugin-proposal-decorators', { legacy: true }], // 编译装饰器语法
               '@babel/plugin-proposal-class-properties', // 解析类属性，静态和实例的属性
               '@babel/plugin-proposal-object-rest-spread', // 支持对象 rest
+              [
+                '@babel/plugin-transform-runtime',
+                {
+                  corejs: false, // defaults to false
+                  helpers: true, // defaults to true
+                  regenerator: true, // defaults to true
+                },
+              ],
               // https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-constant-elements
               '@babel/plugin-transform-react-constant-elements',
               // https://github.com/babel/babel/tree/master/packages/babel-plugin-transform-react-inline-elements
@@ -381,7 +389,7 @@ const webpackConfig = {
           test: /[\\/]node_modules[\\/]/, // 合并指定的模块，这里只 node_modules 下所有公共的，也可以设为 /react|babel/ 等
           name: 'vendors', // 要缓存的分隔出来的 chunk 名称
         },
-        // 所有的 css 生成一个文件，如果不需要的话，可以把这个去掉
+        // 所有的 css 生成一个文件，这样只需第一次加载 css 文件，后续不需要按需加载，这样体验可能会更好些，如果需要按需加载的话，可以把这个去掉，同时 server 端引入 css 和 js 也需要调整，怎样调整可以查看历史版本
         styles: {
           name: 'styles',
           test: /\.s?css$/,

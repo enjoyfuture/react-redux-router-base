@@ -216,6 +216,14 @@ const webpackConfig = {
               ['@babel/plugin-proposal-decorators', { legacy: true }], // 编译装饰器语法
               '@babel/plugin-proposal-class-properties', // 解析类属性，静态和实例的属性
               '@babel/plugin-proposal-object-rest-spread', // 支持对象 rest
+              [
+                '@babel/plugin-transform-runtime',
+                {
+                  corejs: false, // defaults to false
+                  helpers: true, // defaults to true
+                  regenerator: true, // defaults to true
+                },
+              ],
             ],
           },
         },

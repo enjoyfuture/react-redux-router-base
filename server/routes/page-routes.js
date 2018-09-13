@@ -52,18 +52,7 @@ const wrapStyleImports = function(data) {
   };
 
   if (!isDev) {
-    let links = buildLink(manifest[`${staticResourceContext}${data.name}.css`]);
-    // 公共的
-    if (manifest[`${staticResourceContext}vendors.css`]) {
-      links += buildLink(manifest[`${staticResourceContext}vendors.css`]);
-    }
-    // 引入第三方 css
-    if (manifest[`${staticResourceContext}style.${data.name}.css`]) {
-      links += buildLink(
-        manifest[`${staticResourceContext}style.${data.name}.css`]
-      );
-    }
-    data.links = links;
+    data.links = buildLink(manifest[`${staticResourceContext}styles.css`]);
   }
 };
 
@@ -81,11 +70,10 @@ const wrapScriptImports = function(data) {
          ${buildScript(`${staticResourceContext}vendors.chunk.js`)}
          ${buildScript(`${staticResourceContext}${data.name}.bundle.js`)}`;
   } else {
-    data.scripts = `${buildScript(
-      manifest[`${staticResourceContext}manifest.js`]
-    )}
-        ${buildScript(manifest[`${staticResourceContext}vendors.js`])}
-        ${buildScript(manifest[`${staticResourceContext}${data.name}.js`])}`;
+    data.scripts = `
+      ${buildScript(manifest[`${staticResourceContext}vendors.js`])}
+      ${buildScript(manifest[`${staticResourceContext}styles.js`])}
+      ${buildScript(manifest[`${staticResourceContext}${data.name}.js`])}`;
   }
 };
 

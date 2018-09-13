@@ -14,6 +14,7 @@
   - https://github.com/babel/babel-upgrade
 - 更新 AVA 单元测试到 1.0.0 beta 版，并给出相关单元测试
 - 重新整理 stylelint
+- 打包构建后的 css 改为只生成一个，这样只需第一次加载 css，体验会更好一点
 
 ## version 0.11.0 (2018-06-18)
 
