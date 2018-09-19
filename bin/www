@@ -27,9 +27,9 @@ function onError(error) {
     throw error;
   }
 
-  const bind = typeof config.port === 'string'
-    ? 'Pipe ' + config.port
-    : 'Port ' + config.port;
+  const bind = typeof config.PORT === 'string'
+    ? 'Pipe ' + config.PORT
+    : 'Port ' + config.PORT;
 
   // handle specific listen errors with friendly messages
   /* eslint-disable indent */
