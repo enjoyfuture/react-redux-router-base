@@ -3,8 +3,9 @@ const chalk = require('chalk');
 const exec = util.promisify(require('child_process').exec);
 
 const { CLIEngine } = require('eslint');
+const eslintOption = { fix: true, ignore: true };
 // https://eslint.org/docs/developer-guide/nodejs-api#cliengine
-const cli = new CLIEngine({ fix: true, ignore: false });
+const cli = new CLIEngine(eslintOption);
 const stylelint = require('stylelint');
 
 function getStderrLevel(number) {
@@ -48,7 +49,14 @@ async function runEsLint() {
     results.forEach(item => {
       errorCount += item.errorCount;
       warningCount += item.warningCount;
-      if (item.messages.length > 0) {
+      const messages = item.messages.filter(it => {
+        if (eslintOption.ignore) {
+          return it.line !== undefined;
+        }
+        return true;
+      });
+
+      if (messages.length > 0) {
         console.log('\n');
         console.log(
           chalk.cyan('不符合 eslint 规则文件：'),
@@ -67,6 +75,7 @@ async function runEsLint() {
         });
       }
     });
+
     if (warningCount > 0 || errorCount > 0) {
       console.log(
         chalk.red(
