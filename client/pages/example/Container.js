@@ -1,8 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Route, NavLink } from 'dva/router';
 import Loadable from 'react-loadable';
 import LoadingComponent from '../../components/LoadingComponent';
-import PropTypes from 'prop-types';
 
 const Container = ({ match, location }) => {
   let { url } = match;

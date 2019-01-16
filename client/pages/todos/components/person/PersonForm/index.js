@@ -1,11 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames/bind';
 import { connect } from 'dva';
-import style from './style.module.scss';
 import pureRender from '../../../../../components/react-immutable-pure-decorator';
-
-const cx = classNames.bind(style);
 
 // 采用装饰器处理
 @connect()
@@ -29,7 +25,6 @@ class PersonForm extends Component {
 
   savePerson = () => {
     const { firstName, lastName } = this.state;
-    const { router } = this.context;
     const { dispatch } = this.props;
 
     dispatch({

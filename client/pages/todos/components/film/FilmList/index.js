@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import style from './style.scss';
+
 const cx = classNames.bind(style);
 
 const FilmList = ({ film, activeTab }) => {
@@ -12,7 +13,8 @@ const FilmList = ({ film, activeTab }) => {
 
   if (!filmList) {
     return null;
-  } else if (filmList.size === 0) {
+  }
+  if (filmList.size === 0) {
     return (
       <div className={cx('no-items')}>
         <div className={cx('no-items-icon')} />

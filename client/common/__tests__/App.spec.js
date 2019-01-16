@@ -7,7 +7,7 @@ import { shallow, mount, configure } from 'enzyme';
 import sinon from 'sinon';
 import { Map } from 'immutable';
 import Adapter from 'enzyme-adapter-react-16';
-import { App } from '../App';
+import App from '../App';
 
 configure({ adapter: new Adapter() });
 

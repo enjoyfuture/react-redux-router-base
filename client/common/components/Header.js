@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
-import { URL_CONTEXT } from '../../../common/constants';
 import { NavLink } from 'dva/router';
+import { URL_CONTEXT } from '../../../common/constants';
 
 const Header = () => {
   const { pathname } = document.location;

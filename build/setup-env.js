@@ -4,6 +4,7 @@
 
 const path = require('path');
 const fs = require('fs');
+
 const root = path.join(__dirname, '../');
 
 console.log(`in setup Env , process.env.NODE_ENV is [${process.env.NODE_ENV}]`);

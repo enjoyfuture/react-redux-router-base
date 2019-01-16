@@ -1,6 +1,7 @@
 /**
  * 环境配置-功能或闭环
  */
+/* eslint-disable import/no-unresolved */
 const config = require('./base');
 
 const NODE_ENV = (process.env.NODE_ENV = 'beta');

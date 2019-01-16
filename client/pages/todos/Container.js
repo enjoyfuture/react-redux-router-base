@@ -1,8 +1,8 @@
 import React from 'react';
 import { Route, NavLink } from 'dva/router';
-import LoadingComponent from '../../components/LoadingComponent';
 import Loadable from 'react-loadable';
 import PropTypes from 'prop-types';
+import LoadingComponent from '../../components/LoadingComponent';
 
 const Container = ({ match, location }) => {
   let { url } = match;

@@ -14,10 +14,11 @@ require.extensions['.png'] = noop => noop;
 require.extensions['.gif'] = noop => noop;
 require.extensions['.svg'] = noop => noop;
 
-require('babel-register');
+require('@babel/register');
 
 // window 和 document 对象
 const jsdom = require('jsdom');
+
 const { JSDOM } = jsdom;
 const { window } = new JSDOM('<!DOCTYPE html><body></body>');
 global.window = window;

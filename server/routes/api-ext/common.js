@@ -1,6 +1,7 @@
 const fs = require('fs');
 const express = require('express');
 const service = require('../../service/common');
+
 const router = express.Router();
 
 const uploadFile = require('../../helper/utils').getUploadFile();

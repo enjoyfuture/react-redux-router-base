@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames/bind';
 import style from './style.module.scss';
+
 const cx = classNames.bind(style);
 
 class PersonItem extends Component {
@@ -43,7 +44,6 @@ class PersonItem extends Component {
     e.preventDefault();
     const { dispatch, index } = this.props;
     const { person } = this.state;
-    const body = person.toJSON();
 
     dispatch({
       type: 'person/updatePerson',
@@ -69,6 +69,14 @@ class PersonItem extends Component {
     dispatch({ type: 'person/deletePerson', payload: { id, index } });
   };
 
+  handleChange = field => e => {
+    const { person } = this.state;
+    const val = e.target.value;
+    this.setState({
+      person: person.set(field, val),
+    });
+  };
+
   textOrInput(field, val) {
     const { editing } = this.state;
     if (editing) {
@@ -79,14 +87,6 @@ class PersonItem extends Component {
     }
     return <span>{val}</span>;
   }
-
-  handleChange = field => e => {
-    const { person } = this.state;
-    const val = e.target.value;
-    this.setState({
-      person: person.set(field, val),
-    });
-  };
 
   render() {
     const { editing, person } = this.state;

@@ -2,6 +2,7 @@
 
 const win = window;
 const doc = document;
+const loc = doc.location;
 
 const docEl = doc.documentElement;
 const resizeEvt = 'orientationchange' in win ? 'orientationchange' : 'resize';
@@ -36,7 +37,7 @@ export const adjustFontSize = (designWidth = 375, fontSize = 16) => {
  * @returns {null}
  */
 export const getLocationParams = () => {
-  let { search } = location;
+  let { search } = loc;
   if (search.length > 1) {
     const params = {};
     search = search.substring(1);
@@ -55,10 +56,10 @@ export const getLocationParams = () => {
  * @returns {string}
  */
 export const getLocationOrigin = () => {
-  if (location.origin) {
-    return location.origin;
+  if (loc.origin) {
+    return loc.origin;
   }
-  return `${location.protocol}//${location.host}`;
+  return `${loc.protocol}//${loc.host}`;
 };
 
 /**
@@ -66,7 +67,7 @@ export const getLocationOrigin = () => {
  * @returns {*}
  */
 export const getLocationRoot = () => {
-  const { pathname, origin } = location;
+  const { pathname, origin } = loc;
   const [root] = pathname.match(/\/[\w\d-]+\//);
   return origin + root;
 };
@@ -75,8 +76,7 @@ export const getLocationRoot = () => {
  * 返回上下文路径，例如 /context/
  * @returns {*}
  */
-export const getLocationContext = () =>
-  location.pathname.match(/\/[\w\d-]+\//)[0];
+export const getLocationContext = () => loc.pathname.match(/\/[\w\d-]+\//)[0];
 
 // 格式化 json 数据
 export const parseJSON = str => {
@@ -118,13 +118,19 @@ export const createDate = input => {
   if (!input || typeof input !== 'string') {
     return null;
   }
-  let y = 0,
-    m = 0,
-    d = 0,
-    h = 0,
-    M = 0,
-    s = 0,
-    ms = 0;
+  let y = 0;
+
+  let m = 0;
+
+  let d = 0;
+
+  let h = 0;
+
+  let M = 0;
+
+  let s = 0;
+
+  let ms = 0;
   const inputs = input.replace(/\//g, '-').split(' ');
   if (inputs.length > 0) {
     const ymd = inputs[0].split('-');
@@ -222,6 +228,7 @@ export const formatDate = ({
  */
 export const formatRemainingTime = remainingTime => {
   let time = Number(remainingTime);
+  /* eslint-disable no-restricted-globals */
   if (isNaN(time)) {
     return {};
   }
@@ -261,11 +268,11 @@ export const styleSupport = styleProp => {
 
 // 小数转换为百分比数
 export const toPercentNum = (num, percent) => {
-  num = Number(num);
-  if (isNaN(num)) {
+  const _num = Number(num);
+  if (isNaN(_num)) {
     return percent ? '%' : '';
   }
-  return (num * 100).toFixed(2) + (percent ? '%' : '');
+  return (_num * 100).toFixed(2) + (percent ? '%' : '');
 };
 
 // 小数转换为百分比数
@@ -279,24 +286,27 @@ export const toPercent = num => toPercentNum(num, true);
  * @returns {*}
  */
 export const thousands = (num, fixed = 2, hundredThousand) => {
-  num = Number(num);
-  if (isNaN(num) || !isFinite(num)) {
+  let _num = Number(num);
+  let _hundredThousand = hundredThousand;
+  let _fixed = fixed;
+
+  if (isNaN(_num) || !isFinite(_num)) {
     // 如果 NaN或者不是Finite 返回 ''
     return '';
   }
   if (typeof fixed === 'boolean') {
-    hundredThousand = fixed;
-    fixed = 2;
+    _hundredThousand = fixed;
+    _fixed = 2;
   }
   // 如果单位是万元，则除以 10000
-  if (hundredThousand) {
-    num /= 10000;
+  if (_hundredThousand) {
+    _num /= 10000;
   }
 
-  const n = num.toFixed(fixed || 2);
+  const n = num.toFixed(_fixed || 2);
   const re = /(\d{1,3})(?=(\d{3})+(?:\.))/g;
 
-  if (fixed === 0) {
+  if (_fixed === 0) {
     const a = n.replace(re, '$1,').split('.');
     return a[0];
   }
@@ -305,28 +315,31 @@ export const thousands = (num, fixed = 2, hundredThousand) => {
 
 /**
  * 字符串或数字比较
- * 返回-1 正序，返回 1 倒序，a 小于 b 是正序
- * @param a
- * @param b
+ * 返回-1 正序，返回 1 倒序，val1 小于 val2 是正序
+ * @param val1
+ * @param val2
  * @param comparer 比较器，首先处理值
  * @returns {number}
  */
-export const compare = (a, b, comparer) => {
-  if (a === b) {
+export const compare = (val1, val2, comparer) => {
+  if (val1 === val2) {
     return 0;
   }
+  let _val1 = val1;
+  let _val2 = val2;
+
   if (comparer && typeof comparer === 'function') {
-    a = comparer(a);
-    b = comparer(b);
+    _val1 = comparer(val1);
+    _val2 = comparer(val2);
   }
-  const aType = typeof a;
-  const bType = typeof b;
+  const aType = typeof _val1;
+  const bType = typeof _val2;
   if (aType === 'number' && bType === 'number') {
-    return a - b;
+    return _val1 - _val2;
   }
   if (aType === 'string' && bType === 'string') {
-    const arr1 = [a, b];
-    const arr2 = [a, b].sort();
+    const arr1 = [_val1, _val2];
+    const arr2 = [_val1, _val2].sort();
     return arr1[0] === arr2[0] ? -1 : 1;
   }
   if (aType === 'number') {
@@ -334,21 +347,4 @@ export const compare = (a, b, comparer) => {
     return -1;
   }
   return 1;
-};
-
-export default {
-  getLocationParams,
-  getLocationOrigin,
-  getLocationRoot,
-  getLocationContext,
-  parseJSON,
-  stringifyJSON,
-  formatDate,
-  createDate,
-  formatRemainingTime,
-  styleSupport,
-  thousands,
-  toPercent,
-  toPercentNum,
-  compare,
 };

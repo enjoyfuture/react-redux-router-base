@@ -1,6 +1,7 @@
 /**
  * 环境配置-生产环境
  */
+/* eslint-disable import/no-unresolved */
 const config = require('./base');
 
 const NODE_ENV = (process.env.NODE_ENV = 'production');

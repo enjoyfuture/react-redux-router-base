@@ -1,6 +1,6 @@
 import test from 'ava';
-import callApi from '../fetch';
 import nock from 'nock';
+import callApi from '../fetch';
 
 const SERVER_URL = 'http://localhost:8888/context/api/';
 

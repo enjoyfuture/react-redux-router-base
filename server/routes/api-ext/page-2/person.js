@@ -1,5 +1,6 @@
 const express = require('express');
 const service = require('../../../service/page-2/person');
+
 const router = express.Router();
 
 router.get('/', (req, res, next) => {

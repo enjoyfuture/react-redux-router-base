@@ -113,21 +113,6 @@ const deleteFile = filePaths => {
 };
 
 /**
- * 抛出 response.resultCode !== 0 的数据
- * @param options
- */
-module.exports.remotePostFormRejectError = options =>
-  remotePostForm(options).then(resp => {
-    if (!options.text && resp[RES_CODE] !== 0) {
-      const error = new Error(resp[RES_MSG] || '服务端异常');
-      error[RES_CODE] = resp[RES_CODE];
-      error[RES_DATA] = resp[RES_DATA];
-      return Promise.reject(error);
-    }
-    return Promise.resolve(resp);
-  });
-
-/**
  * post 提交 form 数据
  * @param options
  */
@@ -182,11 +167,26 @@ const remotePostForm = (module.exports.remotePostForm = options => {
 });
 
 /**
+ * 抛出 response.resultCode !== 0 的数据
+ * @param options
+ */
+module.exports.remotePostFormRejectError = options =>
+  remotePostForm(options).then(resp => {
+    if (!options.text && resp[RES_CODE] !== 0) {
+      const error = new Error(resp[RES_MSG] || '服务端异常');
+      error[RES_CODE] = resp[RES_CODE];
+      error[RES_DATA] = resp[RES_DATA];
+      return Promise.reject(error);
+    }
+    return Promise.resolve(resp);
+  });
+
+/**
  * post 提交 json 数据
  * @param options
  */
 module.exports.remotePostJSON = options => {
-  const { url, req, res } = options;
+  const { url, req } = options;
   const data = req.body || {};
   const requestHeaders = buildHeader(req);
   requestHeaders['User-Agent'] = req.get('user-agent');
@@ -237,14 +237,15 @@ module.exports.remotePostJSON = options => {
  */
 module.exports.remoteGetJSON = options => {
   let url;
-  if (typeof options === 'string') {
-    url = options;
-    options = {};
-  } else if (typeof options === 'object') {
-    url = options.url;
+  let _options = options;
+  if (typeof _options === 'string') {
+    url = _options;
+    _options = {};
+  } else if (typeof _options === 'object') {
+    url = _options.url;
   }
 
-  const { data, req } = options;
+  const { data, req } = _options;
   const requestHeaders = buildHeader(req);
 
   logger.info(

@@ -3,6 +3,7 @@ const chalk = require('chalk');
 const exec = util.promisify(require('child_process').exec);
 
 const { CLIEngine } = require('eslint');
+
 const eslintOption = { fix: true, ignore: true };
 // https://eslint.org/docs/developer-guide/nodejs-api#cliengine
 const cli = new CLIEngine(eslintOption);

@@ -9,11 +9,6 @@ import './scss/perfect.scss';
 // 以下代码为移动端使用，对于 PC 端项目删除以下代码 --- start
 const isMobile = false;
 if (isMobile) {
-  // 初始化 tapEvent 事件
-  import('react-tap-event-plugin').then(injectTapEventPlugin =>
-    injectTapEventPlugin.default()
-  );
-
   // 引入 eruda
   import('eruda').then(eruda => eruda.default.init());
 }

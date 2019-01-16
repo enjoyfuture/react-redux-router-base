@@ -1,6 +1,7 @@
 /**
  * 环境配置-本地开发环境
  */
+/* eslint-disable import/no-unresolved */
 const config = require('./base');
 
 const NODE_ENV = (process.env.NODE_ENV = 'development');

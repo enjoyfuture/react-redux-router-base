@@ -7,8 +7,6 @@ const path = require('path');
 const serialize = require('serialize-javascript');
 const handlebars = require('handlebars');
 const logger = require('digger-node').Logger;
-const service = require('../service/common');
-const wrapData = require('../helper/utils').wrapData;
 const { URL_CONTEXT } = require('../../common/constants');
 
 // environment
@@ -16,6 +14,7 @@ const isDev = process.env.NODE_ENV === 'development';
 const isProd = process.env.NODE_ENV === 'production';
 
 // 加载 webpack 打包后的静态文件映射表
+/* eslint-disable import/no-unresolved */
 const manifest = isDev ? null : require('../../public/dist/manifest.json');
 
 // 静态文件上下文路径

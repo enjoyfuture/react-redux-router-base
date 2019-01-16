@@ -1,5 +1,5 @@
 import 'isomorphic-fetch';
-import perfect from './perfect';
+import { stringifyJSON } from './perfect';
 import { URL_CONTEXT } from '../../common/constants';
 
 // 定义 fetch 默认选项， 看 https://github.com/github/fetch
@@ -61,7 +61,7 @@ function callApi({ url, body = {}, options = {}, prefix = 'api' }) {
           delete body[item];
         }
       });
-      _options.body = perfect.stringifyJSON(body);
+      _options.body = stringifyJSON(body);
     }
   }
 

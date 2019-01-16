@@ -1,10 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import classNames from 'classnames/bind';
 import { connect } from 'dva/index';
-
-import style from './style.module.scss';
-const cx = classNames.bind(style);
 
 @connect(({ module2 }) => ({
   module2,
