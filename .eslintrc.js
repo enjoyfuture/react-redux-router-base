@@ -674,7 +674,7 @@ module.exports = {
     // JSX-specific rules 以下为 jsx 规则
     "react/jsx-boolean-value": 2, // 该规则可以设置为两种情况，always 和 never ，设置为 always 如果 attribute 没有设置值，会警告；设为 never，如果 attribute 有一个 true 值，会警告 https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-boolean-value.md
     "react/jsx-child-element-spacing": 0, // 元素之间如果需要空格时，需要显示设置，因为 jsx 编译后会删除掉 dom 之间的空格的
-    "react/jsx-closing-bracket-location": [2, {
+    "react/jsx-closing-bracket-location": [0, {
       "nonEmpty": "after-props",
       "selfClosing": "line-aligned"
     }], // 检测jsx tag 闭合书写规范
@@ -807,9 +807,7 @@ module.exports = {
     "prettier/prettier": [2, {
       "singleQuote": true,
       "trailingComma": "es5",
-      "bracketSpacing": true,
-      "jsxBracketSameLine": true,
-      "arrowParens": "avoid"
+      "jsxBracketSameLine": false, // 默认值为 false
     }]
   },
   "parser": "babel-eslint", // 指定默认解析器
