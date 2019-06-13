@@ -13,18 +13,6 @@ const hotMiddlewareScript =
 const appRoot = path.resolve(__dirname, '../');
 const appPath = path.resolve(appRoot, 'public');
 
-/*
- * PC 端 browsers: ['Explorer >= 9', 'Edge >= 12', 'Chrome >= 49', 'Firefox >= 55', 'Safari >= 9.1']
- * 手机端 browsers: ['Android >= 4.4', 'iOS >=9']
- */
-const browsers = [
-  'Explorer >= 9',
-  'Edge >= 12',
-  'Chrome >= 49',
-  'Firefox >= 55',
-  'Safari >= 9.1',
-];
-
 // scss config
 /* eslint-disable indent */
 function scssConfig(modules) {
@@ -36,14 +24,15 @@ function scssConfig(modules) {
         ? {
             sourceMap: true,
             // CSS Modules https://github.com/css-modules/css-modules
-            modules: true,
-            getLocalIdent: (context, localIdentName, localName, options) => {
-              // format as URL on Windows
-              const resourcePath = context.resourcePath.replace(/\\/g, '/');
-              return `${resourcePath
-                .split('/')
-                .slice(-5, -1)
-                .join('-')}-${localName}`;
+            modules: {
+              getLocalIdent: (context, localIdentName, localName, options) => {
+                // format as URL on Windows
+                const resourcePath = context.resourcePath.replace(/\\/g, '/');
+                return `${resourcePath
+                  .split('/')
+                  .slice(-5, -1)
+                  .join('-')}-${localName}`;
+              },
             },
           }
         : {
@@ -62,7 +51,6 @@ function scssConfig(modules) {
           flexbugs(),
           autoprefixer({
             flexbox: 'no-2009',
-            browsers,
           }),
         ],
       },
@@ -78,7 +66,7 @@ function scssConfig(modules) {
       },
     },
     {
-      loader: 'sass-loader-joy-vendor',
+      loader: 'sass-loader',
       options: {
         sourceMap: true, // 必须保留
         modules,
@@ -197,9 +185,6 @@ const webpackConfig = {
               [
                 '@babel/preset-env',
                 {
-                  targets: {
-                    browsers,
-                  },
                   modules: false, // 设为 false，交由 Webpack 来处理模块化
                   /*
                    * 设为 usage 会根据需要自动导入用到的 es6 新方法，而不是一次性的引入 babel-polyfill
@@ -207,6 +192,7 @@ const webpackConfig = {
                    */
                   useBuiltIns: 'usage',
                   debug: true,
+                  corejs: 3,
                 },
               ],
             ],
@@ -251,19 +237,8 @@ const webpackConfig = {
                 flexbugs(),
                 autoprefixer({
                   flexbox: 'no-2009',
-                  browsers,
                 }),
               ],
-            },
-          },
-          {
-            /*
-             * Webpack loader that resolves relative paths in url() statements
-             * based on the original source file
-             */
-            loader: 'resolve-url-loader',
-            options: {
-              debug: true,
             },
           },
         ],
