@@ -1,7 +1,7 @@
 import React from 'react';
 import dva from 'dva';
 import createLoading from 'dva-loading';
-import createBrowserHistory from 'history/createBrowserHistory';
+import { createBrowserHistory } from 'history';
 import commonModels from './common/models';
 // 加载 scss
 import './scss/perfect.scss';

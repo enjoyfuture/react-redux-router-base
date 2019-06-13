@@ -1,5 +1,5 @@
 /* eslint-disable */
-import createBrowserHistory from 'history/createBrowserHistory';
+import { createBrowserHistory } from 'history';
 
 const history = createBrowserHistory();
 
@@ -22,7 +22,6 @@ async function onLocationChange(location, action) {
   currentLocation = location;
 
   try {
-
     // Traverses the list of routes in the order they are defined until
     // it finds the first route that matches provided URL path string
     // and whose action method returns anything other than `undefined`.
@@ -38,11 +37,10 @@ async function onLocationChange(location, action) {
       return;
     }
 
-    appInstance =  ReactDOM.render(
+    appInstance = ReactDOM.render(
       <App context={context}>{route.component}</App>,
       container,
       () => {
-
         document.title = route.title;
 
         let scrollX = 0;
@@ -65,7 +63,7 @@ async function onLocationChange(location, action) {
         // or scroll to the given #hash anchor
         // or scroll to top of the page
         window.scrollTo(scrollX, scrollY);
-      },
+      }
     );
   } catch (error) {
     console.error(error);
