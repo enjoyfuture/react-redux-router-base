@@ -3,6 +3,7 @@ import { is } from 'immutable';
 function shouldComponentUpdate(nextProps, nextState) {
   const state = this.state || {};
 
+  /* eslint-disable function-paren-newline */
   return (
     !(this.updateOnProps || Object.keys({ ...nextProps, ...this.props })).every(
       p => is(nextProps[p], this.props[p])

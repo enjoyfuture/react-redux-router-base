@@ -152,6 +152,7 @@ export const createDate = input => {
     }
     // 格式 2016-06-02 13:01:50:333
     if (hms[3]) {
+      /* eslint-disable prefer-destructuring */
       ms = hms[3];
     }
   }
