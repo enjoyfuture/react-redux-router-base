@@ -27,9 +27,14 @@ async function runEsLint() {
   // 标记是否通过检测
   let pass = 0;
   // --cached 表示暂存区，即执行 git add 后的文件
-  const result = await exec('git diff --cached --name-only| grep .js$').catch(
-    error => console.log(chalk.green('\ngit 暂存区没有要提交的 js 文件'))
-  );
+  const result = await exec(
+    'git diff --cached --name-only | grep -e .js$ -e .vue$'
+  ).catch(error => {
+    if (error) {
+      console.log(chalk.red('检测错误'));
+    }
+    console.log(chalk.green('\ngit 暂存区没有要提交的 js 文件'));
+  });
 
   if (!result) {
     return Promise.resolve(0);
@@ -44,7 +49,7 @@ async function runEsLint() {
   if (stdout.length) {
     const array = stdout.split('\n');
     array.pop();
-    const results = cli.executeOnFiles(array).results;
+    const { results } = cli.executeOnFiles(array);
     let errorCount = 0;
     let warningCount = 0;
     results.forEach(item => {
@@ -94,9 +99,14 @@ async function runStyleLint() {
   // 标记是否通过检测
   let pass = 0;
 
-  const result = await exec('git diff --cached --name-only| grep .scss$').catch(
-    error => console.log(chalk.green('\ngit 暂存区没有要提交的 scss 文件'))
-  );
+  const result = await exec(
+    'git diff --cached --name-only | grep -e .scss$ -e .vue$'
+  ).catch(error => {
+    if (error) {
+      console.log(chalk.red('检测错误'));
+    }
+    console.log(chalk.green('\ngit 暂存区没有要提交的 scss 文件'));
+  });
 
   if (!result) {
     return Promise.resolve(0);
@@ -157,6 +167,7 @@ async function runStyleLint() {
         return Promise.resolve(pass);
       });
   }
+  return null;
 }
 
 async function runLint() {
