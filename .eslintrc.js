@@ -292,28 +292,28 @@ module.exports = {
     "id-match": 0, // 规范变量名或属性名的命名规范
     "implicit-arrow-linebreak": 0, // 箭头函数如果有 return 时，但没有写，表达式应该在一行显示
     // 先关掉该规则，在最新版本中会报错 TypeError: Cannot read property "range" of null
-    "indent": [2, 2, {
-      "SwitchCase": 1,
-      "VariableDeclarator": {"var": 1, "let": 1, "const": 2},
-      "outerIIFEBody": 1,
-      "FunctionDeclaration": {
-        "parameters": 1,
-        "body": 1
-      },
-      "FunctionExpression": {
-        "parameters": 1,
-        "body": 1
-      },
-      "CallExpression": {
-        "arguments": 1
-      },
-      "ArrayExpression": 1,
-      "ObjectExpression": 1,
-      "ImportDeclaration": 1,
-      "flatTernaryExpressions": false,
-      "ignoredNodes": ["JSXElement", "JSXElement > *", "JSXAttribute", "JSXIdentifier", "JSXNamespacedName", "JSXMemberExpression", "JSXSpreadAttribute", "JSXExpressionContainer", "JSXOpeningElement", "JSXClosingElement", "JSXText", "JSXEmptyExpression", "JSXSpreadChild"],
-      "ignoreComments": false,
-    }], // 缩进，我们采用2个空格来缩进
+    // "indent": [2, 2, {
+    //   "SwitchCase": 1,
+    //   "VariableDeclarator": {"var": 1, "let": 1, "const": 2},
+    //   "outerIIFEBody": 1,
+    //   "FunctionDeclaration": {
+    //     "parameters": 1,
+    //     "body": 1
+    //   },
+    //   "FunctionExpression": {
+    //     "parameters": 1,
+    //     "body": 1
+    //   },
+    //   "CallExpression": {
+    //     "arguments": 1
+    //   },
+    //   "ArrayExpression": 1,
+    //   "ObjectExpression": 1,
+    //   "ImportDeclaration": 1,
+    //   "flatTernaryExpressions": false,
+    //   "ignoredNodes": ["JSXElement", "JSXElement > *", "JSXAttribute", "JSXIdentifier", "JSXNamespacedName", "JSXMemberExpression", "JSXSpreadAttribute", "JSXExpressionContainer", "JSXOpeningElement", "JSXClosingElement", "JSXText", "JSXEmptyExpression", "JSXSpreadChild"],
+    //   "ignoreComments": false,
+    // }], // 缩进，我们采用2个空格来缩进
     "jsx-quotes": [0, "prefer-double"], // jsx 属性值应该用双引号
     "key-spacing": 2, // 键值之间的空格
     "keyword-spacing": 2, // 关键字 if, else, for, while, do, switch, try, catch, finally, and with 要求有空格
