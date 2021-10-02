@@ -2,8 +2,8 @@
 
 ## 关于 url 二级路径即上下文 context 的说明
 
-- 有的项目根路径为 '' ，比如 http://ft.jd.com
-- 有的项目根路径为 '/abs' ，比如 http://ft.jd.com/abs
+- 有的项目根路径为 '' ，比如 http://xx.xxx.com
+- 有的项目根路径为 '/abs' ，比如 http://xx.xxx.com/abs
 
 基础项目中 URL_CONTEXT 设置为 ''，如果实际项目中 URL_CONTEXT 不是 ''，需要修改项目中对应的变量值
 
